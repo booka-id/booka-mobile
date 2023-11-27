@@ -76,6 +76,8 @@ Dengan Booka, kami ingin mengubah pengalaman membaca Anda menjadi lebih dari sek
 
 ## Alur Integrasi
 
+Flowchart
+![Alt text](diagram.png) 
 -masing bikin paragraf yang menjelaskan fungsi dari server django yang bakal kalian pake
 
 
