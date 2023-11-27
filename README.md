@@ -80,8 +80,27 @@ Flowchart
 ![Alt text](diagram.png) 
 -masing bikin paragraf yang menjelaskan fungsi dari server django yang bakal kalian pake
 
-
-
-
+1. Menampilkan semua review: `see_review`
+2. Menampilkan review yang diunggah user yang sedang login : `get_reviews_by_user`
+3. Menampilkan semua buku untuk di-review: `get_reviews`
+4. Menampilkan buku-buku dengan rating tertinggi: `get_rating_ranks`
+5. Menambahkan review buku: `post_review`
+6. Menghapus review: `delete_review`
+7. menampilkan semua buku yang dijual : `show_catalogue`
+8. Menambahkan buku oleh admin : `add_book_ajax`
+9. Menampilkan detail buku : `detail_book`
+10. Mengedit buku oleh admin : `edit_book`
+11. menghapus buku oleh admin : `delete_book`
+12. Mencari buku berdasarkan title : `search_book`
+13. Menampilkan semua event: `show_event`
+14. Menambahkan event oleh admin: `create_event`
+15. Menyunting event oleh admin: `edit_event`
+16. Menghapus event oleh admin: `remove_event`
+17. Melakukan registrasi ke event oleh user biasa: `register_event`
+18. Melakukan login ke aplikasi: `login`
+19. Melakukan register ke aplikasi: `register`
+20. Mengambil buku favorit pengguna: `get_favorite_book`
+21. Mengambil buku wishlist pengguna: `get_wishlist`
+22. Mengecek profil user lain: `get_profile`
 Link Berita Acara:
 https://docs.google.com/spreadsheets/d/1zSDaLfim8v-SQiW4og5bOMEO0BqFKL72i5rJ9kFA0jw/edit?usp=sharing
