@@ -78,7 +78,6 @@ Dengan Booka, kami ingin mengubah pengalaman membaca Anda menjadi lebih dari sek
 
 Flowchart
 ![Alt text](diagram.png) 
--masing bikin paragraf yang menjelaskan fungsi dari server django yang bakal kalian pake
 
 1. Menampilkan semua review: `see_review`
 2. Menampilkan review yang diunggah user yang sedang login : `get_reviews_by_user`
