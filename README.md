@@ -91,15 +91,16 @@ Flowchart
 10. Mengedit buku oleh admin : `edit_book`
 11. menghapus buku oleh admin : `delete_book`
 12. Mencari buku berdasarkan title : `search_book`
-13. Menampilkan semua event: `show_event`
-14. Menambahkan event oleh admin: `create_event`
-15. Menyunting event oleh admin: `edit_event`
-16. Menghapus event oleh admin: `remove_event`
-17. Melakukan registrasi ke event oleh user biasa: `register_event`
-18. Melakukan login ke aplikasi: `login`
-19. Melakukan register ke aplikasi: `register`
-20. Mengambil buku favorit pengguna: `get_favorite_book`
-21. Mengambil buku wishlist pengguna: `get_wishlist`
-22. Mengecek profil user lain: `get_profile`
+13. Membeli buku : `pay_book`
+14. Menampilkan semua event: `show_event`
+15. Menambahkan event oleh admin: `create_event`
+16. Menyunting event oleh admin: `edit_event`
+17. Menghapus event oleh admin: `remove_event`
+18. Melakukan registrasi ke event oleh user biasa: `register_event`
+19. Melakukan login ke aplikasi: `login`
+20. Melakukan register ke aplikasi: `register`
+21. Mengambil buku favorit pengguna: `get_favorite_book`
+22. Mengambil buku wishlist pengguna: `get_wishlist`
+23. Mengecek profil user lain: `get_profile`
 Link Berita Acara:
 https://docs.google.com/spreadsheets/d/1zSDaLfim8v-SQiW4og5bOMEO0BqFKL72i5rJ9kFA0jw/edit?usp=sharing
