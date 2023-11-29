@@ -15,6 +15,7 @@ class MyHomePage extends StatelessWidget {
     ShopItem("Review Buku", Icons.add_shopping_cart, Colors.green),
     ShopItem("Event", Icons.calendar_today, Colors.purple),
     ShopItem("Logout", Icons.logout, Colors.blue),
+    ShopItem("Login", Icons.login, Colors.yellow),
   ];
   @override
   Widget build(BuildContext context) {
@@ -27,10 +28,7 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
-          DropdownButton(
-              items: items,
-              onChanged: onChanged
-          ),
+
         ],
       ),
       drawer: const LeftDrawer(),

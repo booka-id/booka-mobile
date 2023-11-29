@@ -27,9 +27,25 @@ class ShopCard extends StatelessWidget {
       child: InkWell(
         // Area responsive terhadap sentuhan
         onTap: () async {
+          // Bakal Dipindahin kebawah nantinya
+          if (item.name == "Katalog Buku") {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti katalog buku
+          }
+          else if (item.name == "Review Buku"){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti review buku
+          }
+          else if (item.name == "Event"){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti event
+          }
+          if(item.name == "Login"){
+            ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+            content: Text("Menekan tombol login !")));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
 
-
-          if(request.loggedIn == false){
+          }
+          else if(request.loggedIn == false){
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
@@ -41,16 +57,8 @@ class ShopCard extends StatelessWidget {
               ..showSnackBar(SnackBar(
                   content: Text("Kamu telah menekan tombol ${item.name}!")));
             // Navigate ke route yang sesuai (tergantung jenis tombol)
-            if (item.name == "Katalog Buku") {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti katalog buku
-            }
-            else if (item.name == "Review Buku"){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti review buku
-            }
-            else if (item.name == "Event"){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti event
-            }
-            else if (item.name == "Logout") {
+
+            if (item.name == "Logout") {
               final response = await request.logout(
                 // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                   "http://127.0.0.1:8000/auth/logout/");
