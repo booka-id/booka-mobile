@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/landing_page/login.dart';
+import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 
 class RegisterFormPage extends StatefulWidget {
   const RegisterFormPage({super.key});
@@ -38,11 +39,11 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             TextFormField(
               controller: _usernameController,
               decoration: const InputDecoration(
-                labelText: 'Username',
+                labelText: 'Email',
               ),
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
-                  return "Username tidak boleh kosong!";
+                  return "Email tidak boleh kosong!";
                 }
                 return null;
               },
@@ -61,7 +62,34 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 return null;
               },
             ),
-            const SizedBox(height: 24.0),
+            TextFormField(
+              controller: _usernameController,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+              ),
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return "Username tidak boleh kosong!";
+                }
+                return null;
+              },
+            ),
+            //Image form for profile picture
+            FormBuilderImagePicker(
+              name: 'images',
+              decoration: const InputDecoration(
+                labelText: 'Profile Picture',
+              ),
+              maxImages: 1,
+              iconColor: Colors.indigo,
+              validator: (images) {
+                if (images == null || images.isEmpty) {
+                  return 'Please pick at least one image';
+                }
+                return null;
+              },
+            ),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
