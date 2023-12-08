@@ -12,9 +12,9 @@ class LeftDrawer extends StatelessWidget {
       child: ListView(
         children: [
           const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.indigo,
-          ),
+            decoration: BoxDecoration(
+              color: Colors.indigo,
+            ),
             child: Column(
               children: [
                 Text(
@@ -27,7 +27,8 @@ class LeftDrawer extends StatelessWidget {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(10)),
-                Text("Daftarkan Buku yang Anda Ingin Baca!",
+                Text(
+                  "Daftarkan Buku yang Anda Ingin Baca!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
@@ -37,7 +38,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
               ],
             ),
-        ),
+          ),
           ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('Halaman Utama'),
@@ -45,7 +46,6 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                   context,
-
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(),
                   ));
@@ -59,8 +59,9 @@ class LeftDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage() //Todo ganti katalog buku,
-                  ));
+                      builder: (context) =>
+                          MyHomePage() //Todo ganti katalog buku,
+                      ));
             },
           ),
           ListTile(
@@ -71,8 +72,9 @@ class LeftDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage() //Todo ganti review buku,
-                  ));
+                      builder: (context) =>
+                          MyHomePage() //Todo ganti review buku,
+                      ));
             },
           ),
           ListTile(
@@ -83,8 +85,9 @@ class LeftDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyHomePage() //Todo ganti event buku,
-                  ));
+                      builder: (context) =>
+                          MyHomePage() //Todo ganti event buku,
+                      ));
             },
           ),
         ],

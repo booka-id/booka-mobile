@@ -68,7 +68,10 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context,  MaterialPageRoute(builder: (context) =>RegisterFormPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterFormPage()));
               },
               child: const Text('Register'),
             ),
@@ -82,10 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                 // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
-                final response = await request.login("http://127.0.0.1:8000/auth/login/", {
-                  'username': username,
-                  'password': password,
-                });
+                final response = await request.login(
+                    "https://deploytest-production-cf18.up.railway.app/login_mobile/",
+                    {
+                      'username': username,
+                      'password': password,
+                    });
 
                 if (request.loggedIn) {
                   String message = response['message'];
@@ -97,15 +102,14 @@ class _LoginPageState extends State<LoginPage> {
                   );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                        SnackBar(content: Text("$message Selamat datang, $uname.")));
+                    ..showSnackBar(SnackBar(
+                        content: Text("$message Selamat datang, $uname.")));
                 } else {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('Login Gagal'),
-                      content:
-                      Text(response['message']),
+                      content: Text(response['message']),
                       actions: [
                         TextButton(
                           child: const Text('OK'),

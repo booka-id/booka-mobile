@@ -9,15 +9,14 @@ class ShopItem {
   final String name;
   final IconData icon;
   final Color cardColor;
-  ShopItem(this.name, this.icon, this.cardColor) ;
+  ShopItem(this.name, this.icon, this.cardColor);
 }
-
 
 class ShopCard extends StatelessWidget {
   final ShopItem item;
   final Color cardColor;
 
-  const ShopCard(this.item, this.cardColor ,{super.key}); // Constructor
+  const ShopCard(this.item, this.cardColor, {super.key}); // Constructor
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +28,35 @@ class ShopCard extends StatelessWidget {
         onTap: () async {
           // Bakal Dipindahin kebawah nantinya
           if (item.name == "Katalog Buku") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti katalog buku
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyHomePage())); //todo Ganti katalog buku
+          } else if (item.name == "Review Buku") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyHomePage())); //todo Ganti review buku
+          } else if (item.name == "Event") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyHomePage())); //todo Ganti event
           }
-          else if (item.name == "Review Buku"){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti review buku
-          }
-          else if (item.name == "Event"){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));//todo Ganti event
-          }
-          if(item.name == "Login"){
-            ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-            content: Text("Menekan tombol login !")));
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
-
-          }
-          else if(request.loggedIn == false){
+          if (item.name == "Login") {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text("Login terlebih dahulu !")));
-
-          }else{
+              ..showSnackBar(const SnackBar(content: Text("Menekan tombol login !")));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+          } else if (request.loggedIn == false) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                  const SnackBar(content: Text("Login terlebih dahulu !")));
+          } else {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
@@ -60,8 +65,8 @@ class ShopCard extends StatelessWidget {
 
             if (item.name == "Logout") {
               final response = await request.logout(
-                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                  "http://127.0.0.1:8000/auth/logout/");
+                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                  "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
               String message = response["message"];
               if (response['status']) {
                 String uname = response["username"];
@@ -74,12 +79,12 @@ class ShopCard extends StatelessWidget {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("$message"),
+                  content: Text(message),
                 ));
               }
             }
-            }
-          },
+          }
+        },
         child: Container(
           // Container untuk menyimpan Icon dan Text
           padding: const EdgeInsets.all(8),
