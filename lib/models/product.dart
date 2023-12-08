@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-List<Book> welcomeFromJson(String str) => List<Book>.from(json.decode(str).map((x) => Book.fromJson(x)));
+List<Book> welcomeFromJson(String str) =>
+    List<Book>.from(json.decode(str).map((x) => Book.fromJson(x)));
 
-String welcomeToJson(List<Book> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String welcomeToJson(List<Book> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Book {
   String model;
@@ -20,16 +22,16 @@ class Book {
   });
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
-    model: json["model"],
-    pk: json["pk"],
-    fields: Fields.fromJson(json["fields"]),
-  );
+        model: json["model"],
+        pk: json["pk"],
+        fields: Fields.fromJson(json["fields"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "model": model,
-    "pk": pk,
-    "fields": fields.toJson(),
-  };
+        "model": model,
+        "pk": pk,
+        "fields": fields.toJson(),
+      };
 }
 
 class Fields {
@@ -52,22 +54,23 @@ class Fields {
   });
 
   factory Fields.fromJson(Map<String, dynamic> json) => Fields(
-    user: json["user"],
-    dateAdded: DateTime.parse(json["date_added"]),
-    name: json["name"],
-    author: json["author"],
-    description: json["description"],
-    status: json["status"],
-    amount: json["amount"],
-  );
+        user: json["user"],
+        dateAdded: DateTime.parse(json["date_added"]),
+        name: json["name"],
+        author: json["author"],
+        description: json["description"],
+        status: json["status"],
+        amount: json["amount"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "user": user,
-    "date_added": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
-    "name": name,
-    "author": author,
-    "description": description,
-    "status": status,
-    "amount": amount,
-  };
+        "user": user,
+        "date_added":
+            "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
+        "name": name,
+        "author": author,
+        "description": description,
+        "status": status,
+        "amount": amount,
+      };
 }

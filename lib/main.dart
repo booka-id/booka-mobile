@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'models/user.dart';
 
-
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -14,7 +13,6 @@ void main() {
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -34,6 +32,5 @@ class MyApp extends StatelessWidget {
           ),
           home: MyHomePage()),
     );
-
   }
 }
