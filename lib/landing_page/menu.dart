@@ -5,6 +5,7 @@ import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/landing_page/shop_card.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:booka_mobile/profile/profile_page.dart';
 
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
@@ -50,11 +51,18 @@ class MyHomePage extends StatelessWidget {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const LoginPage()));
               } else if (value == 'Profile') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(
                       content: Text("Kamu telah menekan tombol $value!")));
               } else if (value == 'Logout') {
+
+
+
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(

@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
                 final response = await request.login(
-                    "https://deploytest-production-cf18.up.railway.app/login_mobile/",
+                    "http://10.0.2.2:8000/login_mobile/",
                     {
                       'username': username,
                       'password': password,
@@ -96,6 +96,8 @@ class _LoginPageState extends State<LoginPage> {
                   String message = response['message'];
                   String uname = response['username'];
                   userProvider.setUsername(uname);
+                  userProvider.setProfilePicture(response['image_url']);
+                  userProvider.setEmail(response['email']);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),

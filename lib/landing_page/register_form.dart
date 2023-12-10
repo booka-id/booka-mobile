@@ -1,9 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/landing_page/login.dart';
-import 'package:form_builder_image_picker/form_builder_image_picker.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:cloudinary_url_gen/cloudinary.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloudinary_api/uploader/cloudinary_uploader.dart';
 
 class RegisterFormPage extends StatefulWidget {
   const RegisterFormPage({super.key});
@@ -13,10 +19,46 @@ class RegisterFormPage extends StatefulWidget {
 }
 
 class _RegisterFormPageState extends State<RegisterFormPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  File? _imageFile;
+  String? _imageUrl;
+  String? _imagePath;
+
   final _formKey = GlobalKey<FormState>();
   String name = "";
+
+  Future<void> pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedImage = await picker.pickImage(source: source);
+
+    setState(() {
+      if (pickedImage != null) _imageFile = File(pickedImage.path);
+    });
+  }
+
+  Future<void> uploadImage() async {
+    print(_imageFile!.path);
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/dtelcmaaw/upload');
+    //  qj9uibnk
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 'p03rcnnf'
+      ..files.add(await http.MultipartFile.fromPath('file', _imageFile!.path));
+    print(_imageFile!.path);
+
+    final response = await request.send();
+    print(response);
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
+      final jsonMap = jsonDecode(responseString);
+      setState(() {
+        final url = jsonMap['url'];
+        _imageUrl = url;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +79,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TextFormField(
-              controller: _usernameController,
+              controller: _emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
               ),
@@ -75,21 +117,47 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               },
             ),
             //Image form for profile picture
-            FormBuilderImagePicker(
-              name: 'images',
-              decoration: const InputDecoration(
-                labelText: 'Profile Picture',
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  const Text(
+                    "Upload Profile Picture",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          pickImage(ImageSource.camera);
+                        },
+                        child: const Text("Camera"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          pickImage(ImageSource.gallery);
+                        },
+                        child: const Text("Gallery"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _imageFile == null
+                      ? const Text("No Image Selected")
+                      : Image.file(
+                          _imageFile!,
+                          width: 300,
+                          height: 300,
+                        ),
+                ],
               ),
-              maxImages: 1,
-              iconColor: Colors.indigo,
-              validator: (images) {
-                if (images == null || images.isEmpty) {
-                  return 'Please pick at least one image';
-                }
-                return null;
-              },
             ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -113,14 +181,23 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                         if (_formKey.currentState!.validate()) {
                           String username = _usernameController.text;
                           String password = _passwordController.text;
+                          String email = _emailController.text;
+
+                          //try to upload image
+                          if (_imageFile != null) {
+                            await uploadImage();
+                            print(_imageUrl);
+                          }
 
                           // Kirim ke Django dan tunggu respons
                           // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                           final response = await request.postJson(
-                              "http://127.0.0.1:8000/register_mobile/",
+                              "http://10.0.2.2:8000/register_mobile/",
                               jsonEncode(<String, String>{
-                                'username': username,
+                                'username': email,
                                 'password': password,
+                                'name': username,
+                                'imageUrl': _imageUrl.toString(),
                                 // TODO: Sesuaikan field data sesuai dengan aplikasimu
                               }));
                           if (response['status'] == 'success') {
