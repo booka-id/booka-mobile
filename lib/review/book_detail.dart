@@ -44,8 +44,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
   Future<List<Review>> fetchBookReviews() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
+        // 'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
         // 'http://10.0.2.2:8000/review/get_reviews/${bookID}'
+        'http://127.0.0.1:8000/review/get_reviews/${bookID}'
         );
     var response = await http.get(
         url,
@@ -106,7 +107,7 @@ void showReviewsBottomSheet() {
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return const Center(
                         child: Text(
-                          "Tidak ada data review.",
+                          "Be the first to review this book!",
                           style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
                         ),
                       );
@@ -115,7 +116,7 @@ void showReviewsBottomSheet() {
                         return const Column(
                             children: [
                             Text(
-                                "Tidak ada data produk.",
+                                "Be the first to review this book!",
                                 style:
                                     TextStyle(color: Color(0xff59A5D8), fontSize: 20),
                             ),
@@ -126,13 +127,6 @@ void showReviewsBottomSheet() {
                         return ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) => InkWell(
-                              onTap: () async {
-                                // Navigator.push(
-                                // context,
-                                // MaterialPageRoute(
-                                //   builder: (context) => ItemDetailPage(itemID: snapshot.data![index].pk,),
-                                // ));
-                              },
                               child: Container(
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 12),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewFormPage extends StatefulWidget {
   final int bookID;
@@ -43,38 +44,23 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Rating",
-                        labelText: "Rating",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
+                  SizedBox(height: 20,),
+                  Center(
+                    child: RatingBar.builder(
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      itemCount: 5,
+                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
                       ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                        // Hanya menerima input digit
-                      ],
-                      // TODO: Tambahkan variabel yang sesuai
-                      onChanged: (String? value) {
-                        setState(() {
-                          _rating = int.parse(value!);
-                        });
-                      },
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return "Jumlah pemesanan tidak boleh kosong!";
-                        }
-                        if (int.tryParse(value) == null) {
-                          return "Jumlah pemesanan harus berupa angka!";
-                        }
-                        return null;
+                      onRatingUpdate: (rating) {
+                        this._rating = rating as int;
                       },
                     ),
                   ),
+                  SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
@@ -112,8 +98,9 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                             // Kirim ke Django dan tunggu respons
                             // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                             final response = await request.postJson(
-                            // "http://127.0.0.1:8000/create-flutter/",
-                            "http://10.0.2.2:8000/review/post-flutter/${bookID}",
+                            "http://127.0.0.1:8000/review/post-flutter/$bookID",
+                            // "http://10.0.2.2:8000/review/post-flutter/${bookID}",
+                            // "https://deploytest-production-cf18.up.railway.app/review/post-flutter/${bookID}",
                             jsonEncode(<String, String>{
                                 'title': '',
                                 'rating': _rating.toString(),
