@@ -27,10 +27,6 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
-          DropdownButton(
-              items: items,
-              onChanged: onChanged
-          ),
         ],
       ),
       drawer: const LeftDrawer(),
