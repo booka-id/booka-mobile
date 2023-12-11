@@ -19,7 +19,6 @@ class _BookListWidgetState extends State<BookListWidget> {
   _BookListWidgetState(this.type);
 
   Future<List<Container>> fetchBook(String type) async {
-    print("masuk fetch book");
 
     final userProvider = context.read<UserProvider>();
     var url;
@@ -51,16 +50,23 @@ class _BookListWidgetState extends State<BookListWidget> {
             child: Card(
                 child: Column(
               children: [
-                Image.network(
-                  d['image_url_medium'],
-                  width: 150,
-                  height: 150,
-                ),
-                Text(
-                  d['title'],
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(d['author']),
+                  Container(
+                    width: 150,
+                    height: 150,
+                    child:DecoratedBox(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(d['image_url_medium']),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    d['title'],
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(d['author']),
               ],
             )),
           ),

@@ -26,34 +26,63 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-                radius: 100, backgroundImage: NetworkImage(profilePicture)),
-            const SizedBox(height: 12.0),
-            Text(
-              userName,
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 12.0),
-            Text(
-              email,
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 12.0),
-            Text('Buku Favorit'),
             Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: BookListWidget('favorite'),
+              margin: const EdgeInsets.only(top: 20),
+              child: Center(
+                child: CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(profilePicture),
+                ),
+              ),
             ),
-            Text('Buku Wishlist'),
             Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: BookListWidget('wishlist'),
+              margin: const EdgeInsets.only(top: 20),
+              child: Center(
+                child: Text(
+                  userName,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Center(
+                child: Text(
+                  email,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Center(
+                child: BookListWidget('favorit'),
+                ),
+              ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BookListWidget('favorit')));
+                  },
+                  child: const Text('List Buku'),
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
