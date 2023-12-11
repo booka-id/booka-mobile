@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'show Platform, File;
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -150,11 +151,17 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                   ),
                   _imageFile == null
                       ? const Text("No Image Selected")
-                      : Image.file(
+                      : kIsWeb? Image.network(
+                          _imageFile!.path,
+                          height: 150,
+                          width: 150,
+
+                  ):
+                      Image.file(
                           _imageFile!,
-                          width: 300,
-                          height: 300,
-                        ),
+                          height: 150,
+                          width: 150,
+                      ),
                 ],
               ),
             ),

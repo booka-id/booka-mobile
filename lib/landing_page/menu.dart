@@ -24,51 +24,55 @@ class MyHomePage extends StatelessWidget {
     final request = context.watch<CookieRequest>();
     final user = context.read<UserProvider>();
     final userName = user.username;
-    List<String> list = <String>['Login', 'Profile', 'Logout'];
-    if (request.loggedIn) {
-      list = <String>[userName, 'Profile', 'Logout'];
-    }
+
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'booka-mobile Book Inventory ',
+          'booka-mobile',
         ),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
-          //DropdownButton for profile, if user not login display login button, if user login display profile and logout button
-          DropdownButton<String>(
-            items: list.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            //if user not login display login button, if user login display profile and logout button
-            onChanged: (String? value) {
-              if (value == 'Login') {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
-              } else if (value == 'Profile') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfilePage()));
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                      content: Text("Kamu telah menekan tombol $value!")));
-              } else if (value == 'Logout') {
 
 
 
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                      content: Text("Kamu telah menekan tombol $value!")));
-              }
-            },
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: request.loggedIn == true?
+            //User Sudah Login
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(user.profile_picture),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePage()));
+                  },
+                ),
+              ) :
+              // User Belum Login
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()));
+                },
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              )
           ),
         ],
       ),

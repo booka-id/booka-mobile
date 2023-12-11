@@ -4,7 +4,6 @@ class UserProvider extends ChangeNotifier {
   String _username = '';
   String _profile_picture = '';
   String _email = '';
-  Image? _image;
 
 
   String get username => _username;
@@ -17,7 +16,6 @@ class UserProvider extends ChangeNotifier {
   }
   void setProfilePicture(String newProfilePicture) {
     _profile_picture = newProfilePicture;
-    _image = Image.network(_profile_picture);
     notifyListeners();
   }
   void setEmail(String newEmail) {
