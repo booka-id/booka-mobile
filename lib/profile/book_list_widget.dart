@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +20,17 @@ class _BookListWidgetState extends State<BookListWidget> {
   String type;
   _BookListWidgetState(this.type);
 
+  String changeUrl(String url) {
+    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    return newUrl;
+
+  }
+
   Future<List<Container>> fetchBook(String type) async {
 
     final userProvider = context.read<UserProvider>();
     var url;
-    if (type == "favorite") {
+    if (type == 'favorite') {
       url = Uri.parse(
           'http://10.0.2.2:8000/profile/get_favorite_book/${userProvider.email}/');
     } else {
@@ -53,20 +61,22 @@ class _BookListWidgetState extends State<BookListWidget> {
                   Container(
                     width: 150,
                     height: 150,
-                    child:DecoratedBox(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(d['image_url_medium']),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    child: Image.network(
+                        changeUrl(d['image_url_medium'],
+
                     ),
-                  ),
+                      fit: BoxFit.cover,
+                    )
+                    ),
+
                   Text(
                     d['title'],
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(d['author']),
+                  Text(
+                      d['author'],
+                      overflow: TextOverflow.ellipsis,
+                  ),
               ],
             )),
           ),
@@ -82,21 +92,19 @@ class _BookListWidgetState extends State<BookListWidget> {
         child: FutureBuilder(
       future: fetchBook(type),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.data == null) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData) {
+        if(!snapshot.hasData || snapshot.data == null){
+          return Container(
+              height: 200,
+              child: const Center(
+                child: Text("No Data"),
+              ),
+            );
+        } else {
           return Container(
             height: 200,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: snapshot.data,
-            ),
-          );
-        } else {
-          return Container(
-            height: 200,
-            child: const Center(
-              child: Text("No Data"),
             ),
           );
         }

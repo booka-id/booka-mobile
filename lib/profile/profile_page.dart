@@ -14,9 +14,9 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     final user = context.read<UserProvider>();
-    final userName = user.username;
-    final profilePicture = user.profile_picture;
-    final email = user.email;
+    String? userName = user.username;
+    String? profilePicture = user.profile_picture;
+    String? email = user.email;
 
     return Scaffold(
       appBar: AppBar(
@@ -65,21 +65,13 @@ class ProfilePage extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: Center(
-                child: BookListWidget('favorit'),
+                child: BookListWidget('favorite'),
                 ),
               ),
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const BookListWidget('favorit')));
-                  },
-                  child: const Text('List Buku'),
-                ),
+                child: BookListWidget('wishlist'),
               ),
             ),
 

@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   String message = response['message'];
                   String uname = response['username'];
                   userProvider.setUsername(uname);
-                  userProvider.setProfilePicture(response['image_url']);
+                  userProvider.setProfilePicture((response['image_url'] == null ? "https://ui-avatars.com/api/?name=$uname&background=0D8ABC&color=fff&size=128" : response['image_url']));
                   userProvider.setEmail(response['email']);
                   Navigator.pushReplacement(
                     context,
