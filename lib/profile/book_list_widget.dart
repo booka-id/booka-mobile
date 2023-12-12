@@ -63,7 +63,6 @@ class _BookListWidgetState extends State<BookListWidget> {
                     height: 150,
                     child: Image.network(
                         changeUrl(d['image_url_medium'],
-
                     ),
                       fit: BoxFit.cover,
                     )
