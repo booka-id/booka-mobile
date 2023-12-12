@@ -22,8 +22,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
-    final user = context.read<UserProvider>();
-    final userName = user.username;
+    final user = context.watch<UserProvider>();
 
 
     return Scaffold(
@@ -35,24 +34,27 @@ class MyHomePage extends StatelessWidget {
         foregroundColor: Colors.white,
         actions: [
 
-
-
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: request.loggedIn == true?
             //User Sudah Login
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage(user.profile_picture),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ProfilePage()));
-                  },
-                ),
-              ) :
+              Consumer<UserProvider>(
+                  builder: (context, user,_){
+                    return CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(user.profile_picture),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfilePage()));
+                        },
+                      ),
+                    );
+                  }
+              )
+              :
               // User Belum Login
               ElevatedButton(
                 style: ElevatedButton.styleFrom(

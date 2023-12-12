@@ -8,7 +8,8 @@ import 'models/user.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+      create: (context) => UserProvider() ,
+
       child: const MyApp(),
     ),
   );

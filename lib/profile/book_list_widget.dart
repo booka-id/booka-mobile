@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../landing_page/login.dart';
 import '../models/user.dart';
 
 class BookListWidget extends StatefulWidget {
@@ -27,10 +28,9 @@ class _BookListWidgetState extends State<BookListWidget> {
   }
 
   Future<List<Container>> fetchBook(String type) async {
-
     final userProvider = context.read<UserProvider>();
     var url;
-    if (type == 'favorite') {
+    if (type == 'Favorit') {
       url = Uri.parse(
           'http://10.0.2.2:8000/profile/get_favorite_book/${userProvider.email}/');
     } else {
@@ -54,7 +54,7 @@ class _BookListWidgetState extends State<BookListWidget> {
         listBuku.add(
           Container(
             width: 150,
-            height: 250,
+            height: 300,
             child: Card(
                 child: Column(
               children: [
@@ -64,17 +64,23 @@ class _BookListWidgetState extends State<BookListWidget> {
                     child: Image.network(
                         changeUrl(d['image_url_medium'],
                     ),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     )
-                    ),
-
-                  Text(
-                    d['title'],
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                      d['author'],
+
+                  SizedBox(
+                    height: 75,
+                    child: Text(
+                        d['title'],
+                        overflow: TextOverflow.clip,
+                      ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Text(
+                      'By: ${d['author']}',
                       overflow: TextOverflow.ellipsis,
+                    ),
                   ),
               ],
             )),
@@ -93,18 +99,19 @@ class _BookListWidgetState extends State<BookListWidget> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if(!snapshot.hasData || snapshot.data == null){
           return Container(
-              height: 200,
               child: const Center(
-                child: Text("No Data"),
+                child: Text("Belum ada buku"),
               ),
             );
         } else {
           return Container(
-            height: 200,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: snapshot.data,
-            ),
+            height: 350,
+            child: Expanded(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: snapshot.data,
+              ),
+            )
           );
         }
       },

@@ -95,10 +95,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 if (request.loggedIn) {
                   String message = response['message'];
-                  String uname = response['username'];
-                  userProvider.setUsername(uname);
-                  userProvider.setProfilePicture((response['image_url'] == null ? "https://ui-avatars.com/api/?name=$uname&background=0D8ABC&color=fff&size=128" : response['image_url']));
-                  userProvider.setEmail(response['email']);
+                  await userProvider.setUser(response['username'], response['image_url'] ?? "https://ui-avatars.com/api/?name=${response['username']}&background=0D8ABC&color=fff&size=128", response['email']);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),
@@ -106,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(
-                        content: Text("$message Selamat datang, $uname.")));
+                        content: Text("$message Selamat datang, ${response['username']}.")));
                 } else {
                   showDialog(
                     context: context,
