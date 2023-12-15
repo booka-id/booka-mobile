@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -35,7 +34,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
             ),
             backgroundColor: Colors.indigo,
             foregroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white),
           ),
           // TODO: Tambahkan drawer yang sudah dibuat di sini
           body: Form(
@@ -44,23 +43,23 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Center(
                     child: RatingBar.builder(
                       minRating: 1,
                       direction: Axis.horizontal,
                       itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        this._rating = rating as int;
+                        _rating = rating as int;
                       },
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(

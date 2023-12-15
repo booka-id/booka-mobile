@@ -20,14 +20,14 @@ class UserProvider extends ChangeNotifier {
   List<Fields> get temp_books => _temp_books;
 
   Future<List<Fields>> fetchBook(String type) async {
-    var url;
+    Uri url;
     var book;
     if (type == 'favorit') {
       url = Uri.parse(
-          'http://10.0.2.2:8000/profile/get_favorite_book/${_email}/');
+          'http://10.0.2.2:8000/profile/get_favorite_book/$_email/');
     } else {
       url = Uri.parse(
-          'http://10.0.2.2:8000/profile/get_wishlist/${_email}/');
+          'http://10.0.2.2:8000/profile/get_wishlist/$_email/');
     }
     var response = await http.get(
       url,
@@ -55,7 +55,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<String> saveBook(List<Fields> books, String type) async {
-    var url;
+    Uri url;
     if (type == 'favorit') {
       url = Uri.parse(
           'http://10.0.2.2:8000/profile/add_favorite_book/',
@@ -76,9 +76,9 @@ class UserProvider extends ChangeNotifier {
     return jsonDecode(response.body)['message'];
   }
 
-  Future<void> setUser(String username, String profile_picture, String email) async {
+  Future<void> setUser(String username, String profilePicture, String email) async {
     _username = username;
-    _profile_picture = profile_picture;
+    _profile_picture = profilePicture;
     _email = email;
     _wishlist = await fetchBook('wishlist');
     _favorite_book = await fetchBook('favorit');

@@ -1,11 +1,9 @@
-import 'package:booka_mobile/models/review.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/review/feeds.dart';
 import 'package:booka_mobile/landing_page/login.dart';
-import 'package:booka_mobile/landing_page/menu.dart';
 
 class ShopItem {
   final String name;
@@ -69,7 +67,7 @@ class ShopCard extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ReviewPage())); //todo Ganti review buku
+                          const ReviewPage())); //todo Ganti review buku
             }
 
             if (item.name == "Logout") {

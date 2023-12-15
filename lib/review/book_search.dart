@@ -1,14 +1,12 @@
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
 class BookSearchPage extends StatefulWidget {
-  BookSearchPage({Key? key}) : super(key: key);
+  const BookSearchPage({Key? key}) : super(key: key);
 
   @override
   _BookSearchPageState createState() => _BookSearchPageState();
@@ -73,7 +71,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
           'Booka',
           style: TextStyle(color: Colors.white),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.indigo,
         centerTitle: true,
       ),
@@ -89,11 +87,11 @@ class _BookSearchPageState extends State<BookSearchPage> {
                 fillColor: Colors.white,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(width: 2.0, color: Colors.grey),
+                  borderSide: const BorderSide(width: 2.0, color: Colors.grey),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(width: 2.0, color: Colors.indigo),
+                  borderSide: const BorderSide(width: 2.0, color: Colors.indigo),
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
                 suffixIcon: const Icon(Icons.search),
@@ -108,7 +106,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
             child: ListView.builder(
             itemCount: book_displayed.length,
             itemBuilder: (_, index) => ListTile(
-              contentPadding: EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(10),
               onTap: () async {
                 Navigator.push(
                 context,
