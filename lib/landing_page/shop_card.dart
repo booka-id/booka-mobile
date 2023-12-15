@@ -29,24 +29,24 @@ class ShopCard extends StatelessWidget {
         // Area responsive terhadap sentuhan
         onTap: () async {
           // Bakal Dipindahin kebawah nantinya
-          // if (item.name == "Katalog Buku") {
-          //   Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //           builder: (context) =>
-          //               MyHomePage())); //todo Ganti katalog buku
-          // } else if (item.name == "Review Buku") {
-          //   Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //           builder: (context) =>
-          //               ReviewPage())); //todo Ganti review buku
-          // } else if (item.name == "Event") {
-          //   Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //           builder: (context) => MyHomePage())); //todo Ganti event
-          // }
+          if (item.name == "Katalog Buku") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyHomePage())); //todo Ganti katalog buku
+          } else if (item.name == "Review Buku") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ReviewPage())); //todo Ganti review buku
+          } else if (item.name == "Event") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyHomePage())); //todo Ganti event
+          }
           if (item.name == "Login") {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()

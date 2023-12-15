@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:booka_mobile/landing_page/menu.dart';
+import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:booka_mobile/review/feeds.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,9 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
     @override
     Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
+        final user = context.read<UserProvider>();
+
+        print(request.jsonData);
         return Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -100,7 +104,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                                 'rating': _rating.toString(),
                                 'content': _content,
                                 //TODO: FIGURE OUT HOW TO GET THE LOGGED IN USER'S EMAIL
-                                'email' : 'adminmagang@gmail.com' //MASIH HARDCODE,
+                                'email' : user.email //MASIH HARDCODE,
                             }));
                             if (response['status'] == 'success') {
                                 ScaffoldMessenger.of(context)
