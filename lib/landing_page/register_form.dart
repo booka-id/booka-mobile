@@ -7,10 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/landing_page/login.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:cloudinary_url_gen/cloudinary.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:cloudinary_api/uploader/cloudinary_uploader.dart';
 
 class RegisterFormPage extends StatefulWidget {
   const RegisterFormPage({super.key});

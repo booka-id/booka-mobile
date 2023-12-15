@@ -6,7 +6,7 @@ import '../models/book.dart';
 
 class BookList extends StatelessWidget {
   final String type;
-  const BookList(String this.type, {Key? key}) : super(key: key);
+  const BookList(this.type, {Key? key}) : super(key: key);
 
   String changeUrl(String url) {
     String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
@@ -30,43 +30,65 @@ class BookList extends StatelessWidget {
         return Center(
             child: SizedBox(
               height: 275,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: books.length,
-                  itemBuilder: (context, index) {
-                return SizedBox(
-                  width: 150,
-                  height: 250,
-                  child: Card(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: Image.network(
-                              changeUrl(books[index].imageUrlMedium),
-                              fit: BoxFit.fill,
-                            ),
+                child: books.isEmpty ?
+                const SizedBox(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Belum ada buku',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(
-                            height: 75,
-                            child: Text(
-                              books[index].title,
-                              overflow: TextOverflow.clip,
+                        ),
+                      ),
+                    )) :
+                ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: books.length,
+                    itemBuilder: (context, index) {
+                  return SizedBox(
+                    width: 150,
+                    height: 250,
+                    child: Card(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              width: 150,
+                              height: 150,
+                              child: FadeInImage(
+                                placeholder: const AssetImage('assets/images/no_image.jpg'),
+                                image: NetworkImage(changeUrl(books[index].imageUrlMedium)),
+                                fit: BoxFit.cover,
+                                placeholderErrorBuilder: (context, error, stackTrace) {
+                                  return const Image(
+                                    image: AssetImage('assets/images/no_image.jpg'),
+                                  );
+                                }
+                              )
                             ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                            child: Text(
-                              'By: ${books[index].author}',
-                              overflow: TextOverflow.ellipsis,
+                            SizedBox(
+                              height: 75,
+                              child: Text(
+                                books[index].title,
+                                overflow: TextOverflow.clip,
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
-                );
-              },
-              )
+                            SizedBox(
+                              height: 20,
+                              child: Text(
+                                'By: ${books[index].author}',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        )),
+                  );
+                },
+                )
                 )
             );
         },

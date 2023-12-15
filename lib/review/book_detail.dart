@@ -21,7 +21,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
   Future<List<Book>> fetchBookDetails() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'https://deploytest-production-cf18.up.railway.app/review/books/${bookID}'
+        'https://deploytest-production-cf18.up.railway.app/review/books/$bookID'
         // 'http://127.0.0.1:8000/review/all/'
         );
     var response = await http.get(
@@ -33,10 +33,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     // melakukan konversi data json menjadi object Product
-    List<Book> all_review = [];
+    List<Book> allReview = [];
     for (var d in data) {
         if (d != null) {
-            all_review.add(Book.fromJson(d));
+            allReview.add(Book.fromJson(d));
         }
     }
     return all_review;
@@ -61,13 +61,38 @@ class _BookDetailPageState extends State<BookDetailPage> {
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     // melakukan konversi data json menjadi object Product
-    List<Review> all_review = [];
+    List<Review> allReview = [];
     for (var d in data) {
         if (d != null) {
-            all_review.add(Review.fromJson(d));
+            allReview.add(Review.fromJson(d));
         }
     }
-    return all_review;
+    return allReview;
+}
+
+Future<String> getUsername(int id) async {
+  String url = "http://10.0.2.2:8000/review/get_user/$id";
+
+  // Make the HTTP GET request
+  http.Response response = await http.get(Uri.parse(url));
+
+  // Check if the request was successful (status code 200)
+  if (response.statusCode == 200) {
+    // Parse the JSON response
+    List<dynamic> userDataList = jsonDecode(response.body);
+
+    if (userDataList.isNotEmpty) {
+      // Extract username from the first user's fields
+      Map<String, dynamic> userData = userDataList[0];
+      String username = userData['fields']['username'];
+      return username;
+    } else {
+      throw Exception('No user data found');
+    }
+  } else {
+    // Request failed, throw an error or return null
+    throw Exception('Failed to fetch user data');
+  }
 }
 
 Future<String> getUsername(int id) async {
@@ -113,7 +138,7 @@ void showReviewsBottomSheet() {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
               decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: Colors.grey)),
@@ -219,7 +244,7 @@ void showReviewsBottomSheet() {
 
 void showAddReviewBottomSheet() {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -263,7 +288,7 @@ void showAddReviewBottomSheet() {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -283,7 +308,7 @@ void showAddReviewBottomSheet() {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Image.network(
                     changeUrl(book.fields.imageUrlLarge), // Gunakan URL gambar cover buku dari data API
                     fit: BoxFit.fitWidth,
@@ -291,43 +316,43 @@ void showAddReviewBottomSheet() {
                   ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           '${book.fields.author}, ${book.fields.year}',
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          '${book.fields.publisher}',
-                          style: TextStyle(fontSize: 18),
+                          book.fields.publisher,
+                          style: const TextStyle(fontSize: 18),
                         ),
                         Text(
                           'ISBN: ${book.fields.isbn}',
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ),
-                        Text(
+                        const Text(
                           '⭐5/5', // Gunakan rating dari data API
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
                         // Implementasi navigasi ke halaman reviews
                         showReviewsBottomSheet();
                       },
-                      child: Text('See Reviews'),
+                      child: const Text('See Reviews'),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
                         // Implementasi navigasi ke halaman tambah review
@@ -338,17 +363,17 @@ void showAddReviewBottomSheet() {
                         //   builder: (context) => ReviewFormPage(bookID: bookID,),
                         // ));
                       },
-                      child: Text('Add Review'),
+                      child: const Text('Add Review'),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             );
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

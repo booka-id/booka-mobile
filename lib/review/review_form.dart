@@ -5,7 +5,6 @@ import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:booka_mobile/review/feeds.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -39,13 +38,13 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Center(
                     child: RatingBar.builder(
                       minRating: 1,
                       direction: Axis.horizontal,
                       itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -58,7 +57,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(

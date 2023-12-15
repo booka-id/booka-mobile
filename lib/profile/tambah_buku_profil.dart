@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/models/book.dart';
@@ -11,7 +12,7 @@ import '../models/user.dart';
 
 class AddBookButton extends StatelessWidget {
   final String type;
-  const AddBookButton(String this.type, {Key? key}) : super(key: key);
+  const AddBookButton(this.type, {Key? key}) : super(key: key);
 
   String changeUrl(String url) {
     String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
@@ -44,6 +45,10 @@ class AddBookButton extends StatelessWidget {
 
   }
 
+  List<Book> resultSearch(List<>){
+    return [];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +59,14 @@ class AddBookButton extends StatelessWidget {
               context: context,
               builder: (BuildContext context){
                 return AlertDialog(
-                  title: Text('Tambah Buku'),
-                  content: Container(
+                  title: const Text('Tambah Buku'),
+                  content: SizedBox(
                     width: 300,
                     height: 300,
                     child: Column(
                       children: [
                         TypeAheadField(
                           textFieldConfiguration: const TextFieldConfiguration(
-                            autofocus: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Cari Buku',
@@ -91,7 +95,7 @@ class AddBookButton extends StatelessWidget {
                               onPressed: (){
                                 userProvider.clearBooks();
                               },
-                              child: const Text('Bersihkan Pilihan'),
+                              child: const Text('Reset'),
                             ),
                             ElevatedButton(
                                 onPressed: (){
@@ -102,7 +106,7 @@ class AddBookButton extends StatelessWidget {
                                   }
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Simpan Buku ${type}'),
+                                child: const Text('Simpan'),
                             )
                           ],
                         ),
@@ -113,7 +117,7 @@ class AddBookButton extends StatelessWidget {
                 );
               }
           );
-        }, child: Text('Tambah Buku ${type}')
+        }, child: Text('Tambah Buku $type')
     );
   }
 }

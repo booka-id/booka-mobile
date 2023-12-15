@@ -11,7 +11,7 @@ import 'dart:convert';
 
 
 class ReviewPage extends StatefulWidget {
-  ReviewPage({Key? key}) : super(key: key);
+  const ReviewPage({Key? key}) : super(key: key);
 
   @override
   _ReviewPageState createState() => _ReviewPageState();
@@ -59,13 +59,13 @@ class _ReviewPageState extends State<ReviewPage> {
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     // melakukan konversi data json menjadi object Product
-    List<Review> all_review = [];
+    List<Review> allReview = [];
     for (var d in data) {
         if (d != null) {
-            all_review.add(Review.fromJson(d));
+            allReview.add(Review.fromJson(d));
         }
     }
-    return all_review;
+    return allReview;
 }
 
 Future<String> getUsername(int id) async {
@@ -126,7 +126,7 @@ Future<String> getBookTitle(int id) async {
           'Booka',
           style: TextStyle(color: Colors.white),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.indigo,
         centerTitle: true,
       ),
@@ -136,7 +136,7 @@ Future<String> getBookTitle(int id) async {
           Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BookSearchPage(),
+            builder: (context) => const BookSearchPage(),
           ));
         },
         child: const Icon(Icons.add),
