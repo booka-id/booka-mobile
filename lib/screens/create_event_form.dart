@@ -41,8 +41,6 @@ class _EventFormPageState extends State<EventFormPage> {
 
     for (var d in data) {
       if (d != null) {
-        //list_event.add(Event.fromJson(d));
-        //featuredBookList.length;
         list_string.add(Book.fromJson(d).fields.title);
       }
     }
@@ -76,7 +74,7 @@ Widget build(BuildContext context) {
                 return const Column(
                   children: [
                     Text(
-                      "Tidak ada Buku disini...",
+                      "Tidak ada buku disini",
                       style:
                       TextStyle(color: Color(0xff59A5D8), fontSize: 20),
                     ),
@@ -84,7 +82,7 @@ Widget build(BuildContext context) {
                   ],
                 );
               } else {
-                return Form(
+                return Form (
                   key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(
@@ -270,5 +268,8 @@ Widget build(BuildContext context) {
                 );
               }
             }
-      }));
-}}
+          }
+        )
+      );
+    }
+  }

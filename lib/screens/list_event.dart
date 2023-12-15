@@ -5,6 +5,7 @@ import 'package:booka_mobile/models/event.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:booka_mobile/screens/create_event_form.dart';
 import 'package:booka_mobile/screens/edit_event.dart';
+import 'package:booka_mobile/screens/register_event.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);
@@ -91,6 +92,23 @@ class _EventPageState extends State<EventPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              RegisterEventPage() 
+                                          ));
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                                ),
+                                child: const Text("Register", 
+                                style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.push(
