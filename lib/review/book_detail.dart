@@ -41,12 +41,16 @@ class _BookDetailPageState extends State<BookDetailPage> {
     }
     return all_review;
 }
+  String changeUrl(String url) {
+    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    return newUrl;
+  }
   Future<List<Review>> fetchBookReviews() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
         // 'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
-        // 'http://10.0.2.2:8000/review/get_reviews/${bookID}'
-        'http://127.0.0.1:8000/review/get_reviews/${bookID}'
+        'http://10.0.2.2:8000/review/get_reviews/${bookID}'
+        // 'http://127.0.0.1:8000/review/get_reviews/${bookID}'
         );
     var response = await http.get(
         url,
@@ -66,18 +70,44 @@ class _BookDetailPageState extends State<BookDetailPage> {
     return all_review;
 }
 
+Future<String> getUsername(int id) async {
+  String url = "http://10.0.2.2:8000/review/get_user/$id";
+
+  // Make the HTTP GET request
+  http.Response response = await http.get(Uri.parse(url));
+
+  // Check if the request was successful (status code 200)
+  if (response.statusCode == 200) {
+    // Parse the JSON response
+    List<dynamic> userDataList = jsonDecode(response.body);
+
+    if (userDataList.isNotEmpty) {
+      // Extract username from the first user's fields
+      Map<String, dynamic> userData = userDataList[0];
+      String username = userData['fields']['username'];
+      return username;
+    } else {
+      throw Exception('No user data found');
+    }
+  } else {
+    // Request failed, throw an error or return null
+    throw Exception('Failed to fetch user data');
+  }
+}
+
 void showReviewsBottomSheet() {
   showModalBottomSheet(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     clipBehavior: Clip.antiAliasWithSaveLayer,
-    // isScrollControlled: true,
+    isScrollControlled: true,
     showDragHandle: true,
     context: context, 
     builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 10.0),
+        height: MediaQuery.of(context).size.height * 0.75,
         color: Colors.white70,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -125,37 +155,56 @@ void showReviewsBottomSheet() {
                         );
                     } else {
                         return ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (_, index) => InkWell(
-                              child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 12),
-                                    padding: const EdgeInsets.all(20.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue,
-                                      borderRadius: BorderRadius.circular(20.0), // Set the border radius here
-                                    ),
-                                    child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                        Text(
-                                        "Review by user ${snapshot.data![index].fields.user}",
-                                        style: const TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (_, index) {
+                            return FutureBuilder<String>(
+                              future: getUsername(snapshot.data![index].fields.user),
+                              builder: (context, AsyncSnapshot<String> usernameSnapshot) {
+                                if (usernameSnapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (usernameSnapshot.hasError) {
+                                  return Text('Error: ${usernameSnapshot.error}');
+                                } else {
+                                  return InkWell(
+                                    onTap: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => BookDetailPage(bookID: snapshot.data![index].fields.book),
                                         ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text("${snapshot.data![index].fields.title}"),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                            "${snapshot.data![index].fields.content}")
-                                    ],
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      padding: const EdgeInsets.all(20.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Review by ${usernameSnapshot.data ?? 'Loading...'}",
+                                            style: const TextStyle(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text("⭐ ${snapshot.data![index].fields.rating}/5"),
+                                          SizedBox(height: 20,),
+                                          Text("${snapshot.data![index].fields.content}"),
+                                        ],
+                                      ),
                                     ),
-                                ),
-                            )
+                                  );
+                                }
+                              },
                             );
+                          },
+                        );
+
                         }
                     }
                 },
@@ -178,73 +227,31 @@ void showAddReviewBottomSheet() {
       showDragHandle: true,
       context: context,
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          color: Colors.white70,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: EdgeInsets.all(16.0),
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.grey)),
-                ),
-                child: const Text(
-                  'What do you think about this book?',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom) ,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            color: Colors.white70,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.grey)),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                    color: Colors.white70,
-                    child: Center(
-                      child: ListView(
-                        children: [
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ],
-                      ),
+                  child: const Text(
+                    'How was your journey on this book?',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-            ],
+                ReviewFormPage(bookID: bookID),
+              ],
+            ),
           ),
         );
       },
@@ -261,7 +268,10 @@ void showAddReviewBottomSheet() {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Judul Buku'),
+        title: Text('Booka'),
+        centerTitle: true,
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
       body: FutureBuilder<List<Book>>(
         future: fetchBookDetails(),
@@ -275,7 +285,7 @@ void showAddReviewBottomSheet() {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Image.network(
-                    book.fields.imageUrlLarge, // Gunakan URL gambar cover buku dari data API
+                    changeUrl(book.fields.imageUrlLarge), // Gunakan URL gambar cover buku dari data API
                     fit: BoxFit.fitWidth,
                     // width: 80.0,
                   ),
@@ -321,12 +331,12 @@ void showAddReviewBottomSheet() {
                     child: ElevatedButton(
                       onPressed: () {
                         // Implementasi navigasi ke halaman tambah review
-                        // showAddReviewBottomSheet();
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ReviewFormPage(bookID: bookID,),
-                        ));
+                        showAddReviewBottomSheet();
+                        // Navigator.push(
+                        // context,
+                        // MaterialPageRoute(
+                        //   builder: (context) => ReviewFormPage(bookID: bookID,),
+                        // ));
                       },
                       child: Text('Add Review'),
                     ),

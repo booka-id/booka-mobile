@@ -37,6 +37,11 @@ class _BookSearchPageState extends State<BookSearchPage> {
     }); 
   }
 
+  String changeUrl(String url) {
+    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    return newUrl;
+  }
+
   Future<void> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
@@ -62,7 +67,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
       all_books = fetchedBooks;
       book_displayed = List.from(all_books);
     });
-}
+  }
 
 
   @override
@@ -105,7 +110,10 @@ class _BookSearchPageState extends State<BookSearchPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return const Divider(height: 2,color: Colors.indigo);
+              },
             itemCount: book_displayed.length,
             itemBuilder: (_, index) => ListTile(
               contentPadding: EdgeInsets.all(10),
@@ -124,7 +132,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
                         ),
               subtitle: Text("${book_displayed[index].fields.author}, ${book_displayed[index].fields.year}",
                 style: const TextStyle(color: Colors.black),),
-              leading: Image.network(book_displayed[index].fields.imageUrlLarge, fit: BoxFit.cover),
+              leading: Image.network(changeUrl(book_displayed[index].fields.imageUrlLarge), fit: BoxFit.cover, width: 80,),
             )
             )
           ),
