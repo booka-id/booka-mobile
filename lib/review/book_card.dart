@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
-class NewsCard extends StatelessWidget {
-  const NewsCard({
+class BookCard extends StatelessWidget {
+  const BookCard({
     Key? key,
     required this.image,
+    required this.title,
+    required this.author,
+    required this.year,
   }) : super(key: key);
 
   final String image;
+  final String title;
+  final String author;
+  final int year;
   final double defaultPadding = 16.0;
   final Color primaryColor = const Color(0xFF2967FF);
   final Color grayColor = const Color(0xFF8D8D8E);
@@ -16,29 +22,34 @@ class NewsCard extends StatelessWidget {
     return Column(
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 120,
+              height: 170,
               width: 120,
-              child: Image.network(image,fit: BoxFit.contain,),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(image,fit: BoxFit.cover,),
+              ),
             ),
-            SizedBox(width: defaultPadding),
+            SizedBox(width: defaultPadding,),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: defaultPadding / 2),
                     child: Text(
-                      "Classical Mythology",
-                      style: Theme.of(context).textTheme.headline6,
+                      title,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   Row(
                     children: [
                       Text(
-                        "Mark P. O. Morford",
+                        author,
                         style: TextStyle(color: primaryColor),
                       ),
                       Padding(
@@ -50,7 +61,7 @@ class NewsCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "2002",
+                        year.toString(),
                         style: TextStyle(color: grayColor),
                       )
                     ],

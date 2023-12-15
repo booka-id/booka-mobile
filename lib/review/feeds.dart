@@ -1,13 +1,15 @@
 import 'package:booka_mobile/landing_page/menu.dart';
-import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/review.dart';
+import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:booka_mobile/review/book_search.dart';
-import 'package:booka_mobile/review/card.dart';
+import 'package:booka_mobile/review/review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 
 class ReviewPage extends StatefulWidget {
@@ -19,6 +21,14 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   int _selectedIndex = 1;
+  int _refreshCount = 0;
+
+  // Function to refresh the FutureBuilder
+  void refreshFutureBuilder() {
+    setState(() {
+      _refreshCount++; // Update the state to trigger a rebuild
+    });
+  }
 
   Future<List<Review>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
@@ -68,7 +78,7 @@ class _ReviewPageState extends State<ReviewPage> {
     return allReview;
 }
 
-Future<String> getUsername(int id) async {
+Future<List<String>> getUsername(int id) async {
   String url = "http://10.0.2.2:8000/review/get_user/$id";
 
   // Make the HTTP GET request
@@ -83,7 +93,10 @@ Future<String> getUsername(int id) async {
       // Extract username from the first user's fields
       Map<String, dynamic> userData = userDataList[0];
       String username = userData['fields']['username'];
-      return username;
+      List<String> identityList = [];
+      identityList.add(username);
+      identityList.add(userData['fields']['image_url']);
+      return identityList;
     } else {
       throw Exception('No user data found');
     }
@@ -118,8 +131,80 @@ Future<String> getBookTitle(int id) async {
   }
 }
 
+Future<void> deleteReview(int id) async {
+  String url = 'http://10.0.2.2:8000/review/delete/$id'; // Replace with your API base URL
+  try {
+    final response = await http.delete(Uri.parse(url));
+    if (response.statusCode == 200) {
+      // Review successfully deleted
+      print('Review deleted successfully');
+      // You can add further actions after successful deletion if needed
+    } else {
+      // Error occurred while deleting the review
+      print('Failed to delete review. Status code: ${response.statusCode}');
+      // Handle error or display an error message to the user
+    }
+  } catch (error) {
+    // Exception thrown during deletion
+    print('Exception occurred while deleting review: $error');
+    // Handle exception or display an error message to the user
+  }
+}
+
+void showCardOptions(int id, bool isAdmin){
+  showModalBottomSheet(
+    isScrollControlled: true,
+    showDragHandle: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical( 
+            top: Radius.circular(25.0),
+          ),
+        ),
+    builder: (context){
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.2,
+        child: Column(
+          children: [
+            if(isAdmin)
+              ListTile(
+                contentPadding: EdgeInsets.only(left:20.0),
+                leading: Icon(Icons.delete_outline,
+                  color: Colors.indigo,
+                ),
+                title: Text("Delete Review"),
+                onTap: () async {
+                  await deleteReview(id);
+                  Navigator.of(context).pop(); // Close the bottom sheet
+                  refreshFutureBuilder();
+                },
+              ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left:20.0),
+              leading: Icon(Icons.menu_book_rounded,
+                color: Colors.indigo,
+              ),
+              title: Text("Go to this book"),
+              onTap: () async {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookDetailPage(bookID: id,),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  );
+}
+
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserProvider>();
+    print(user.id);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -232,9 +317,9 @@ Future<String> getBookTitle(int id) async {
                             return ListView.builder(
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (_, index) {
-                                  return FutureBuilder<String>(
+                                  return FutureBuilder<List<String>>(
                                     future: getUsername(snapshot.data![index].fields.user),
-                                    builder: (context, AsyncSnapshot<String> usernameSnapshot) {
+                                    builder: (context, AsyncSnapshot<List<String>> usernameSnapshot) {
                                       return FutureBuilder<String>(
                                         future: getBookTitle(snapshot.data![index].fields.book),
                                         builder: (context, AsyncSnapshot<String> bookTitleSnapshot) {
@@ -253,30 +338,16 @@ Future<String> getBookTitle(int id) async {
                                                   ),
                                                 );
                                               },
-                                              child: Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                                padding: const EdgeInsets.all(20.0),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blue,
-                                                  borderRadius: BorderRadius.circular(20.0),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Review by ${usernameSnapshot.data ?? 'Loading...'}",
-                                                      style: const TextStyle(
-                                                        fontSize: 18.0,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text("on ${bookTitleSnapshot.data ?? 'Loading...'}"),
-                                                    const SizedBox(height: 10),
-                                                    Text("${snapshot.data![index].fields.content}"),
-                                                  ],
-                                                ),
-                                              ),
+                                              child: ReviewCard(
+                                                image: usernameSnapshot.data![1],
+                                                username: usernameSnapshot.data![0],
+                                                rating: snapshot.data![index].fields.rating,
+                                                bookTitle: bookTitleSnapshot.data!,
+                                                content: snapshot.data![index].fields.content,
+                                                showCardOptions: showCardOptions,
+                                                bookId: snapshot.data![index].fields.book,
+                                                isAdmin:snapshot.data![index].fields.user==user.id || user.is_superuser,
+                                              )
                                             );
                                           }
                                         },
@@ -293,7 +364,7 @@ Future<String> getBookTitle(int id) async {
                   // Ranks Tab Content (Placeholder)
                   FutureBuilder(
                     // TODO: GANTI DENGAN LOGGED IN USER'S ID
-                    future: fetchUserReviews(2),
+                    future: fetchUserReviews(user.id),
                     builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.data == null) {
                             return const Center(child: CircularProgressIndicator());
@@ -310,12 +381,15 @@ Future<String> getBookTitle(int id) async {
                                 ],
                             );
                         } else {
-                            return ListView.builder(
+                            return ListView.separated(
+                                separatorBuilder: (context, index) {
+                                  return const Divider(height: 1, color: Colors.grey);
+                                },
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (_, index) {
-                                  return FutureBuilder<String>(
+                                  return FutureBuilder<List<String>>(
                                     future: getUsername(snapshot.data![index].fields.user),
-                                    builder: (context, AsyncSnapshot<String> usernameSnapshot) {
+                                    builder: (context, AsyncSnapshot<List<String>> usernameSnapshot) {
                                       return FutureBuilder<String>(
                                         future: getBookTitle(snapshot.data![index].fields.book),
                                         builder: (context, AsyncSnapshot<String> bookTitleSnapshot) {
@@ -334,30 +408,16 @@ Future<String> getBookTitle(int id) async {
                                                   ),
                                                 );
                                               },
-                                              child: Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                                padding: const EdgeInsets.all(20.0),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blue,
-                                                  borderRadius: BorderRadius.circular(20.0),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Review by ${usernameSnapshot.data ?? 'Loading...'}",
-                                                      style: const TextStyle(
-                                                        fontSize: 18.0,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text("on ${bookTitleSnapshot.data ?? 'Loading...'}"),
-                                                    const SizedBox(height: 10),
-                                                    Text("${snapshot.data![index].fields.content}"),
-                                                  ],
-                                                ),
-                                              ),
+                                              child: ReviewCard(
+                                                image: user.profile_picture,
+                                                username: user.username,
+                                                rating: snapshot.data![index].fields.rating,
+                                                bookTitle: bookTitleSnapshot.data!,
+                                                content: snapshot.data![index].fields.content,
+                                                showCardOptions: showCardOptions,
+                                                bookId: snapshot.data![index].pk,
+                                                isAdmin: true,
+                                              )
                                             );
                                           }
                                         },
@@ -379,4 +439,6 @@ Future<String> getBookTitle(int id) async {
       ),
     );
   }
+  
 }
+

@@ -96,7 +96,8 @@ class _LoginPageState extends State<LoginPage> {
 
                 if (request.loggedIn) {
                   String message = response['message'];
-                  await userProvider.setUser(response['username'], response['image_url'] ?? "https://ui-avatars.com/api/?name=${response['username']}&background=0D8ABC&color=fff&size=128", response['email']);
+                  await userProvider.setUser(response['username'], response['image_url'] ?? "https://ui-avatars.com/api/?name=${response['username']}&background=0D8ABC&color=fff&size=128",
+                  response['email'], response['id'], response['is_superuser']);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),

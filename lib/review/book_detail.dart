@@ -39,7 +39,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
             allReview.add(Book.fromJson(d));
         }
     }
-    return all_review;
+    return allReview;
 }
   String changeUrl(String url) {
     String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
@@ -95,30 +95,30 @@ Future<String> getUsername(int id) async {
   }
 }
 
-Future<String> getUsername(int id) async {
-  String url = "http://10.0.2.2:8000/review/get_user/$id";
+// Future<String> getUsername(int id) async {
+//   String url = "http://10.0.2.2:8000/review/get_user/$id";
 
-  // Make the HTTP GET request
-  http.Response response = await http.get(Uri.parse(url));
+//   // Make the HTTP GET request
+//   http.Response response = await http.get(Uri.parse(url));
 
-  // Check if the request was successful (status code 200)
-  if (response.statusCode == 200) {
-    // Parse the JSON response
-    List<dynamic> userDataList = jsonDecode(response.body);
+//   // Check if the request was successful (status code 200)
+//   if (response.statusCode == 200) {
+//     // Parse the JSON response
+//     List<dynamic> userDataList = jsonDecode(response.body);
 
-    if (userDataList.isNotEmpty) {
-      // Extract username from the first user's fields
-      Map<String, dynamic> userData = userDataList[0];
-      String username = userData['fields']['username'];
-      return username;
-    } else {
-      throw Exception('No user data found');
-    }
-  } else {
-    // Request failed, throw an error or return null
-    throw Exception('Failed to fetch user data');
-  }
-}
+//     if (userDataList.isNotEmpty) {
+//       // Extract username from the first user's fields
+//       Map<String, dynamic> userData = userDataList[0];
+//       String username = userData['fields']['username'];
+//       return username;
+//     } else {
+//       throw Exception('No user data found');
+//     }
+//   } else {
+//     // Request failed, throw an error or return null
+//     throw Exception('Failed to fetch user data');
+//   }
+// }
 
 void showReviewsBottomSheet() {
   showModalBottomSheet(

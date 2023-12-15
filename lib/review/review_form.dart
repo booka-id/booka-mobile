@@ -1,9 +1,6 @@
 import 'dart:convert';
 
-import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/book_detail.dart';
-import 'package:booka_mobile/review/feeds.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
