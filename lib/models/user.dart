@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'book.dart';
@@ -56,6 +57,24 @@ class UserProvider extends ChangeNotifier {
     }
     return fetchedBooks;
 
+  }
+
+  Future<bool> saveProfilePic(String imageUrl) async {
+    Uri url = Uri.parse(
+      'http://10.0.2.2:8000/profile/change_profile_pic/',);
+    var response = await http.post(
+      url,
+      body: {
+        'email': _email,
+        'profile_picture': imageUrl,
+      },
+    );
+    String message = jsonDecode(response.body)['message'];
+    if (message == 'success') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<String> saveBook(List<Fields> books, String type) async {
@@ -132,7 +151,11 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
+  void changeProfilePic(String imageUrl){
+    saveProfilePic(imageUrl);
+    _profile_picture = imageUrl;
+    notifyListeners();
+  }
 }
+
 

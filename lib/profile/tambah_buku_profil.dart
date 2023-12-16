@@ -6,6 +6,7 @@ import 'package:booka_mobile/models/book.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:booka_mobile/profile/book_list.dart';
 import 'package:provider/provider.dart';
+import 'package:basic_utils/basic_utils.dart';
 
 import '../models/user.dart';
 
@@ -67,7 +68,7 @@ class AddBookButton extends StatelessWidget {
                           title: const Text('Tambah Buku'),
                           content: SizedBox(
                             width: 300,
-                            height: 350,
+                            height: 400,
                             child: Column(
                               children: [
                                 TypeAheadField(
@@ -134,7 +135,7 @@ class AddBookButton extends StatelessWidget {
                         );
                       });
                 },
-                child: Text('Tambah Buku $type'));
+                child: Text('Tambah Buku ${StringUtils.capitalize(type)}'));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }

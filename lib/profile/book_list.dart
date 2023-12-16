@@ -48,6 +48,7 @@ class BookList extends StatelessWidget {
                     )) :
                 ListView.builder(
                     scrollDirection: Axis.horizontal,
+
                     itemCount: books.length,
                     itemBuilder: (context, index) {
                   return SizedBox(
@@ -61,9 +62,9 @@ class BookList extends StatelessWidget {
                               height: 150,
                               child: FadeInImage(
                                 placeholder: const AssetImage('assets/images/no_image.jpg'),
-                                image: NetworkImage(changeUrl(books[index].imageUrlMedium)),
+                                image: NetworkImage(changeUrl(books[index].imageUrlMedium),),
                                 fit: BoxFit.cover,
-                                placeholderErrorBuilder: (context, error, stackTrace) {
+                                imageErrorBuilder: (context, error, stackTrace) {
                                   return const Image(
                                     image: AssetImage('assets/images/no_image.jpg'),
                                   );

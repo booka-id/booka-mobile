@@ -7,6 +7,8 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/profile/profile_page.dart';
 
+import '../review/feeds.dart';
+
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
 
@@ -23,6 +25,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     final user = context.watch<UserProvider>();
+    int _selectedIndex= 0;
 
 
     return Scaffold(
@@ -79,6 +82,67 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       drawer: const LeftDrawer(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        selectedItemColor: Colors.indigo,
+        unselectedItemColor: Colors.indigo.withOpacity(0.6),
+        onTap: (int index) {
+          _selectedIndex = index;
+          if (_selectedIndex == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyHomePage(),
+              ),
+            );
+          } else if (_selectedIndex == 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ReviewPage(),
+              ),
+            );
+          }
+          else if (_selectedIndex == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfilePage()
+              ),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              size: 30.0,
+            ),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.comment,
+              size: 30.0,
+            ),
+            label: "Reviews",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.campaign,
+              size: 30.0,
+            ),
+            label: "Events",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: 30.0,
+            ),
+            label: "Profile",
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
