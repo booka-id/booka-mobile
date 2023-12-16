@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:booka_mobile/profile/profile_page.dart';
 
 import '../review/feeds.dart';
+import 'bottom_nav_bar.dart';
 
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
@@ -82,67 +83,7 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       drawer: const LeftDrawer(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.indigo,
-        unselectedItemColor: Colors.indigo.withOpacity(0.6),
-        onTap: (int index) {
-          _selectedIndex = index;
-          if (_selectedIndex == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyHomePage(),
-              ),
-            );
-          } else if (_selectedIndex == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ReviewPage(),
-              ),
-            );
-          }
-          else if (_selectedIndex == 3) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfilePage()
-              ),
-            );
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 30.0,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.comment,
-              size: 30.0,
-            ),
-            label: "Reviews",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.campaign,
-              size: 30.0,
-            ),
-            label: "Events",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              size: 30.0,
-            ),
-            label: "Profile",
-          ),
-        ],
-      ),
+      bottomNavigationBar: BotNavBar(0),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(

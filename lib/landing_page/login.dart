@@ -87,8 +87,8 @@ class _LoginPageState extends State<LoginPage> {
                 // gunakan URL http://10.0.2.2/
                 runtimeType;
                 final response = await request.login(
-                    "http://10.0.2.2:8000/login_mobile/",
-                    // "https://deploytest-production-cf18.up.railway.app/login_mobile/",
+                    //"http://10.0.2.2:8000/login_mobile/",
+                    "https://deploytest-production-cf18.up.railway.app/login_mobile/",
                     {
                       'username': username,
                       'password': password,

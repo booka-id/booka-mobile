@@ -4,6 +4,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/models/user.dart';
 
+import '../landing_page/bottom_nav_bar.dart';
 import '../landing_page/menu.dart';
 import '../review/feeds.dart';
 import 'book_list.dart';
@@ -16,7 +17,6 @@ class ProfilePage extends StatelessWidget {
     final request = context.watch<CookieRequest>();
     final user = context.read<UserProvider>();
     String? userName = user.username;
-    String? profilePicture = user.profile_picture;
     String? email = user.email;
     int _selectedIndex = 3;
 
@@ -28,67 +28,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
-        selectedItemColor: Colors.indigo,
-        unselectedItemColor: Colors.indigo.withOpacity(0.6),
-        onTap: (int index) {
-          _selectedIndex = index;
-          if (_selectedIndex == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyHomePage(),
-              ),
-            );
-          } else if (_selectedIndex == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ReviewPage(),
-              ),
-            );
-          }
-          else if (_selectedIndex == 3) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ProfilePage()
-              ),
-            );
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 30.0,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.comment,
-              size: 30.0,
-            ),
-            label: "Reviews",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.campaign,
-              size: 30.0,
-            ),
-            label: "Events",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              size: 30.0,
-            ),
-            label: "Profile",
-          ),
-        ],
-      ),
+      bottomNavigationBar: BotNavBar(3),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -107,7 +47,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: NetworkImage(profilePicture!),
+                            image: NetworkImage(user.profile_picture),
                             fit: BoxFit.fill,
                           ),
                         ),

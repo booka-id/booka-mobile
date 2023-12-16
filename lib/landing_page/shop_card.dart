@@ -1,3 +1,4 @@
+import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';
@@ -73,7 +74,7 @@ class ShopCard extends StatelessWidget {
             if (item.name == "Logout") {
               final response = await request.logout(
                   // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                  "https://10.0.2.2:8000/logout_mobile/");
+                  "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
               String message = response["message"];
               if (response['status']) {
                 String uname = response["username"];
@@ -82,7 +83,7 @@ class ShopCard extends StatelessWidget {
                 ));
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

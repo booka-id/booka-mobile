@@ -29,10 +29,10 @@ class UserProvider extends ChangeNotifier {
     var book;
     if (type == 'favorit') {
       url = Uri.parse(
-          'http://10.0.2.2:8000/profile/get_favorite_book/$_email/');
+          'https://deploytest-production-cf18.up.railway.app/profile/get_favorite_book/$_email/');
     } else {
       url = Uri.parse(
-          'http://10.0.2.2:8000/profile/get_wishlist/$_email/');
+          'https://deploytest-production-cf18.up.railway.app/profile/get_wishlist/$_email/');
     }
     var response = await http.get(
       url,
@@ -61,7 +61,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<bool> saveProfilePic(String imageUrl) async {
     Uri url = Uri.parse(
-      'http://10.0.2.2:8000/profile/change_profile_pic/',);
+      'https://deploytest-production-cf18.up.railway.app/profile/change_profile_pic/',);
     var response = await http.post(
       url,
       body: {
@@ -81,11 +81,11 @@ class UserProvider extends ChangeNotifier {
     Uri url;
     if (type == 'favorit') {
       url = Uri.parse(
-          'http://10.0.2.2:8000/profile/add_favorite_book/',
+          'https://deploytest-production-cf18.up.railway.app/profile/add_favorite_book/',
       );
     } else {
       url = Uri.parse(
-          'http://10.0.2.2:8000/profile/add_wishlist/',
+          'https://deploytest-production-cf18.up.railway.app/add_wishlist/',
       );
     }
     var bookJson = jsonEncode(books);
