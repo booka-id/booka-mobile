@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io'show Platform, File;
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -189,7 +190,10 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           //try to upload image
                           if (_imageFile != null) {
                             await uploadImage();
-                            print(_imageUrl);
+
+                          }else{
+                            String bgColor = Random().nextInt(0xFFFFFF).toRadixString(16).padLeft(6, '0');
+                            _imageUrl = "https://ui-avatars.com/api/?name=$username&background=$bgColor&color=fff&size=128";
                           }
 
                           // Kirim ke Django dan tunggu respons
