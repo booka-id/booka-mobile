@@ -306,8 +306,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Booka'),
-        centerTitle: true,
+        title: Text('Book Detail'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
@@ -327,13 +326,16 @@ class _BookDetailPageState extends State<BookDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
-                    child: Image.network(
-                      changeUrl(
-                          image_url_large), // Gunakan URL gambar cover buku dari data API
-                      fit: BoxFit.fitWidth,
-                      // width: 80.0,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: SizedBox(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          changeUrl(image_url_large), // Gunakan URL gambar cover buku dari data API
+                          fit: BoxFit.fitWidth,
+                          // width: 80.0,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
@@ -342,32 +344,42 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${title}, ${year}',
-                          style: const TextStyle(fontSize: 18),
+                          '${title}',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
-                        Text(
-                          author,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        Text(
-                          'ISBN: ${isbn}',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            SizedBox(
-                              width: 5,
+                            Text(
+                              author,
+                              style: TextStyle(
+                                fontSize: 18, 
+                                color: Colors.grey[700]
+                              ),
                             ),
                             Text(
-                              avg_rating,
+                              year,
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.amber),
+                                fontSize: 18, 
+                                color: Colors.grey[700]
+                              ),
+                            ),
+                            Text(
+                              publisher,
+                              style: TextStyle(
+                                fontSize: 18, 
+                                color: Colors.grey[700]
+                              ),
+                            ),
+                            Text(
+                              'ISBN: ${isbn}',
+                              style: TextStyle(
+                                fontSize: 18, 
+                                color: Colors.grey[700]
+                              ),
                             ),
                           ],
                         )
@@ -375,33 +387,87 @@ class _BookDetailPageState extends State<BookDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Implementasi navigasi ke halaman reviews
-                        showReviewsBottomSheet();
-                      },
-                      child: const Text('See Reviews'),
-                    ),
+
+                  // BUTTON ROW
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust the alignment as needed
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 15,right: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          border: Border.all(
+                            color: Colors.amber,
+                            width: 2
+                          )
+                        ),
+                        child: Row(
+                          children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 35,),
+                          const SizedBox(width: 5,),
+                          Text(
+                            avg_rating,
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.amber
+                            ),
+                          ),
+                        ],),
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.indigo,
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.article_outlined),
+                              color: Colors.white, // Change the icon color as needed
+                              onPressed: () {
+                                // Add your onPressed logic for "See Reviews" here
+                                showReviewsBottomSheet();
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            'See Reviews',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.indigo,
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.add_comment),
+                              color: Colors.white, // Change the icon color as needed
+                              onPressed: () {
+                                // Add your onPressed logic for "See Reviews" here
+                                showAddReviewBottomSheet();
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            'Add Review',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Implementasi navigasi ke halaman tambah review
-                        showAddReviewBottomSheet();
-                        // Navigator.push(
-                        // context,
-                        // MaterialPageRoute(
-                        //   builder: (context) => ReviewFormPage(bookID: bookID,),
-                        // ));
-                      },
-                      child: const Text('Add Review'),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 30,)
                 ],
               ),
             );

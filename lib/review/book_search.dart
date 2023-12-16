@@ -74,12 +74,11 @@ class _BookSearchPageState extends State<BookSearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Booka',
+          'Post Review',
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.indigo,
-        centerTitle: true,
       ),
       body: Column(
         children: [
