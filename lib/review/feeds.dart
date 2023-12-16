@@ -115,12 +115,11 @@ Future<String> getBookTitle(int id) async {
   // Check if the request was successful (status code 200)
   if (response.statusCode == 200) {
     // Parse the JSON response
-    List<dynamic> userDataList = jsonDecode(response.body);
+    dynamic userData = jsonDecode(response.body);
 
-    if (userDataList.isNotEmpty) {
-      // Extract title from the first book's fields
-      Map<String, dynamic> userData = userDataList[0];
-      String title = userData['fields']['title'];
+    if (userData!=null) {
+      // Extract username from the first user's fields
+      String title = userData['title'];
       return title;
     } else {
       throw Exception('No user data found');
@@ -314,7 +313,10 @@ void showCardOptions(int id, bool isAdmin){
                                 ],
                             );
                         } else {
-                            return ListView.builder(
+                            return ListView.separated(
+                                separatorBuilder: (context, index) {
+                                  return const Divider(height: 1, color: Colors.grey);
+                                },
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (_, index) {
                                   return FutureBuilder<List<String>>(
@@ -347,6 +349,7 @@ void showCardOptions(int id, bool isAdmin){
                                                 showCardOptions: showCardOptions,
                                                 bookId: snapshot.data![index].fields.book,
                                                 isAdmin:snapshot.data![index].fields.user==user.id || user.is_superuser,
+                                                isInFeeds: true,
                                               )
                                             );
                                           }
@@ -417,6 +420,7 @@ void showCardOptions(int id, bool isAdmin){
                                                 showCardOptions: showCardOptions,
                                                 bookId: snapshot.data![index].pk,
                                                 isAdmin: true,
+                                                isInFeeds: true,
                                               )
                                             );
                                           }

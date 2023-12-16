@@ -6,64 +6,94 @@ class ReviewCard extends StatelessWidget {
     required this.image,
     required this.username,
     required this.rating,
-    required this.bookTitle,
+    this.bookTitle,
     required this.bookId,
     required this.content,
     required this.isAdmin,
-    required this.showCardOptions,
+    this.showCardOptions,
+    required this.isInFeeds,
   }) : super(key: key);
 
   final String image;
   final String username;
   final String content;
-  final String bookTitle;
+  final String? bookTitle;
   final int bookId;
   final int rating;
   final bool isAdmin;
-  final void Function(int, bool) showCardOptions;
+  final bool isInFeeds;
+  final void Function(int, bool)? showCardOptions;
   final double defaultPadding = 16.0;
   final Color primaryColor = const Color(0xFF2967FF);
   final Color grayColor = const Color(0xFF8D8D8E);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              CircleAvatar(backgroundImage: NetworkImage(image),radius: 25),
-              SizedBox(width: defaultPadding,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Review by $username",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    "⭐ $rating/5",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(width: defaultPadding*4,),
-              IconButton(
-                onPressed: () {
-                  showCardOptions(bookId, isAdmin);
-                },
-                icon: Icon(Icons.more_vert)
-              )
-            ],
-          ),
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(backgroundImage: NetworkImage(image),radius: 25),
+                    SizedBox(width: defaultPadding,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              // const TextSpan(
+                              //   text: "Review by ",
+                              //   style: TextStyle(
+                              //     fontSize: 18,
+                              //     fontWeight: FontWeight.bold,
+                              //     color: Colors.black, // Color for the "Review by " text
+                              //   ),
+                              // ),
+                              TextSpan(
+                                text: "$username", // Your username variable here
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.indigo, // Color for the username part
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        ),
+                        Row(children: [
+                          Icon(Icons.star, color: Colors.amber,),
+                          SizedBox(width: 3,),
+                          Text(
+                            "$rating/5",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.grey[700]
+                            ),
+                          ),
+                        ],)
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(width: defaultPadding*2.5,),
+                if(isInFeeds)
+                IconButton(
+                  onPressed: () {
+                    showCardOptions!(bookId, isAdmin);
+                  },
+                  icon: Icon(Icons.more_vert)
+                )
+              ],
+            ),
           Padding(
             padding: EdgeInsets.only(top: 10, left: 10),
             child: Text(
@@ -73,9 +103,9 @@ class ReviewCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(top: 10, left: 10),
-            child: Row(
+            child: isInFeeds == true ? Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children:[
                 Icon(Icons.menu_book_rounded, color: Colors.grey),
                 SizedBox(width: 10,),
                 Container (
@@ -90,7 +120,7 @@ class ReviewCard extends StatelessWidget {
                   ),
                 )
               ],
-            ),
+            ) : null,
           ),
         ],
       ),

@@ -20,6 +20,8 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
     int _rating = 0;
     String _content = "";
     bool isButtonEnabled = false;
+    bool isRated = false;
+    bool isCommented = false;
 
     _ReviewFormPageState({required this.bookID});
 
@@ -48,9 +50,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                       ),
                       onRatingUpdate: (rating) {
                         _rating = rating.toInt();
-                        setState(() {
-                          isButtonEnabled = true;
-                        });
+                        isRated = true;
                       },
                     ),
                   ),
