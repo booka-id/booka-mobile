@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:booka_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -19,12 +20,17 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
   int _rating = 0;
   String _content = "";
   bool isButtonEnabled = false;
+  bool isRated = false;
+  bool isCommented = false;
 
   _ReviewFormPageState({required this.bookID});
 
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    final user = context.read<UserProvider>();
+
+    print(request.jsonData);
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -43,7 +49,8 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                 color: Colors.amber,
               ),
               onRatingUpdate: (rating) {
-                _rating = rating as int;
+                _rating = rating.toInt();
+                isRated = true;
               },
             ),
           ),
@@ -97,8 +104,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                                 'rating': _rating.toString(),
                                 'content': _content,
                                 //TODO: FIGURE OUT HOW TO GET THE LOGGED IN USER'S EMAIL
-                                'email':
-                                    'adminmagang@gmail.com' //MASIH HARDCODE,
+                                'email': user.email //MASIH HARDCODE,
                               }));
                           if (response['status'] == 'success') {
                             ScaffoldMessenger.of(context)

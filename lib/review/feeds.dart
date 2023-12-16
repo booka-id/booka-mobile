@@ -1,11 +1,15 @@
 import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:booka_mobile/models/review.dart';
+import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:booka_mobile/review/book_search.dart';
+import 'package:booka_mobile/review/review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({Key? key}) : super(key: key);
@@ -16,6 +20,14 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   int _selectedIndex = 1;
+  int _refreshCount = 0;
+
+  // Function to refresh the FutureBuilder
+  void refreshFutureBuilder() {
+    setState(() {
+      _refreshCount++; // Update the state to trigger a rebuild
+    });
+  }
 
   Future<List<Review>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
@@ -31,13 +43,13 @@ class _ReviewPageState extends State<ReviewPage> {
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     // melakukan konversi data json menjadi object Product
-    List<Review> allReview = [];
+    List<Review> all_review = [];
     for (var d in data) {
       if (d != null) {
-        allReview.add(Review.fromJson(d));
+        all_review.add(Review.fromJson(d));
       }
     }
-    return allReview;
+    return all_review;
   }
 
   Future<List<Review>> fetchUserReviews(int id) async {
@@ -63,7 +75,7 @@ class _ReviewPageState extends State<ReviewPage> {
     return allReview;
   }
 
-  Future<String> getUsername(int id) async {
+  Future<List<String>> getUsername(int id) async {
     String url = "http://10.0.2.2:8000/review/get_user/$id";
 
     // Make the HTTP GET request
@@ -78,7 +90,10 @@ class _ReviewPageState extends State<ReviewPage> {
         // Extract username from the first user's fields
         Map<String, dynamic> userData = userDataList[0];
         String username = userData['fields']['username'];
-        return username;
+        List<String> identityList = [];
+        identityList.add(username);
+        identityList.add(userData['fields']['image_url']);
+        return identityList;
       } else {
         throw Exception('No user data found');
       }
@@ -97,12 +112,11 @@ class _ReviewPageState extends State<ReviewPage> {
     // Check if the request was successful (status code 200)
     if (response.statusCode == 200) {
       // Parse the JSON response
-      List<dynamic> userDataList = jsonDecode(response.body);
+      dynamic userData = jsonDecode(response.body);
 
-      if (userDataList.isNotEmpty) {
-        // Extract title from the first book's fields
-        Map<String, dynamic> userData = userDataList[0];
-        String title = userData['fields']['title'];
+      if (userData != null) {
+        // Extract username from the first user's fields
+        String title = userData['title'];
         return title;
       } else {
         throw Exception('No user data found');
@@ -113,8 +127,84 @@ class _ReviewPageState extends State<ReviewPage> {
     }
   }
 
+  Future<void> deleteReview(int id) async {
+    String url =
+        'http://10.0.2.2:8000/review/delete/$id'; // Replace with your API base URL
+    try {
+      final response = await http.delete(Uri.parse(url));
+      if (response.statusCode == 200) {
+        // Review successfully deleted
+        print('Review deleted successfully');
+        // You can add further actions after successful deletion if needed
+      } else {
+        // Error occurred while deleting the review
+        print('Failed to delete review. Status code: ${response.statusCode}');
+        // Handle error or display an error message to the user
+      }
+    } catch (error) {
+      // Exception thrown during deletion
+      print('Exception occurred while deleting review: $error');
+      // Handle exception or display an error message to the user
+    }
+  }
+
+  void showCardOptions(int id, bool isAdmin) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        showDragHandle: true,
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Column(
+              children: [
+                if (isAdmin)
+                  ListTile(
+                    contentPadding: EdgeInsets.only(left: 20.0),
+                    leading: Icon(
+                      Icons.delete_outline,
+                      color: Colors.indigo,
+                    ),
+                    title: Text("Delete Review"),
+                    onTap: () async {
+                      await deleteReview(id);
+                      Navigator.of(context).pop(); // Close the bottom sheet
+                      refreshFutureBuilder();
+                    },
+                  ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 20.0),
+                  leading: Icon(
+                    Icons.menu_book_rounded,
+                    color: Colors.indigo,
+                  ),
+                  title: Text("Go to this book"),
+                  onTap: () async {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailPage(
+                          bookID: id,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserProvider>();
+    print(user.id);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -226,11 +316,12 @@ class _ReviewPageState extends State<ReviewPage> {
                           return ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
-                              return FutureBuilder<String>(
+                              return FutureBuilder<List<String>>(
                                 future: getUsername(
                                     snapshot.data![index].fields.user),
                                 builder: (context,
-                                    AsyncSnapshot<String> usernameSnapshot) {
+                                    AsyncSnapshot<List<String>>
+                                        usernameSnapshot) {
                                   return FutureBuilder<String>(
                                     future: getBookTitle(
                                         snapshot.data![index].fields.book),
@@ -306,7 +397,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   // Ranks Tab Content (Placeholder)
                   FutureBuilder(
                     // TODO: GANTI DENGAN LOGGED IN USER'S ID
-                    future: fetchUserReviews(2),
+                    future: fetchUserReviews(user.id),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.data == null) {
                         return const Center(child: CircularProgressIndicator());
@@ -326,11 +417,12 @@ class _ReviewPageState extends State<ReviewPage> {
                           return ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
-                              return FutureBuilder<String>(
+                              return FutureBuilder<List<String>>(
                                 future: getUsername(
                                     snapshot.data![index].fields.user),
                                 builder: (context,
-                                    AsyncSnapshot<String> usernameSnapshot) {
+                                    AsyncSnapshot<List<String>>
+                                        usernameSnapshot) {
                                   return FutureBuilder<String>(
                                     future: getBookTitle(
                                         snapshot.data![index].fields.book),
@@ -341,7 +433,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                               ConnectionState.waiting ||
                                           bookTitleSnapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                        return const CircularProgressIndicator();
+                                        return CircularProgressIndicator();
                                       } else if (usernameSnapshot.hasError ||
                                           bookTitleSnapshot.hasError) {
                                         return Text(

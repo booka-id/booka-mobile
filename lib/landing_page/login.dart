@@ -88,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                 runtimeType;
                 final response = await request.login(
                     "http://10.0.2.2:8000/login_mobile/",
+                    // "https://deploytest-production-cf18.up.railway.app/login_mobile/",
                     {
                       'username': username,
                       'password': password,
@@ -95,7 +96,8 @@ class _LoginPageState extends State<LoginPage> {
 
                 if (request.loggedIn) {
                   String message = response['message'];
-                  await userProvider.setUser(response['username'], response['image_url'] ?? "https://ui-avatars.com/api/?name=${response['username']}&background=0D8ABC&color=fff&size=128", response['email']);
+                  await userProvider.setUser(response['username'], response['image_url'] ?? "https://ui-avatars.com/api/?name=${response['username']}&background=0D8ABC&color=fff&size=128",
+                  response['email'], response['id'], response['is_superuser']);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),

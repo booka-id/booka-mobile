@@ -1,5 +1,6 @@
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/review/book_detail.dart';
+import 'package:booka_mobile/review/book_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -108,30 +109,27 @@ class _BookSearchPageState extends State<BookSearchPage> {
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              separatorBuilder: (context, index) {
-                return const Divider(height: 2,color: Colors.indigo);
-              },
+            child: ListView.builder(
             itemCount: book_displayed.length,
-            itemBuilder: (_, index) => ListTile(
-              contentPadding: const EdgeInsets.all(10),
-              onTap: () async {
-                Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BookDetailPage(bookID: book_displayed[index].pk),
-                ));
-              },
-              title: Text(book_displayed[index].fields.title, 
-                style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-              subtitle: Text("${book_displayed[index].fields.author}, ${book_displayed[index].fields.year}",
-                style: const TextStyle(color: Colors.black),),
-              leading: Image.network(changeUrl(book_displayed[index].fields.imageUrlLarge), fit: BoxFit.cover, width: 80,),
-            )
+            itemBuilder: (_, index) => 
+             Padding(
+                padding: EdgeInsets.all(8.0), // Adjust the padding values as needed
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailPage(bookID: book_displayed[index].pk),
+                    ));
+                  },
+                  child: BookCard(
+                    image: changeUrl(book_displayed[index].fields.imageUrlLarge),
+                    title: book_displayed[index].fields.title,
+                    author: book_displayed[index].fields.author,
+                    year: book_displayed[index].fields.year,
+                  )
+                ),
+              )
             )
           ),
         ],

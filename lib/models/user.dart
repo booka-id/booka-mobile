@@ -5,6 +5,8 @@ import 'book.dart';
 
 class UserProvider extends ChangeNotifier {
   String? _username ="" ;
+  int? _id = 0;
+  bool? _is_superuser = false;
   String? _profile_picture="" ;
   String? _email="";
   List<Fields> _favorite_book = [];
@@ -15,6 +17,8 @@ class UserProvider extends ChangeNotifier {
   String get username => _username!;
   String get profile_picture => _profile_picture!;
   String get email => _email!;
+  int get id => _id!;
+  bool get is_superuser => _is_superuser!;
   List<Fields> get favorite_book => _favorite_book;
   List<Fields> get wishlist => _wishlist;
   List<Fields> get temp_books => _temp_books;
@@ -76,8 +80,10 @@ class UserProvider extends ChangeNotifier {
     return jsonDecode(response.body)['message'];
   }
 
-  Future<void> setUser(String username, String profilePicture, String email) async {
+  Future<void> setUser(String username, String profilePicture, String email, int id, bool is_superuser) async {
     _username = username;
+    _id = id;
+    _is_superuser = is_superuser;
     _profile_picture = profilePicture;
     _email = email;
     _wishlist = await fetchBook('wishlist');

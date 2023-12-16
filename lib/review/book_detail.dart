@@ -1,8 +1,12 @@
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/review.dart';
+import 'package:booka_mobile/models/user.dart';
+import 'package:booka_mobile/review/review_card.dart';
+import 'package:booka_mobile/review/review_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class BookDetailPage extends StatefulWidget {
   final int bookID;
@@ -41,6 +45,46 @@ class _BookDetailPageState extends State<BookDetailPage> {
     return allReview;
   }
 
+  Future<List<String>> getBookDetails() async {
+    String url = "http://10.0.2.2:8000/review/books/$bookID";
+
+    // Make the HTTP GET request
+    http.Response response = await http.get(Uri.parse(url));
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      dynamic userData = jsonDecode(response.body);
+      print(userData);
+
+      if (userData != null) {
+        // Extract username from the first user's fields
+        String author = userData['author'];
+        String title = userData['title'];
+        String image_url_large = userData['image_url_large'];
+        String publisher = userData['publisher'];
+        double avg_rating =
+            userData['avg_rating'] == null ? 0.0 : userData['avg_rating'];
+        int year = userData['year'];
+        String isbn = userData['isbn'];
+        List<String> bookDetailList = [];
+        bookDetailList.add(author);
+        bookDetailList.add(title);
+        bookDetailList.add(image_url_large);
+        bookDetailList.add(publisher);
+        bookDetailList.add(avg_rating.toStringAsFixed(1));
+        bookDetailList.add(year.toString());
+        bookDetailList.add(isbn);
+        return bookDetailList;
+      } else {
+        throw Exception('No user data found');
+      }
+    } else {
+      // Request failed, throw an error or return null
+      throw Exception('Failed to fetch user data');
+    }
+  }
+
   String changeUrl(String url) {
     String newUrl = url.replaceAll(
         'http://images.amazon.com', 'https://m.media-amazon.com');
@@ -51,8 +95,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
         // 'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
-        // 'http://10.0.2.2:8000/review/get_reviews/${bookID}'
-        'http://127.0.0.1:8000/review/get_reviews/$bookID');
+        'http://10.0.2.2:8000/review/get_reviews/${bookID}'
+        // 'http://127.0.0.1:8000/review/get_reviews/${bookID}'
+        );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -71,7 +116,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
     return allReview;
   }
 
-  Future<String> getUsername(int id) async {
+  Future<List<String>> getUsername(int id) async {
     String url = "http://10.0.2.2:8000/review/get_user/$id";
 
     // Make the HTTP GET request
@@ -86,7 +131,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
         // Extract username from the first user's fields
         Map<String, dynamic> userData = userDataList[0];
         String username = userData['fields']['username'];
-        return username;
+        List<String> identityList = [];
+        identityList.add(username);
+        identityList.add(userData['fields']['image_url']);
+        return identityList;
       } else {
         throw Exception('No user data found');
       }
@@ -106,8 +154,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
         showDragHandle: true,
         context: context,
         builder: (context) {
+          final user = context.read<UserProvider>();
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            height: MediaQuery.of(context).size.height * 0.75,
             color: Colors.white70,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -155,68 +205,39 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             ],
                           );
                         } else {
-                          return ListView.builder(
+                          return ListView.separated(
+                            separatorBuilder: (context, index) =>
+                                const Divider(height: 1, color: Colors.grey),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
-                              return FutureBuilder<String>(
+                              return FutureBuilder<List<String>>(
                                 future: getUsername(
                                     snapshot.data![index].fields.user),
                                 builder: (context,
-                                    AsyncSnapshot<String> usernameSnapshot) {
+                                    AsyncSnapshot<List<String>>
+                                        usernameSnapshot) {
                                   if (usernameSnapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
+                                    return CircularProgressIndicator();
                                   } else if (usernameSnapshot.hasError) {
                                     return Text(
                                         'Error: ${usernameSnapshot.error}');
                                   } else {
-                                    return InkWell(
-                                      onTap: () async {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BookDetailPage(
-                                                    bookID: snapshot
-                                                        .data![index]
-                                                        .fields
-                                                        .book),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 12),
-                                        padding: const EdgeInsets.all(20.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Review by ${usernameSnapshot.data ?? 'Loading...'}",
-                                              style: const TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                                "⭐ ${snapshot.data![index].fields.rating}/5"),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text(
-                                                "${snapshot.data![index].fields.content}"),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    return Container(
+                                        child: ReviewCard(
+                                      image: usernameSnapshot.data![1],
+                                      username: usernameSnapshot.data![0],
+                                      rating:
+                                          snapshot.data![index].fields.rating,
+                                      content:
+                                          snapshot.data![index].fields.content,
+                                      bookId: snapshot.data![index].fields.book,
+                                      isAdmin:
+                                          snapshot.data![index].fields.user ==
+                                                  user.id ||
+                                              user.is_superuser,
+                                      isInFeeds: false,
+                                    ));
                                   }
                                 },
                               );
@@ -243,81 +264,32 @@ class _BookDetailPageState extends State<BookDetailPage> {
       showDragHandle: true,
       context: context,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          color: Colors.white70,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.grey)),
-                ),
-                child: const Text(
-                  'What do you think about this book?',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                    color: Colors.white70,
-                    child: Center(
-                      child: ListView(
-                        children: const [
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ],
-                      ),
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            color: Colors.white70,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 16.0),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'How was your journey on this book?',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-            ],
+                ReviewFormPage(bookID: bookID),
+                SizedBox(
+                  height: 30,
+                )
+              ],
+            ),
           ),
         );
       },
@@ -334,16 +306,22 @@ class _BookDetailPageState extends State<BookDetailPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text('Booka'),
+        title: Text('Booka'),
         centerTitle: true,
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      body: FutureBuilder<List<Book>>(
-        future: fetchBookDetails(),
+      body: FutureBuilder<List<String>>(
+        future: getBookDetails(),
         builder: (context, snapshot) {
+          String author = snapshot.data![0];
+          String title = snapshot.data![1];
+          String image_url_large = snapshot.data![2];
+          String publisher = snapshot.data![3];
+          String avg_rating = snapshot.data![4];
+          String year = snapshot.data![5];
+          String isbn = snapshot.data![6];
           if (snapshot.hasData) {
-            var book = snapshot.data![0];
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -352,8 +330,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 20),
                     child: Image.network(
-                      changeUrl(book.fields
-                          .imageUrlLarge), // Gunakan URL gambar cover buku dari data API
+                      changeUrl(
+                          image_url_large), // Gunakan URL gambar cover buku dari data API
                       fit: BoxFit.fitWidth,
                       // width: 80.0,
                     ),
@@ -364,21 +342,35 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${book.fields.author}, ${book.fields.year}',
+                          '${title}, ${year}',
                           style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          book.fields.publisher,
+                          author,
                           style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          'ISBN: ${book.fields.isbn}',
+                          'ISBN: ${isbn}',
                           style: const TextStyle(fontSize: 18),
                         ),
-                        const Text(
-                          '⭐5/5', // Gunakan rating dari data API
-                          style: TextStyle(fontSize: 18),
-                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              avg_rating,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.amber),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
