@@ -64,11 +64,10 @@ class AddBookButton extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-
                           title: const Text('Tambah Buku'),
                           content: SizedBox(
                             width: 300,
-                            height: 500,
+                            height: 350,
                             child: Column(
                               children: [
                                 TypeAheadField(
@@ -96,7 +95,6 @@ class AddBookButton extends StatelessWidget {
 
                                 ),
                                 const SizedBox(
-
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -108,6 +106,7 @@ class AddBookButton extends StatelessWidget {
                                   ),
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {

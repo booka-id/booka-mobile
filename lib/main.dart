@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
             useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.indigo,
+            ),
           ),
           home: MyHomePage()),
     );
