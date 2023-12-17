@@ -1,3 +1,4 @@
+import 'package:booka_mobile/katalog_buku/catalogue.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -65,7 +66,14 @@ class ShopCard extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) =>
                           const ReviewPage())); //todo Ganti review buku
-            }
+              }
+              if (item.name == "Katalog Buku") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const CataloguePage())); //todo Ganti katalog buku
+              }
 
             if (item.name == "Logout") {
               final response = await request.logout(

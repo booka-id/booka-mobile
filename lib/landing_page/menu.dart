@@ -1,3 +1,5 @@
+import 'package:booka_mobile/landing_page/login.dart';
+import 'package:booka_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:booka_mobile/landing_page/shop_card.dart';

@@ -1,3 +1,4 @@
+import 'package:booka_mobile/katalog_buku/catalogue.dart';
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
@@ -61,7 +62,7 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyHomePage() //Todo ganti katalog buku,
+                          const CataloguePage()
                       ));
             },
           ),
