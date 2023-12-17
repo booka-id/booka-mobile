@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:booka_mobile/models/event.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
-import 'package:booka_mobile/screens/create_event_form.dart';
-import 'package:booka_mobile/screens/edit_event.dart';
-import 'package:booka_mobile/screens/register_event.dart';
+import 'package:booka_mobile/event/screens/create_event_form.dart';
+import 'package:booka_mobile/event/screens/edit_event.dart';
+import 'package:booka_mobile/event/screens/register_event.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);

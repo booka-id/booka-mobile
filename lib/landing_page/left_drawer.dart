@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
-import 'package:booka_mobile/screens/list_event.dart';
+import 'package:booka_mobile/event/screens/list_event.dart';
 //Todo import 'package:booka_mobile/landing_page/shoplist_form.dart';
 
 class LeftDrawer extends StatelessWidget {

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:booka_mobile/models/book.dart';
 import 'package:http/http.dart' as http;
-import 'package:booka_mobile/screens/list_event.dart';
+import 'package:booka_mobile/event/screens/list_event.dart';
 
 class EventFormPage extends StatefulWidget {
   const EventFormPage({super.key});

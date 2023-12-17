@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:booka_mobile/screens/list_event.dart';
+import 'package:booka_mobile/event/screens/list_event.dart';
 
 class RegisterEventPage extends StatefulWidget {
   @override
