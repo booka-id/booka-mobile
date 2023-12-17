@@ -44,6 +44,7 @@ class _EventPageState extends State<EventPage> {
         title: const Text('Event'),
       ),
       drawer: const LeftDrawer(),
+      bottomNavigationBar: BotNavBar(2),
       body: FutureBuilder(
         future: fetchProduct(),
         builder: (context, AsyncSnapshot<List<Event>> snapshot) {
@@ -169,24 +170,26 @@ class _EventPageState extends State<EventPage> {
           }
         },
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      EventFormPage() 
-                  ));
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: Colors.indigo,
-        elevation: 4, 
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0), 
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    
+    floatingActionButton: user.is_superuser
+        ? FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EventFormPage(),
+                ),
+              );
+            },
+            child: const Icon(Icons.add, color: Colors.white),
+            backgroundColor: Colors.indigo,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          )
+        : null, 
+    floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
