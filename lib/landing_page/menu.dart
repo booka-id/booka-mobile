@@ -1,8 +1,8 @@
+import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/top_ranks.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
-import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/landing_page/shop_card.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +13,8 @@ import 'bottom_nav_bar.dart';
 
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
+
+
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -141,5 +143,8 @@ class MyHomePage extends StatelessWidget {
     // case the title) provided by the parent (in this case the App widget) and
     // used by the build method of the State. Fields in a Widget subclass are
     // always marked "final".
+
+
   }
 }
+
