@@ -85,7 +85,7 @@ class UserProvider extends ChangeNotifier {
       );
     } else {
       url = Uri.parse(
-          'https://deploytest-production-cf18.up.railway.app/add_wishlist/',
+          'https://deploytest-production-cf18.up.railway.app/profile/add_wishlist/',
       );
     }
     var bookJson = jsonEncode(books);
