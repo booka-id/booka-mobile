@@ -19,8 +19,8 @@ class EventPage extends StatefulWidget {
 
 class _EventPageState extends State<EventPage> {
   Future<List<Event>> fetchProduct() async {
-    // var url = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/get-event/');
-   var url = Uri.parse('http://127.0.0.1:8000/event/get-event/');
+    var url = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/get-event/');
+  //  var url = Uri.parse('http://127.0.0.1:8000/event/get-event/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -134,8 +134,8 @@ class _EventPageState extends State<EventPage> {
                                 const SizedBox(width: 8),
                                 ElevatedButton(
                                   onPressed: () async {
-                                      // final deleteUrl = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/delete-event-flutter/${snapshot.data![index].pk}/');
-                                      final deleteUrl = Uri.parse('http://127.0.0.1:8000/event/delete-event-flutter/${snapshot.data![index].pk}/');
+                                      final deleteUrl = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/delete-event-flutter/${snapshot.data![index].pk}/');
+                                      // final deleteUrl = Uri.parse('http://127.0.0.1:8000/event/delete-event-flutter/${snapshot.data![index].pk}/');
                                       final response = await http.delete(deleteUrl);
                                       setState(() {
                                         if (response.statusCode == 200) {
