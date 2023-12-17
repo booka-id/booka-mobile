@@ -9,8 +9,7 @@ import 'models/user.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => UserProvider() ,
-
+      create: (context) => UserProvider(),
       child: const MyApp(),
     ),
   );
@@ -29,10 +28,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Flutter App',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-            useMaterial3: true,
-            textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-          ),
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+              useMaterial3: true,
+              textTheme:
+                  GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)),
           home: MyHomePage()),
     );
   }

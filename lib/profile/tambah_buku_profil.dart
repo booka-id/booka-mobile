@@ -6,26 +6,26 @@ import 'package:booka_mobile/models/book.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:booka_mobile/profile/book_list.dart';
 import 'package:provider/provider.dart';
+import 'package:basic_utils/basic_utils.dart';
 
 import '../models/user.dart';
-
 
 class AddBookButton extends StatelessWidget {
   final String type;
   const AddBookButton(this.type, {Key? key}) : super(key: key);
 
   String changeUrl(String url) {
-    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    String newUrl = url.replaceAll(
+        'http://images.amazon.com', 'https://m.media-amazon.com');
     return newUrl;
-
   }
 
   Future<List<Book>> fetchBook() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse(
-        'https://deploytest-production-cf18.up.railway.app/api/books/'
-      // 'http://127.0.0.1:8000/review/all/'
-    );
+    var url =
+        Uri.parse('https://deploytest-production-cf18.up.railway.app/api/books/'
+            // 'http://127.0.0.1:8000/review/all/'
+            );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -42,82 +42,106 @@ class AddBookButton extends StatelessWidget {
       }
     }
     return fetchedBooks;
-
   }
 
-  // List<Book> resultSearch(List<>){
-  //   return [];
-  // }
+  List<Book> updateList(String value, List<Book> all_books) {
+    List<Book> book_displayed = all_books
+        .where((element) =>
+            element.fields.title.toLowerCase().contains(value.toLowerCase()) ||
+            element.fields.author.toLowerCase().contains(value.toLowerCase()))
+        .toList();
+    return book_displayed;
+  }
 
-
-  @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
-    return ElevatedButton(
-        onPressed: (){
-          showDialog(
-              context: context,
-              builder: (BuildContext context){
-                return AlertDialog(
-                  title: const Text('Tambah Buku'),
-                  content: SizedBox(
-                    width: 300,
-                    height: 300,
-                    child: Column(
-                      children: [
-                        TypeAheadField(
-                          textFieldConfiguration: const TextFieldConfiguration(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Cari Buku',
+    return FutureBuilder(
+        future: fetchBook(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Tambah Buku'),
+                          content: SizedBox(
+                            width: 300,
+                            height: 400,
+                            child: Column(
+                              children: [
+                                TypeAheadField(
+                                  textFieldConfiguration:
+                                      const TextFieldConfiguration(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          hintText: 'Cari Buku',
+                                        ),
+                                      ),
+                                  suggestionsCallback: (pattern) {
+                                    return updateList(pattern, snapshot.data!);
+                                  },
+                                  itemBuilder: (context, Book suggestion) {
+                                    return ListTile(
+                                      leading: Image.network(
+                                          changeUrl(suggestion.fields.imageUrlMedium)),
+                                      title: Text(suggestion.fields.title),
+                                      subtitle: Text(suggestion.fields.author),
+                                    );
+                                  },
+                                  onSuggestionSelected: (Book suggestion) {
+                                    userProvider.addBook(suggestion.fields);
+                                  },
+
+                                ),
+                                const SizedBox(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                      color: Colors.white,
+                                    ),
+                                    child: Center(
+                                      child: BookList('temp')
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        userProvider.clearBooks();
+                                      },
+                                      child: const Text('Reset'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        if (type == 'favorit') {
+                                          userProvider.saveFavoriteBook();
+                                        } else {
+                                          userProvider.saveWishlist();
+                                        }
+                                        userProvider.clearBooks();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Simpan'),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          suggestionsCallback: (pattern) async {
-                            return await fetchBook();
-                          },
-                          itemBuilder: (context, Book suggestion) {
-                            return ListTile(
-                              leading: Image.network(changeUrl(suggestion.fields.imageUrlMedium)),
-                              title: Text(suggestion.fields.title),
-                              subtitle: Text(suggestion.fields.author),
-                            );
-                          },
-                          onSuggestionSelected: (Book suggestion) {
-                            userProvider.addBook(suggestion.fields);
-                          },
-                        ),
-                        const Expanded(
-                            child: BookList('temp'),
-                        ),
-                        Row(
-                          children: [
-                            ElevatedButton(
-                              onPressed: (){
-                                userProvider.clearBooks();
-                              },
-                              child: const Text('Reset'),
-                            ),
-                            ElevatedButton(
-                                onPressed: (){
-                                  if(type == 'favorit'){
-                                    userProvider.saveFavoriteBook();
-                                  } else {
-                                    userProvider.saveWishlist();
-                                  }
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Simpan'),
-                            )
-                          ],
-                        ),
-
-                      ],
-                    ),
-                  ),
-                );
-              }
-          );
-        }, child: Text('Tambah Buku $type')
+                        );
+                      });
+                },
+                child: Text('Tambah Buku ${StringUtils.capitalize(type)}'));
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+          return const CircularProgressIndicator(
+        );
+      }
     );
   }
 }

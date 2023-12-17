@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io'show Platform, File;
+import 'dart:io'show File;
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -25,37 +26,6 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
 
   final _formKey = GlobalKey<FormState>();
   String name = "";
-
-  Future<void> pickImage(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedImage = await picker.pickImage(source: source);
-
-    setState(() {
-      if (pickedImage != null) _imageFile = File(pickedImage.path);
-    });
-  }
-
-  Future<void> uploadImage() async {
-    print(_imageFile!.path);
-    final url = Uri.parse('https://api.cloudinary.com/v1_1/dtelcmaaw/upload');
-    //  qj9uibnk
-    final request = http.MultipartRequest('POST', url)
-      ..fields['upload_preset'] = 'p03rcnnf'
-      ..files.add(await http.MultipartFile.fromPath('file', _imageFile!.path));
-    print(_imageFile!.path);
-
-    final response = await request.send();
-    print(response);
-    if (response.statusCode == 200) {
-      final responseData = await response.stream.toBytes();
-      final responseString = String.fromCharCodes(responseData);
-      final jsonMap = jsonDecode(responseString);
-      setState(() {
-        final url = jsonMap['url'];
-        _imageUrl = url;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,53 +84,53 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               },
             ),
             //Image form for profile picture
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  const Text(
-                    "Upload Profile Picture",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          pickImage(ImageSource.camera);
-                        },
-                        child: const Text("Camera"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          pickImage(ImageSource.gallery);
-                        },
-                        child: const Text("Gallery"),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _imageFile == null
-                      ? const Text("No Image Selected")
-                      : kIsWeb? Image.network(
-                          _imageFile!.path,
-                          height: 150,
-                          width: 150,
-
-                  ):
-                      Image.file(
-                          _imageFile!,
-                          height: 150,
-                          width: 150,
-                      ),
-                ],
-              ),
-            ),
+            //   Container(
+            //     margin: const EdgeInsets.all(10),
+            //     child: Column(
+            //       children: [
+            //         const Text(
+            //           "Upload Profile Picture",
+            //           style: TextStyle(fontSize: 20),
+            //         ),
+            //         const SizedBox(
+            //           height: 10,
+            //         ),
+            //         Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //           children: [
+            //             ElevatedButton(
+            //               onPressed: () {
+            //                 pickImage(ImageSource.camera);
+            //               },
+            //               child: const Text("Camera"),
+            //             ),
+            //             ElevatedButton(
+            //               onPressed: () {
+            //                 pickImage(ImageSource.gallery);
+            //               },
+            //               child: const Text("Gallery"),
+            //             ),
+            //           ],
+            //         ),
+            //         const SizedBox(
+            //           height: 10,
+            //         ),
+            //         _imageFile == null
+            //             ? const Text("No Image Selected")
+            //             : kIsWeb? Image.network(
+            //                 _imageFile!.path,
+            //                 height: 150,
+            //                 width: 150,
+            //
+            //         ):
+            //             Image.file(
+            //                 _imageFile!,
+            //                 height: 150,
+            //                 width: 150,
+            //             ),
+            //       ],
+            //     ),
+            //   ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -185,22 +155,27 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           String username = _usernameController.text;
                           String password = _passwordController.text;
                           String email = _emailController.text;
+                          String bgColor = Random().nextInt(0xFFFFFF).toRadixString(16).padLeft(6, '0');
+                          _imageUrl = "https://ui-avatars.com/api/?name=$username&background=$bgColor&color=fff&size=128";
 
                           //try to upload image
-                          if (_imageFile != null) {
-                            await uploadImage();
-                            print(_imageUrl);
-                          }
+                          // if (_imageFile != null) {
+                          //   await uploadImage();
+                          //
+                          // }else{
+                          //   String bgColor = Random().nextInt(0xFFFFFF).toRadixString(16).padLeft(6, '0');
+                          //
+                          // }
 
                           // Kirim ke Django dan tunggu respons
                           // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                           final response = await request.postJson(
-                              "http://10.0.2.2:8000/register_mobile/",
+                              "https://deploytest-production-cf18.up.railway.app/register_mobile/",
                               jsonEncode(<String, String>{
                                 'username': email,
                                 'password': password,
                                 'name': username,
-                                'imageUrl': _imageUrl.toString(),
+                                'imageUrl': _imageUrl!,
                                 // TODO: Sesuaikan field data sesuai dengan aplikasimu
                               }));
                           if (response['status'] == 'success') {

@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class BookDetailPage extends StatefulWidget {
   final int bookID;
-    const BookDetailPage({Key? key, required this.bookID}) : super(key: key);
+  const BookDetailPage({Key? key, required this.bookID}) : super(key: key);
 
   @override
   _BookDetailPageState createState() => _BookDetailPageState(bookID: bookID);
@@ -28,8 +28,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
         // 'http://127.0.0.1:8000/review/all/'
         );
     var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
+      url,
+      headers: {"Content-Type": "application/json"},
     );
 
     // melakukan decode response menjadi bentuk json
@@ -38,57 +38,59 @@ class _BookDetailPageState extends State<BookDetailPage> {
     // melakukan konversi data json menjadi object Product
     List<Book> allReview = [];
     for (var d in data) {
-        if (d != null) {
-            allReview.add(Book.fromJson(d));
-        }
+      if (d != null) {
+        allReview.add(Book.fromJson(d));
+      }
     }
     return allReview;
-}
-
-Future<List<String>> getBookDetails() async {
-  String url = "http://10.0.2.2:8000/review/books/$bookID";
-
-  // Make the HTTP GET request
-  http.Response response = await http.get(Uri.parse(url));
-
-  // Check if the request was successful (status code 200)
-  if (response.statusCode == 200) {
-    // Parse the JSON response
-    dynamic userData = jsonDecode(response.body);
-    print(userData);
-
-    if (userData!=null) {
-      // Extract username from the first user's fields
-      String author = userData['author'];
-      String title = userData['title'];
-      String image_url_large = userData['image_url_large'];
-      String publisher = userData['publisher'];
-      double avg_rating = userData['avg_rating'] == null ? 
-                          0.0 : userData['avg_rating'];
-      int year = userData['year'];
-      String isbn = userData['isbn'];
-      List<String> bookDetailList = [];
-      bookDetailList.add(author);
-      bookDetailList.add(title);
-      bookDetailList.add(image_url_large);
-      bookDetailList.add(publisher);
-      bookDetailList.add(avg_rating.toStringAsFixed(1));
-      bookDetailList.add(year.toString());
-      bookDetailList.add(isbn);
-      return bookDetailList;
-    } else {
-      throw Exception('No user data found');
-    }
-  } else {
-    // Request failed, throw an error or return null
-    throw Exception('Failed to fetch user data');
   }
-}
+
+  Future<List<String>> getBookDetails() async {
+    String url = "http://10.0.2.2:8000/review/books/$bookID";
+
+    // Make the HTTP GET request
+    http.Response response = await http.get(Uri.parse(url));
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      dynamic userData = jsonDecode(response.body);
+      print(userData);
+
+      if (userData != null) {
+        // Extract username from the first user's fields
+        String author = userData['author'];
+        String title = userData['title'];
+        String image_url_large = userData['image_url_large'];
+        String publisher = userData['publisher'];
+        double avg_rating =
+            userData['avg_rating'] == null ? 0.0 : userData['avg_rating'];
+        int year = userData['year'];
+        String isbn = userData['isbn'];
+        List<String> bookDetailList = [];
+        bookDetailList.add(author);
+        bookDetailList.add(title);
+        bookDetailList.add(image_url_large);
+        bookDetailList.add(publisher);
+        bookDetailList.add(avg_rating.toStringAsFixed(1));
+        bookDetailList.add(year.toString());
+        bookDetailList.add(isbn);
+        return bookDetailList;
+      } else {
+        throw Exception('No user data found');
+      }
+    } else {
+      // Request failed, throw an error or return null
+      throw Exception('Failed to fetch user data');
+    }
+  }
 
   String changeUrl(String url) {
-    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    String newUrl = url.replaceAll(
+        'http://images.amazon.com', 'https://m.media-amazon.com');
     return newUrl;
   }
+
   Future<List<Review>> fetchBookReviews() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
@@ -97,8 +99,8 @@ Future<List<String>> getBookDetails() async {
         // 'http://127.0.0.1:8000/review/get_reviews/${bookID}'
         );
     var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
+      url,
+      headers: {"Content-Type": "application/json"},
     );
 
     // melakukan decode response menjadi bentuk json
@@ -107,144 +109,152 @@ Future<List<String>> getBookDetails() async {
     // melakukan konversi data json menjadi object Product
     List<Review> allReview = [];
     for (var d in data) {
-        if (d != null) {
-            allReview.add(Review.fromJson(d));
-        }
+      if (d != null) {
+        allReview.add(Review.fromJson(d));
+      }
     }
     return allReview;
-}
-
-Future<List<String>> getUsername(int id) async {
-  String url = "http://10.0.2.2:8000/review/get_user/$id";
-
-  // Make the HTTP GET request
-  http.Response response = await http.get(Uri.parse(url));
-
-  // Check if the request was successful (status code 200)
-  if (response.statusCode == 200) {
-    // Parse the JSON response
-    List<dynamic> userDataList = jsonDecode(response.body);
-
-    if (userDataList.isNotEmpty) {
-      // Extract username from the first user's fields
-      Map<String, dynamic> userData = userDataList[0];
-      String username = userData['fields']['username'];
-      List<String> identityList = [];
-      identityList.add(username);
-      identityList.add(userData['fields']['image_url']);
-      return identityList;
-    } else {
-      throw Exception('No user data found');
-    }
-  } else {
-    // Request failed, throw an error or return null
-    throw Exception('Failed to fetch user data');
   }
-}
 
-void showReviewsBottomSheet() {
-  showModalBottomSheet(
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    isScrollControlled: true,
-    showDragHandle: true,
-    context: context, 
-    builder: (context) {
-      final user = context.read<UserProvider>();
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        height: MediaQuery.of(context).size.height * 0.75,
-        color: Colors.white70,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey)),
-              ),
-              child: const Text(
-                'What they say about this book...',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+  Future<List<String>> getUsername(int id) async {
+    String url = "http://10.0.2.2:8000/review/get_user/$id";
+
+    // Make the HTTP GET request
+    http.Response response = await http.get(Uri.parse(url));
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      List<dynamic> userDataList = jsonDecode(response.body);
+
+      if (userDataList.isNotEmpty) {
+        // Extract username from the first user's fields
+        Map<String, dynamic> userData = userDataList[0];
+        String username = userData['fields']['username'];
+        List<String> identityList = [];
+        identityList.add(username);
+        identityList.add(userData['fields']['image_url']);
+        return identityList;
+      } else {
+        throw Exception('No user data found');
+      }
+    } else {
+      // Request failed, throw an error or return null
+      throw Exception('Failed to fetch user data');
+    }
+  }
+
+  void showReviewsBottomSheet() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        isScrollControlled: true,
+        showDragHandle: true,
+        context: context,
+        builder: (context) {
+          final user = context.read<UserProvider>();
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            height: MediaQuery.of(context).size.height * 0.75,
+            color: Colors.white70,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.grey)),
+                  ),
+                  child: const Text(
+                    'What they say about this book...',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: FutureBuilder(
-                future: fetchBookReviews(),
-                builder: (context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          "Be the first to review this book!",
-                          style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
-                        ),
-                      );
-                    } else {
-                        if (!snapshot.hasData) {
-                        return const Column(
-                            children: [
-                            Text(
-                                "Be the first to review this book!",
-                                style:
-                                    TextStyle(color: Color(0xff59A5D8), fontSize: 20),
-                            ),
-                            SizedBox(height: 8),
-                            ],
+                Expanded(
+                  child: FutureBuilder(
+                    future: fetchBookReviews(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            "Be the first to review this book!",
+                            style: TextStyle(
+                                color: Color(0xff59A5D8), fontSize: 20),
+                          ),
                         );
-                    } else {
-                        return ListView.separated(
-                          separatorBuilder: (context, index) => 
-                            const Divider(height: 1, color: Colors.grey),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (_, index) {
-                            return FutureBuilder<List<String>>(
-                              future: getUsername(snapshot.data![index].fields.user),
-                              builder: (context, AsyncSnapshot<List<String>> usernameSnapshot) {
-                                if (usernameSnapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (usernameSnapshot.hasError) {
-                                  return Text('Error: ${usernameSnapshot.error}');
-                                } else {
-                                  return Container(
-                                    child: ReviewCard(
+                      } else {
+                        if (!snapshot.hasData) {
+                          return const Column(
+                            children: [
+                              Text(
+                                "Be the first to review this book!",
+                                style: TextStyle(
+                                    color: Color(0xff59A5D8), fontSize: 20),
+                              ),
+                              SizedBox(height: 8),
+                            ],
+                          );
+                        } else {
+                          return ListView.separated(
+                            separatorBuilder: (context, index) =>
+                                const Divider(height: 1, color: Colors.grey),
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (_, index) {
+                              return FutureBuilder<List<String>>(
+                                future: getUsername(
+                                    snapshot.data![index].fields.user),
+                                builder: (context,
+                                    AsyncSnapshot<List<String>>
+                                        usernameSnapshot) {
+                                  if (usernameSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (usernameSnapshot.hasError) {
+                                    return Text(
+                                        'Error: ${usernameSnapshot.error}');
+                                  } else {
+                                    return Container(
+                                        child: ReviewCard(
                                       image: usernameSnapshot.data![1],
                                       username: usernameSnapshot.data![0],
-                                      rating: snapshot.data![index].fields.rating,
-                                      content: snapshot.data![index].fields.content,
+                                      rating:
+                                          snapshot.data![index].fields.rating,
+                                      content:
+                                          snapshot.data![index].fields.content,
                                       bookId: snapshot.data![index].fields.book,
-                                      isAdmin:snapshot.data![index].fields.user==user.id || user.is_superuser,
+                                      isAdmin:
+                                          snapshot.data![index].fields.user ==
+                                                  user.id ||
+                                              user.is_superuser,
                                       isInFeeds: false,
-                                    )
-                                  );
-                                }
-                              },
-                            );
-                          },
-                        );
-
+                                    ));
+                                  }
+                                },
+                              );
+                            },
+                          );
                         }
-                    }
-                },
-              ),
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
-    }
-  );
-}
+          );
+        });
+  }
 
-void showAddReviewBottomSheet() {
+  void showAddReviewBottomSheet() {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -255,7 +265,8 @@ void showAddReviewBottomSheet() {
       context: context,
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom) ,
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             color: Colors.white70,
@@ -263,7 +274,7 @@ void showAddReviewBottomSheet() {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: EdgeInsets.only(top:16.0),
+                  padding: EdgeInsets.only(top: 16.0),
                   alignment: Alignment.center,
                   child: const Text(
                     'How was your journey on this book?',
@@ -274,7 +285,9 @@ void showAddReviewBottomSheet() {
                   ),
                 ),
                 ReviewFormPage(bookID: bookID),
-                SizedBox(height: 30,)
+                SizedBox(
+                  height: 30,
+                )
               ],
             ),
           ),

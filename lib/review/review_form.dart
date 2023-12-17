@@ -8,10 +8,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewFormPage extends StatefulWidget {
   final int bookID;
-    const ReviewFormPage({Key? key, required this.bookID}) : super(key: key);
+  const ReviewFormPage({Key? key, required this.bookID}) : super(key: key);
 
-    @override
-    State<ReviewFormPage> createState() => _ReviewFormPageState(bookID: bookID);
+  @override
+  State<ReviewFormPage> createState() => _ReviewFormPageState(bookID: bookID);
 }
 
 class _ReviewFormPageState extends State<ReviewFormPage> {
@@ -21,12 +21,12 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
     String _content = "";
     bool isButtonEnabled = false;
 
-    _ReviewFormPageState({required this.bookID});
+  _ReviewFormPageState({required this.bookID});
 
-    @override
-    Widget build(BuildContext context) {
-        final request = context.watch<CookieRequest>();
-        final user = context.read<UserProvider>();
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+    final user = context.read<UserProvider>();
 
         return Form(
             key: _formKey,
@@ -88,48 +88,48 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                         ),
                         onPressed: isButtonEnabled ? () async {
                         if (_formKey.currentState!.validate()) {
-                            // Kirim ke Django dan tunggu respons
-                            // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                            final response = await request.postJson(
-                            // "http://127.0.0.1:8000/review/post-flutter/$bookID",
-                            "http://10.0.2.2:8000/review/post-flutter/${bookID}",
-                            // "https://deploytest-production-cf18.up.railway.app/review/post-flutter/${bookID}",
-                            jsonEncode(<String, String>{
+                          // Kirim ke Django dan tunggu respons
+                          // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                          final response = await request.postJson(
+                              // "http://127.0.0.1:8000/review/post-flutter/$bookID",
+                              "http://10.0.2.2:8000/review/post-flutter/$bookID",
+                              // "https://deploytest-production-cf18.up.railway.app/review/post-flutter/${bookID}",
+                              jsonEncode(<String, String>{
                                 'title': '',
                                 'rating': _rating.toString(),
                                 'content': _content,
                                 //TODO: FIGURE OUT HOW TO GET THE LOGGED IN USER'S EMAIL
-                                'email' : user.email //MASIH HARDCODE,
-                            }));
-                            if (response['status'] == 'success') {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                content: Text("Review Anda berhasil disimpan!"),
-                                ));
-                                Navigator.pop(context); //close the modalbottomsheet
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     MaterialPageRoute(builder: (context) => BookDetailPage(bookID: bookID,)),
-                                // );
-                            } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                    content:
-                                        Text("Terdapat kesalahan, silakan coba lagi."),
-                                ));
-                            }
+                                'email': user.email //MASIH HARDCODE,
+                              }));
+                          if (response['status'] == 'success') {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Review Anda berhasil disimpan!"),
+                            ));
+                            Navigator.pop(context); //close the modalbottomsheet
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(builder: (context) => BookDetailPage(bookID: bookID,)),
+                            // );
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Terdapat kesalahan, silakan coba lagi."),
+                            ));
+                          }
                         }
-                    } : null,
-                        child: Text(
-                          "Save",
-                          style: TextStyle(color:Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]
+                      }
+                    : null,
+                child: const Text(
+                  "Save",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-          );
-    }
+          ),
+        ]),
+      ),
+    );
+  }
 }

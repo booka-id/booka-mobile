@@ -7,6 +7,9 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/profile/profile_page.dart';
 
+import '../review/feeds.dart';
+import 'bottom_nav_bar.dart';
+
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
 
@@ -23,6 +26,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     final user = context.watch<UserProvider>();
+    int _selectedIndex= 0;
 
 
     return Scaffold(
@@ -79,6 +83,7 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       drawer: const LeftDrawer(),
+      bottomNavigationBar: BotNavBar(0),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
