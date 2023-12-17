@@ -8,20 +8,22 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewFormPage extends StatefulWidget {
   final int bookID;
-  const ReviewFormPage({Key? key, required this.bookID}) : super(key: key);
+  final Function onSubmit;
+  const ReviewFormPage({Key? key, required this.bookID, required this.onSubmit}) : super(key: key);
 
   @override
-  State<ReviewFormPage> createState() => _ReviewFormPageState(bookID: bookID);
+  State<ReviewFormPage> createState() => _ReviewFormPageState(bookID: bookID, onSubmit: onSubmit);
 }
 
 class _ReviewFormPageState extends State<ReviewFormPage> {
     final _formKey = GlobalKey<FormState>();
     final int bookID;
+    Function onSubmit;
     int _rating = 0;
     String _content = "";
     bool isButtonEnabled = false;
 
-  _ReviewFormPageState({required this.bookID});
+  _ReviewFormPageState({required this.bookID, required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +94,8 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                           // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                           final response = await request.postJson(
                               // "http://127.0.0.1:8000/review/post-flutter/$bookID",
-                              "http://10.0.2.2:8000/review/post-flutter/$bookID",
-                              // "https://deploytest-production-cf18.up.railway.app/review/post-flutter/${bookID}",
+                              // "http://10.0.2.2:8000/review/post-flutter/$bookID",
+                              "https://deploytest-production-cf18.up.railway.app/review/post-flutter/${bookID}",
                               jsonEncode(<String, String>{
                                 'title': '',
                                 'rating': _rating.toString(),
@@ -102,6 +104,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                                 'email': user.email //MASIH HARDCODE,
                               }));
                           if (response['status'] == 'success') {
+                            onSubmit();
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text("Review Anda berhasil disimpan!"),

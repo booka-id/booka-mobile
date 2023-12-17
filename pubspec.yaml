@@ -46,6 +46,7 @@ dependencies:
   flutter_typeahead: ^4.6.2
   google_fonts: ^6.1.0
   basic_utils: ^5.7.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

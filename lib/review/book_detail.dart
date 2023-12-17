@@ -1,12 +1,14 @@
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/review.dart';
 import 'package:booka_mobile/models/user.dart';
+import 'package:booka_mobile/review/card_skeleton.dart';
 import 'package:booka_mobile/review/review_card.dart';
 import 'package:booka_mobile/review/review_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookDetailPage extends StatefulWidget {
   final int bookID;
@@ -18,8 +20,15 @@ class BookDetailPage extends StatefulWidget {
 
 class _BookDetailPageState extends State<BookDetailPage> {
   final int bookID;
+  int refresher = 0;
 
   _BookDetailPageState({required this.bookID});
+
+  void handleSubmit(){
+    setState(() {
+      refresher++;
+    });
+  }
 
   Future<List<Book>> fetchBookDetails() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
@@ -46,7 +55,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
   }
 
   Future<List<String>> getBookDetails() async {
-    String url = "http://10.0.2.2:8000/review/books/$bookID";
+    // String url = "http://10.0.2.2:8000/review/books/$bookID";
+    String url = "https://deploytest-production-cf18.up.railway.app/review/books/$bookID";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -94,8 +104,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
   Future<List<Review>> fetchBookReviews() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        // 'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
-        'http://10.0.2.2:8000/review/get_reviews/${bookID}'
+        'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
+        // 'http://10.0.2.2:8000/review/get_reviews/${bookID}'
         // 'http://127.0.0.1:8000/review/get_reviews/${bookID}'
         );
     var response = await http.get(
@@ -117,7 +127,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
   }
 
   Future<List<String>> getUsername(int id) async {
-    String url = "http://10.0.2.2:8000/review/get_user/$id";
+    // String url = "http://10.0.2.2:8000/review/get_user/$id";
+    String url = "https://deploytest-production-cf18.up.railway.app/review/get_user/$id";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -181,15 +192,21 @@ class _BookDetailPageState extends State<BookDetailPage> {
                     future: fetchBookReviews(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: 
+                        Column(
+                          children: [
+                            SkeletonCard(),
+                            SkeletonCard(),
+                            SkeletonCard(),
+                          ],
+                        ));
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(
                           child: Text(
                             "Be the first to review this book!",
-                            style: TextStyle(
-                                color: Color(0xff59A5D8), fontSize: 20),
+                            style: TextStyle( fontSize: 20),
                           ),
                         );
                       } else {
@@ -198,8 +215,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             children: [
                               Text(
                                 "Be the first to review this book!",
-                                style: TextStyle(
-                                    color: Color(0xff59A5D8), fontSize: 20),
+                                style: TextStyle( fontSize: 20),
                               ),
                               SizedBox(height: 8),
                             ],
@@ -218,7 +234,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                                         usernameSnapshot) {
                                   if (usernameSnapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
+                                    return SkeletonCard();
                                   } else if (usernameSnapshot.hasError) {
                                     return Text(
                                         'Error: ${usernameSnapshot.error}');
@@ -284,7 +300,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                     ),
                   ),
                 ),
-                ReviewFormPage(bookID: bookID),
+                ReviewFormPage(bookID: bookID, onSubmit: handleSubmit,),
                 SizedBox(
                   height: 30,
                 )
@@ -354,21 +370,21 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              author,
+                              "by $author",
                               style: TextStyle(
                                 fontSize: 18, 
                                 color: Colors.grey[700]
                               ),
                             ),
                             Text(
-                              year,
+                              '$year',
                               style: TextStyle(
                                 fontSize: 18, 
                                 color: Colors.grey[700]
                               ),
                             ),
                             Text(
-                              publisher,
+                              'Publisher: $publisher',
                               style: TextStyle(
                                 fontSize: 18, 
                                 color: Colors.grey[700]
