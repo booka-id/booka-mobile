@@ -1,4 +1,5 @@
 import 'package:booka_mobile/katalog_buku/catalogue.dart';
+import 'package:booka_mobile/review/feeds.dart';
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
@@ -58,7 +59,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.checklist),
+            leading: const Icon(Icons.menu_book_rounded),
             title: const Text('Katalog Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
@@ -71,7 +72,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.add_shopping_cart),
+            leading: const Icon(Icons.rate_review_rounded),
             title: const Text('Review Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
@@ -79,7 +80,7 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyHomePage() //Todo ganti review buku,
+                          ReviewPage() //Todo ganti review buku,
                       ));
             },
           ),
