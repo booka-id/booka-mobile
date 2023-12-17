@@ -1,4 +1,5 @@
 import 'package:booka_mobile/models/user.dart';
+import 'package:booka_mobile/review/top_ranks.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:booka_mobile/landing_page/login.dart';
@@ -16,11 +17,11 @@ import 'bottom_nav_bar.dart';
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
   final List<ShopItem> items = [
-    ShopItem("Katalog Buku", Icons.checklist, Colors.red),
-    ShopItem("Review Buku", Icons.add_shopping_cart, Colors.green),
-    ShopItem("Event", Icons.calendar_today, Colors.purple),
-    ShopItem("Logout", Icons.logout, Colors.blue),
-    ShopItem("Login", Icons.login, Colors.yellow),
+    ShopItem("Katalog Buku", Icons.menu_book_rounded, Colors.indigo),
+    ShopItem("Review Buku", Icons.rate_review_rounded, Colors.indigo),
+    ShopItem("Event", Icons.calendar_today, Colors.indigo),
+    // ShopItem("Logout", Icons.logout, Colors.indigo),
+    // ShopItem("Login", Icons.login, Colors.indigo),
   ];
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'booka-mobile',
+          'Booka',
         ),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
@@ -58,27 +59,27 @@ class MyHomePage extends StatelessWidget {
                     );
                   }
               )
-              :
+              :null
               // User Belum Login
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()));
-                },
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              )
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //     backgroundColor: Colors.white,
+              //   ),
+              //   onPressed: () {
+              //     Navigator.push(context,
+              //         MaterialPageRoute(builder: (context) => const LoginPage()));
+              //   },
+              //   child: const Text(
+              //     'Login',
+              //     style: TextStyle(
+              //       fontSize: 20,
+              //       color: Colors.indigo,
+              //     ),
+              //   ),
+              // )
           ),
         ],
       ),
@@ -92,7 +93,7 @@ class MyHomePage extends StatelessWidget {
             // Widget untuk menampilkan children secara vertikal
             children: <Widget>[
               const Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                padding: EdgeInsets.only(bottom: 10.0),
                 // Widget Text untuk menampilkan tulisan dengan alignment center dan style yang sesuai
                 child: Text(
                   'What to do?', // Text yang menandakan toko
@@ -117,6 +118,15 @@ class MyHomePage extends StatelessWidget {
                   return ShopCard(item, item.cardColor);
                 }).toList(),
               ),
+              const Text(
+                'Top Ranked Books', // Text yang menandakan toko
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              TopRanksWidget(),
             ],
           ),
         ),

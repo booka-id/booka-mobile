@@ -38,12 +38,17 @@ class _BotNavBarState extends State<BotNavBar> {
             ),
           );
         } else if (_selectedIndex == 1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ReviewPage(),
-            ),
-          );
+          if(request.loggedIn){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ReviewPage()
+              ),
+            );
+          }else{
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+          }
         }
         else if (_selectedIndex == 2) {
           Navigator.pushReplacement(
