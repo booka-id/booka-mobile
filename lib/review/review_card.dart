@@ -48,16 +48,8 @@ class ReviewCard extends StatelessWidget {
                         Text.rich(
                           TextSpan(
                             children: [
-                              // const TextSpan(
-                              //   text: "Review by ",
-                              //   style: TextStyle(
-                              //     fontSize: 18,
-                              //     fontWeight: FontWeight.bold,
-                              //     color: Colors.black, // Color for the "Review by " text
-                              //   ),
-                              // ),
                               TextSpan(
-                                text: "$username", // Your username variable here
+                                text: username,
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -69,10 +61,10 @@ class ReviewCard extends StatelessWidget {
                           softWrap: true,
                         ),
                         Row(children: [
-                          Icon(Icons.star, color: Colors.amber,),
-                          SizedBox(width: 3,),
+                          const Icon(Icons.star, color: Colors.amber,),
+                          const SizedBox(width: 3,),
                           Text(
-                            "$rating/5",
+                            "$rating.0",
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w300,

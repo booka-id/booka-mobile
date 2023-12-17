@@ -1,8 +1,10 @@
+import 'package:booka_mobile/landing_page/bottom_nav_bar.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:booka_mobile/models/review.dart';
 import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:booka_mobile/review/book_search.dart';
+import 'package:booka_mobile/review/card_skeleton.dart';
 import 'package:booka_mobile/review/review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
@@ -32,8 +34,9 @@ class _ReviewPageState extends State<ReviewPage> {
   Future<List<Review>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        // 'https://deploytest-production-cf18.up.railway.app/review/all/'
-        'http://10.0.2.2:8000/review/all/');
+        'https://deploytest-production-cf18.up.railway.app/review/all/'
+        // 'http://10.0.2.2:8000/review/all/'
+      );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -55,8 +58,9 @@ class _ReviewPageState extends State<ReviewPage> {
   Future<List<Review>> fetchUserReviews(int id) async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        // 'https://deploytest-production-cf18.up.railway.app/review/all/'
-        'http://10.0.2.2:8000/review/user/$id');
+        'https://deploytest-production-cf18.up.railway.app/review/user/$id'
+        // 'http://10.0.2.2:8000/review/user/$id'
+      );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -76,7 +80,9 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Future<List<String>> getUsername(int id) async {
-    String url = "http://10.0.2.2:8000/review/get_user/$id";
+    String url = 
+    // "http://10.0.2.2:8000/review/get_user/$id";
+    "https://deploytest-production-cf18.up.railway.app/review/get_user/$id";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -104,7 +110,9 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Future<String> getBookTitle(int id) async {
-    String url = "http://10.0.2.2:8000/review/books/$id";
+    String url = 
+    // "http://10.0.2.2:8000/review/books/$id";
+    "https://deploytest-production-cf18.up.railway.app/review/books/$id";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -129,7 +137,8 @@ class _ReviewPageState extends State<ReviewPage> {
 
   Future<void> deleteReview(int id) async {
     String url =
-        'http://10.0.2.2:8000/review/delete/$id'; // Replace with your API base URL
+        // 'http://10.0.2.2:8000/review/delete/$id'; // Replace with your API base URL
+        'https://deploytest-production-cf18.up.railway.app/review/delete/$id'; // Replace with your API base URL
     try {
       final response = await http.delete(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -204,7 +213,6 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserProvider>();
-    print(user.id);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -226,61 +234,7 @@ class _ReviewPageState extends State<ReviewPage> {
         },
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.indigo,
-        unselectedItemColor: Colors.indigo.withOpacity(0.6),
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          if (_selectedIndex == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyHomePage(),
-              ),
-            );
-          } else if (_selectedIndex == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ReviewPage(),
-              ),
-            );
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 30.0,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.comment,
-              size: 30.0,
-            ),
-            label: "Reviews",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.campaign,
-              size: 30.0,
-            ),
-            label: "Events",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              size: 30.0,
-            ),
-            label: "Profile",
-          ),
-        ],
-      ),
+      bottomNavigationBar: BotNavBar(1),
       body: DefaultTabController(
         length: 2, // Number of tabs
         child: Column(
@@ -299,7 +253,13 @@ class _ReviewPageState extends State<ReviewPage> {
                     future: fetchProduct(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.data == null) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Column(
+                          children: [
+                            SkeletonCard(),
+                            SkeletonCard(),
+                            SkeletonCard(),
+                          ],
+                        );
                       } else {
                         if (!snapshot.hasData) {
                           return const Column(
@@ -313,7 +273,9 @@ class _ReviewPageState extends State<ReviewPage> {
                             ],
                           );
                         } else {
-                          return ListView.builder(
+                          return ListView.separated(
+                            separatorBuilder: (context, index) => 
+                            Divider(height: 1, color: Colors.grey[450],),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
                               return FutureBuilder<List<String>>(
@@ -332,7 +294,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                               ConnectionState.waiting ||
                                           bookTitleSnapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                        return const CircularProgressIndicator();
+                                        return const SkeletonCard();
                                       } else if (usernameSnapshot.hasError ||
                                           bookTitleSnapshot.hasError) {
                                         return Text(
@@ -352,36 +314,22 @@ class _ReviewPageState extends State<ReviewPage> {
                                               ),
                                             );
                                           },
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 12),
-                                            padding: const EdgeInsets.all(20.0),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Review by ${usernameSnapshot.data ?? 'Loading...'}",
-                                                  style: const TextStyle(
-                                                    fontSize: 18.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                    "on ${bookTitleSnapshot.data ?? 'Loading...'}"),
-                                                const SizedBox(height: 10),
-                                                Text(
-                                                    "${snapshot.data![index].fields.content}"),
-                                              ],
-                                            ),
-                                          ),
+                                          child: ReviewCard(
+                                            image: usernameSnapshot.data![1],
+                                            username: usernameSnapshot.data![0],
+                                            rating:
+                                                snapshot.data![index].fields.rating,
+                                            content:
+                                                snapshot.data![index].fields.content,
+                                            bookTitle: bookTitleSnapshot.data,
+                                            bookId: snapshot.data![index].fields.book,
+                                            isAdmin:
+                                                snapshot.data![index].fields.user ==
+                                                        user.id ||
+                                                    user.is_superuser,
+                                            isInFeeds: true,
+                                            showCardOptions: showCardOptions,
+                                          )
                                         );
                                       }
                                     },
@@ -400,7 +348,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     future: fetchUserReviews(user.id),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.data == null) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: SkeletonCard());
                       } else {
                         if (!snapshot.hasData) {
                           return const Column(
@@ -414,7 +362,8 @@ class _ReviewPageState extends State<ReviewPage> {
                             ],
                           );
                         } else {
-                          return ListView.builder(
+                          return ListView.separated(
+                            separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey,),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
                               return FutureBuilder<List<String>>(
@@ -433,7 +382,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                               ConnectionState.waiting ||
                                           bookTitleSnapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                        return CircularProgressIndicator();
+                                        return SkeletonCard();
                                       } else if (usernameSnapshot.hasError ||
                                           bookTitleSnapshot.hasError) {
                                         return Text(
@@ -453,36 +402,22 @@ class _ReviewPageState extends State<ReviewPage> {
                                               ),
                                             );
                                           },
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 12),
-                                            padding: const EdgeInsets.all(20.0),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Review by ${usernameSnapshot.data ?? 'Loading...'}",
-                                                  style: const TextStyle(
-                                                    fontSize: 18.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                    "on ${bookTitleSnapshot.data ?? 'Loading...'}"),
-                                                const SizedBox(height: 10),
-                                                Text(
-                                                    "${snapshot.data![index].fields.content}"),
-                                              ],
-                                            ),
-                                          ),
+                                          child: ReviewCard(
+                                            image: usernameSnapshot.data![1],
+                                            username: usernameSnapshot.data![0],
+                                            rating:
+                                                snapshot.data![index].fields.rating,
+                                            content:
+                                                snapshot.data![index].fields.content,
+                                            bookTitle: bookTitleSnapshot.data,
+                                            bookId: snapshot.data![index].fields.book,
+                                            isAdmin:
+                                                snapshot.data![index].fields.user ==
+                                                        user.id ||
+                                                    user.is_superuser,
+                                            isInFeeds: true,
+                                            showCardOptions: showCardOptions,
+                                          )
                                         );
                                       }
                                     },
