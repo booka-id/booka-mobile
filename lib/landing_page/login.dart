@@ -85,7 +85,9 @@ class _LoginPageState extends State<LoginPage> {
                 // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
+                runtimeType;
                 final response = await request.login(
+                    //"http://10.0.2.2:8000/login_mobile/",
                     "https://deploytest-production-cf18.up.railway.app/login_mobile/",
                     {
                       'username': username,
@@ -94,8 +96,8 @@ class _LoginPageState extends State<LoginPage> {
 
                 if (request.loggedIn) {
                   String message = response['message'];
-                  String uname = response['username'];
-                  userProvider.setUsername(uname);
+                  await userProvider.setUser(response['username'], response['image_url'] ?? "https://ui-avatars.com/api/?name=${response['username']}&background=0D8ABC&color=fff&size=128",
+                  response['email'], response['id'], response['is_superuser']);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyHomePage()),
@@ -103,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(
-                        content: Text("$message Selamat datang, $uname.")));
+                        content: Text("$message Selamat datang, ${response['username']}.")));
                 } else {
                   showDialog(
                     context: context,

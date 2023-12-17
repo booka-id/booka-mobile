@@ -1,10 +1,10 @@
+import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';
 import 'package:provider/provider.dart';
+import 'package:booka_mobile/review/feeds.dart';
 import 'package:booka_mobile/landing_page/login.dart';
-import 'package:booka_mobile/landing_page/menu.dart';
-import 'package:booka_mobile/event/screens/list_event.dart';
 
 class ShopItem {
   final String name;
@@ -28,24 +28,24 @@ class ShopCard extends StatelessWidget {
         // Area responsive terhadap sentuhan
         onTap: () async {
           // Bakal Dipindahin kebawah nantinya
-          if (item.name == "Katalog Buku") {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MyHomePage())); //todo Ganti katalog buku
-          } else if (item.name == "Review Buku") {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MyHomePage())); //todo Ganti review buku
-          } else if (item.name == "Event") {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EventPage())); //todo Ganti event
-          }
+          // if (item.name == "Katalog Buku") {
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) =>
+          //               MyHomePage())); //todo Ganti katalog buku
+          // } else if (item.name == "Review Buku") {
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) =>
+          //               ReviewPage())); //todo Ganti review buku
+          // } else if (item.name == "Event") {
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => MyHomePage())); //todo Ganti event
+          // }
           if (item.name == "Login") {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
@@ -63,6 +63,13 @@ class ShopCard extends StatelessWidget {
               ..showSnackBar(SnackBar(
                   content: Text("Kamu telah menekan tombol ${item.name}!")));
             // Navigate ke route yang sesuai (tergantung jenis tombol)
+              if (item.name == "Review Buku") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const ReviewPage())); //todo Ganti review buku
+            }
 
             if (item.name == "Logout") {
               final response = await request.logout(
@@ -76,7 +83,7 @@ class ShopCard extends StatelessWidget {
                 ));
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

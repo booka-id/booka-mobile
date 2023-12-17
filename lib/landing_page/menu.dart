@@ -5,6 +5,10 @@ import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/landing_page/shop_card.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:booka_mobile/profile/profile_page.dart';
+
+import '../review/feeds.dart';
+import 'bottom_nav_bar.dart';
 
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
@@ -21,50 +25,65 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
-    final user = context.read<UserProvider>();
-    final userName = user.username;
-    List<String> list = <String>['Login', 'Profile', 'Logout'];
-    if (request.loggedIn) {
-      list = <String>[userName, 'Profile', 'Logout'];
-    }
+    final user = context.watch<UserProvider>();
+    int _selectedIndex= 0;
+
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'booka-mobile Book Inventory ',
+          'booka-mobile',
         ),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
-          //DropdownButton for profile, if user not login display login button, if user login display profile and logout button
-          DropdownButton<String>(
-            items: list.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            //if user not login display login button, if user login display profile and logout button
-            onChanged: (String? value) {
-              if (value == 'Login') {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
-              } else if (value == 'Profile') {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                      content: Text("Kamu telah menekan tombol $value!")));
-              } else if (value == 'Logout') {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                      content: Text("Kamu telah menekan tombol $value!")));
-              }
-            },
+
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: request.loggedIn == true?
+            //User Sudah Login
+              Consumer<UserProvider>(
+                  builder: (context, user,_){
+                    return CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(user.profile_picture),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfilePage()));
+                        },
+                      ),
+                    );
+                  }
+              )
+              :
+              // User Belum Login
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()));
+                },
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              )
           ),
         ],
       ),
       drawer: const LeftDrawer(),
+      bottomNavigationBar: BotNavBar(0),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
