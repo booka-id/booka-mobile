@@ -26,6 +26,7 @@ class _EventFormPageState extends State<EventFormPage> {
 
   Future<List<String>> fetchProduct() async {
     var url = Uri.parse(
+      // 'https://deploytest-production-cf18.up.railway.app/event/get-books/');
         'http://127.0.0.1:8000/event/get-books/');
     var response = await http.get(
       url,
@@ -227,6 +228,7 @@ Widget build(BuildContext context) {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   final response = await request.postJson(
+                                    // "https://deploytest-production-cf18.up.railway.app/event/create-event-flutter/",
                                     "http://127.0.0.1:8000/event/create-event-flutter/",
                                     jsonEncode({
                                       'name': _name,

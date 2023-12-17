@@ -30,6 +30,7 @@ class _EditEventPageState extends State<EditEventPage> {
 
   Future<List<String>> fetchProduct() async {
     var url = Uri.parse('http://127.0.0.1:8000/event/get-books/');
+    // var url = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -241,6 +242,7 @@ class _EditEventPageState extends State<EditEventPage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
+                                  // "https://deploytest-production-cf18.up.railway.app/${widget.event.pk}/",
                                   "http://127.0.0.1:8000/event/edit-event-flutter/${widget.event.pk}/", 
                                   jsonEncode({
                                     'name': _name,

@@ -5,6 +5,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/review/feeds.dart';
 import 'package:booka_mobile/landing_page/login.dart';
+import 'package:booka_mobile/event/screens/list_event.dart';
 
 class ShopItem {
   final String name;
@@ -69,6 +70,13 @@ class ShopCard extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) =>
                           const ReviewPage())); //todo Ganti review buku
+            }
+             else if (item.name == "Event") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const EventPage())); 
             }
 
             if (item.name == "Logout") {
