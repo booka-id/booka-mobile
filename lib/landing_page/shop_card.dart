@@ -5,7 +5,6 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/review/feeds.dart';
-import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/event/screens/list_event.dart';
 
 class ShopItem {
@@ -52,7 +51,7 @@ class ShopCard extends StatelessWidget {
           if (item.name == "Login") {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
+              ..showSnackBar(const SnackBar(
                   content: Text("Login terlebih dahulu !")));
 
           }else{
@@ -99,7 +98,7 @@ class ShopCard extends StatelessWidget {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("$message"),
+                  content: Text(message),
                 ));
               }
             }

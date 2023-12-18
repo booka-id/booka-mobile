@@ -1,5 +1,4 @@
 import 'package:booka_mobile/landing_page/bottom_nav_bar.dart';
-import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:booka_mobile/models/review.dart';
 import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
@@ -21,7 +20,7 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  int _selectedIndex = 1;
+  final int _selectedIndex = 1;
   int _refreshCount = 0;
 
   // Function to refresh the FutureBuilder
@@ -46,13 +45,13 @@ class _ReviewPageState extends State<ReviewPage> {
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     // melakukan konversi data json menjadi object Product
-    List<Review> all_review = [];
+    List<Review> allReview = [];
     for (var d in data) {
       if (d != null) {
-        all_review.add(Review.fromJson(d));
+        allReview.add(Review.fromJson(d));
       }
     }
-    return all_review;
+    return allReview;
   }
 
   Future<List<Review>> fetchUserReviews(int id) async {
@@ -168,18 +167,18 @@ class _ReviewPageState extends State<ReviewPage> {
           ),
         ),
         builder: (context) {
-          return Container(
+          return SizedBox(
             height: MediaQuery.of(context).size.height * 0.2,
             child: Column(
               children: [
                 if (isAdmin)
                   ListTile(
-                    contentPadding: EdgeInsets.only(left: 20.0),
-                    leading: Icon(
+                    contentPadding: const EdgeInsets.only(left: 20.0),
+                    leading: const Icon(
                       Icons.delete_outline,
                       color: Colors.indigo,
                     ),
-                    title: Text("Delete Review"),
+                    title: const Text("Delete Review"),
                     onTap: () async {
                       await deleteReview(id);
                       Navigator.of(context).pop(); // Close the bottom sheet
@@ -187,12 +186,12 @@ class _ReviewPageState extends State<ReviewPage> {
                     },
                   ),
                 ListTile(
-                  contentPadding: EdgeInsets.only(left: 20.0),
-                  leading: Icon(
+                  contentPadding: const EdgeInsets.only(left: 20.0),
+                  leading: const Icon(
                     Icons.menu_book_rounded,
                     color: Colors.indigo,
                   ),
-                  title: Text("Go to this book"),
+                  title: const Text("Go to this book"),
                   onTap: () async {
                     Navigator.pushReplacement(
                       context,
@@ -363,7 +362,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           );
                         } else {
                           return ListView.separated(
-                            separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey,),
+                            separatorBuilder: (context, index) => const Divider(height: 1, color: Colors.grey,),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
                               return FutureBuilder<List<String>>(
@@ -382,7 +381,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                               ConnectionState.waiting ||
                                           bookTitleSnapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                        return SkeletonCard();
+                                        return const SkeletonCard();
                                       } else if (usernameSnapshot.hasError ||
                                           bookTitleSnapshot.hasError) {
                                         return Text(

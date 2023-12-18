@@ -1,10 +1,6 @@
 import 'dart:convert';
-import 'dart:io'show File;
 import 'dart:math';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/landing_page/login.dart';
@@ -38,10 +34,10 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
               children: [
-                SizedBox(height: 25,),
+                const SizedBox(height: 25,),
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -56,7 +52,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                     Text("We're so glad to have you on board.")
                   ],
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 // Register Form
                 Form(
                   key: _formKey,
@@ -69,14 +65,14 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             controller: _emailController,
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              prefixIcon: Icon(Icons.mail_rounded, color: Colors.indigo),
+                              prefixIcon: const Icon(Icons.mail_rounded, color: Colors.indigo),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                             ),
                             validator: (String? value) {
@@ -91,14 +87,14 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             controller: _usernameController,
                             decoration: InputDecoration(
                               labelText: 'Username',
-                              prefixIcon: Icon(Icons.person, color: Colors.indigo),
+                              prefixIcon: const Icon(Icons.person, color: Colors.indigo),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                             ),
                             validator: (String? value) {
@@ -113,14 +109,14 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             controller: _passwordController,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              prefixIcon: Icon(Icons.key_rounded, color: Colors.indigo),
+                              prefixIcon: const Icon(Icons.key_rounded, color: Colors.indigo),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                             ),
                             obscureText: true,
@@ -136,14 +132,14 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             controller: _passwordValidator,
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
-                              prefixIcon: Icon(Icons.check, color: Colors.indigo),
+                              prefixIcon: const Icon(Icons.check, color: Colors.indigo),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                                borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                                borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                               ),
                             ),
                             obscureText: true,
@@ -209,7 +205,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             ),
                           ),
                           const SizedBox(height: 20.0),
-                          Text("Already have an account?"),
+                          const Text("Already have an account?"),
                           const SizedBox(height: 10.0),
                           SizedBox(
                             width: double.infinity,

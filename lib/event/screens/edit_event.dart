@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:booka_mobile/main.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -38,17 +37,17 @@ class _EditEventPageState extends State<EditEventPage> {
 
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-    List<String> list_string = [];
-    list_string.add("None");
+    List<String> listString = [];
+    listString.add("None");
 
     for (var d in data) {
       if (d != null) {
-        list_string.add(Book.fromJson(d).fields.title);
+        listString.add(Book.fromJson(d).fields.title);
       }
     }
 
-    featuredBookList = list_string;
-    return list_string;
+    featuredBookList = listString;
+    return listString;
   }
 
   @override
@@ -129,10 +128,10 @@ class _EditEventPageState extends State<EditEventPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Featured Book",
                             ),
-                            SizedBox(height: 8.0),
+                            const SizedBox(height: 8.0),
                             DropdownButton<String>(
                               value: _selectedFeaturedBook,
                               items: featuredBookList
@@ -153,7 +152,7 @@ class _EditEventPageState extends State<EditEventPage> {
                               underline: Container(
                                 height: 1,
                               ),
-                              icon: Icon(Icons.arrow_drop_down),
+                              icon: const Icon(Icons.arrow_drop_down),
                             ),
                           ],
                         ),

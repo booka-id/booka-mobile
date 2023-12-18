@@ -10,16 +10,16 @@ import 'menu.dart';
 
 class BotNavBar extends StatefulWidget {
   int initState;
-  BotNavBar(int this.initState, {Key? key}) : super(key: key);
+  BotNavBar(this.initState, {Key? key}) : super(key: key);
 
   @override
-  _BotNavBarState createState() => _BotNavBarState(this.initState);
+  _BotNavBarState createState() => _BotNavBarState(initState);
 }
 
 class _BotNavBarState extends State<BotNavBar> {
   int _selectedIndex = 0;
   int initPage;
-  _BotNavBarState(int this.initPage);
+  _BotNavBarState(this.initPage);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _BotNavBarState extends State<BotNavBar> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage()
+                  builder: (context) => const ProfilePage()
               ),
             );
           }else{

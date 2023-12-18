@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/book_detail.dart';
 import 'package:flutter/material.dart';
@@ -55,14 +54,14 @@ class TopRanksWidget extends StatelessWidget {
         future: getBookRanks(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Placeholder for loading state
+            return const CircularProgressIndicator(); // Placeholder for loading state
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}'); // Placeholder for error state
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text('No data available'); // Placeholder for empty data state
+            return const Text('No data available'); // Placeholder for empty data state
           } else {
             return Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               height: 290, // Set a fixed height for the container
               child: ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -72,11 +71,10 @@ class TopRanksWidget extends StatelessWidget {
                   int id = snapshot.data![index]['id'];
                   String title = snapshot.data![index]['title'];
                   String author = snapshot.data![index]['author'];
-                  String image_url = snapshot.data![index]['image_url'];
-                  double avg_rating = snapshot.data![index]['avg_rating'] == null ?
-                         0.0 : snapshot.data![index]['avg_rating'];
+                  String imageUrl = snapshot.data![index]['image_url'];
+                  double avgRating = snapshot.data![index]['avg_rating'] ?? 0.0;
                   return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
                     // decoration: BoxDecoration(
                     //   border: Border.all(width: 2, color: Colors.indigo),
                     //   borderRadius: BorderRadius.circular(15)
@@ -103,12 +101,12 @@ class TopRanksWidget extends StatelessWidget {
                               width: 120,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.network(changeUrl(image_url),fit: BoxFit.cover,),
+                                child: Image.network(changeUrl(imageUrl),fit: BoxFit.cover,),
                               ),
                             ),
                             Text(
                               title,
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -119,7 +117,7 @@ class TopRanksWidget extends StatelessWidget {
                               const Icon(Icons.star, color: Colors.amber,),
                               const SizedBox(width: 3,),
                               Text(
-                                avg_rating.toStringAsFixed(1),
+                                avgRating.toStringAsFixed(1),
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w300,

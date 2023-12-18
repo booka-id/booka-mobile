@@ -99,10 +99,10 @@ class UserProvider extends ChangeNotifier {
     return jsonDecode(response.body)['message'];
   }
 
-  Future<void> setUser(String username, String profilePicture, String email, int id, bool is_superuser) async {
+  Future<void> setUser(String username, String profilePicture, String email, int id, bool isSuperuser) async {
     _username = username;
     _id = id;
-    _is_superuser = is_superuser;
+    _is_superuser = isSuperuser;
     _profile_picture = profilePicture;
     _email = email;
     _wishlist = await fetchBook('wishlist');

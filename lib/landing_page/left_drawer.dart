@@ -81,10 +81,10 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ReviewPage() //Todo ganti review buku,
+                          const ReviewPage() //Todo ganti review buku,
                       ));
               }else{
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text("Login terlebih dahulu."),
                 ));
               }
@@ -99,7 +99,7 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          EventPage() //Todo ganti event buku,
+                          const EventPage() //Todo ganti event buku,
                       ));
             },
           ),

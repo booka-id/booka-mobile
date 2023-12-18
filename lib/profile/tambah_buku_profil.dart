@@ -44,15 +44,16 @@ class AddBookButton extends StatelessWidget {
     return fetchedBooks;
   }
 
-  List<Book> updateList(String value, List<Book> all_books) {
-    List<Book> book_displayed = all_books
+  List<Book> updateList(String value, List<Book> allBooks) {
+    List<Book> bookDisplayed = allBooks
         .where((element) =>
             element.fields.title.toLowerCase().contains(value.toLowerCase()) ||
             element.fields.author.toLowerCase().contains(value.toLowerCase()))
         .toList();
-    return book_displayed;
+    return bookDisplayed;
   }
 
+  @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
     return FutureBuilder(

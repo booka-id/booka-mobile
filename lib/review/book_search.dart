@@ -112,7 +112,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
             itemCount: book_displayed.length,
             itemBuilder: (_, index) => 
              Padding(
-                padding: EdgeInsets.all(8.0), // Adjust the padding values as needed
+                padding: const EdgeInsets.all(8.0), // Adjust the padding values as needed
                 child: InkWell(
                   onTap: () {
                     Navigator.push(

@@ -36,9 +36,9 @@ class BookDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -58,12 +58,12 @@ class BookDetailPage extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(60), topRight: Radius.circular(60)),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(40),
+                  padding: const EdgeInsets.all(40),
                   child: 
                   SingleChildScrollView(
                     child: 
@@ -80,10 +80,10 @@ class BookDetailPage extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 4,
                         ),
-                        SizedBox(height: 12,),
-                        Text(
+                        const SizedBox(height: 12,),
+                        const Text(
                           "Author",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w800,
                             color: Color.fromARGB(255, 134, 132, 132)
@@ -97,10 +97,10 @@ class BookDetailPage extends StatelessWidget {
                             color: Colors.black
                           ),
                         ),
-                        SizedBox(height: 7,),
-                        Text(
+                        const SizedBox(height: 7,),
+                        const Text(
                           "Year",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w800,
                             color: Color.fromARGB(255, 134, 132, 132)
@@ -114,10 +114,10 @@ class BookDetailPage extends StatelessWidget {
                             color: Colors.black
                           ),
                         ),
-                        SizedBox(height: 7,),
-                        Text(
+                        const SizedBox(height: 7,),
+                        const Text(
                           "Publisher",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w800,
                             color: Color.fromARGB(255, 134, 132, 132)
@@ -131,10 +131,10 @@ class BookDetailPage extends StatelessWidget {
                             color: Colors.black
                           ),
                         ),
-                        SizedBox(height: 7,),
-                        Text(
+                        const SizedBox(height: 7,),
+                        const Text(
                           "ISBN",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w800,
                             color: Color.fromARGB(255, 134, 132, 132)
@@ -148,10 +148,10 @@ class BookDetailPage extends StatelessWidget {
                             color: Colors.black
                           ),
                         ),
-                        SizedBox(height: 7,),
-                        Text(
+                        const SizedBox(height: 7,),
+                        const Text(
                           "Year",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13.0,
                             fontWeight: FontWeight.w800,
                             color: Color.fromARGB(255, 134, 132, 132)
@@ -165,7 +165,7 @@ class BookDetailPage extends StatelessWidget {
                             color: Colors.black
                           ),
                         ),
-                        SizedBox(height: 12,),
+                        const SizedBox(height: 12,),
                         Text(
                           "Rp${ stock.fields.price}",
                           style: const TextStyle(
@@ -212,14 +212,14 @@ class BookDetailPage extends StatelessWidget {
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(color: Colors.indigo),
+                    side: const BorderSide(color: Colors.indigo),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
                   // Aksi ketika tombol Beli ditekan
                 },
-                child: Text(
+                child: const Text(
                   'Beli',
                   style: TextStyle(
                     color: Colors.indigo,
@@ -229,7 +229,7 @@ class BookDetailPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10), // Jarak antar tombol
+          const SizedBox(width: 10), // Jarak antar tombol
           // Tombol Review
           Expanded(
             child: ClipRRect(
@@ -240,12 +240,12 @@ class BookDetailPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
                   // Aksi ketika tombol Review ditekan
                 },
-                child: Text(
+                child: const Text(
                   'Cek Review',
                   style: TextStyle(
                     color: Colors.white,
@@ -277,14 +277,14 @@ class BookDetailPage extends StatelessWidget {
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(color: Colors.indigo),
+                    side: const BorderSide(color: Colors.indigo),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
                   // Aksi ketika tombol Beli ditekan
                 },
-                child: Text(
+                child: const Text(
                   'Edit',
                   style: TextStyle(
                     color: Colors.indigo,
@@ -294,7 +294,7 @@ class BookDetailPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10), // Jarak antar tombol
+          const SizedBox(width: 10), // Jarak antar tombol
           // Tombol Review
           Expanded(
             child: ClipRRect(
@@ -305,12 +305,12 @@ class BookDetailPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
                   // Aksi ketika tombol Review ditekan
                 },
-                child: Text(
+                child: const Text(
                   'Delete',
                   style: TextStyle(
                     color: Colors.white,

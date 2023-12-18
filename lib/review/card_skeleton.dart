@@ -17,7 +17,7 @@ class SkeletonCard extends StatelessWidget {
       direction: ShimmerDirection.ttb, // added direction
       period: const Duration(milliseconds: 900), // added period
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -41,7 +41,7 @@ class SkeletonCard extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(defaultPadding))),
                           ),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           Container(
                             height: 15,
                             width: 80,
@@ -59,7 +59,7 @@ class SkeletonCard extends StatelessWidget {
                 ],
               ),
             Padding(
-              padding: EdgeInsets.only(top: 10, left: 10),
+              padding: const EdgeInsets.only(top: 10, left: 10),
               child: Container(
                 height: 15,
                 width: 300,
@@ -71,7 +71,7 @@ class SkeletonCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10, left: 10),
+              padding: const EdgeInsets.only(top: 10, left: 10),
               child: Container(
                 height: 15,
                 width: 300,

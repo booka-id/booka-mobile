@@ -27,13 +27,13 @@ class _EventPageState extends State<EventPage> {
     );
 
     var data = jsonDecode(utf8.decode(response.bodyBytes));
-    List<Event> list_event = [];
+    List<Event> listEvent = [];
     for (var d in data) {
       if (d != null) {
-        list_event.add(Event.fromJson(d));
+        listEvent.add(Event.fromJson(d));
       }
     }
-    return list_event;
+    return listEvent;
   }
 
   @override
@@ -71,7 +71,7 @@ class _EventPageState extends State<EventPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
-                          "${snapshot.data![index].fields.photo}",
+                          snapshot.data![index].fields.photo,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -82,7 +82,7 @@ class _EventPageState extends State<EventPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${snapshot.data![index].fields.name}",
+                            snapshot.data![index].fields.name,
                             style: const TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
@@ -91,9 +91,9 @@ class _EventPageState extends State<EventPage> {
                           const SizedBox(height: 10),
                           Text("Featuring: ${snapshot.data![index].fields.featuredBook}"),
                           const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.date.toString().split(' ')[0]}"),
+                          Text(snapshot.data![index].fields.date.toString().split(' ')[0]),
                           const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.description}"),
+                          Text(snapshot.data![index].fields.description),
                           const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -104,7 +104,7 @@ class _EventPageState extends State<EventPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              RegisterEventPage() 
+                                              const RegisterEventPage() 
                                           ));
                                 },
                                 style: ButtonStyle(
@@ -177,16 +177,16 @@ class _EventPageState extends State<EventPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EventFormPage(),
+                  builder: (context) => const EventFormPage(),
                 ),
               );
             },
-            child: const Icon(Icons.add, color: Colors.white),
             backgroundColor: Colors.indigo,
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
+            child: const Icon(Icons.add, color: Colors.white),
           )
         : null, 
     floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

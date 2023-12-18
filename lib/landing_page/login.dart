@@ -79,21 +79,21 @@ class _LoginPageState extends State<LoginPage> {
                   Text("Please sign in to your account first.")
                 ],
               ),
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Column(
                 children: [
                   TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
                       labelText: 'E-mail',
-                      prefixIcon: Icon(Icons.mail_rounded, color: Colors.indigo),
+                      prefixIcon: const Icon(Icons.mail_rounded, color: Colors.indigo),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                        borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                        borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                        borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                        borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                       ),
                     ),
                   ),
@@ -102,14 +102,14 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.key_rounded, color: Colors.indigo),
+                      prefixIcon: const Icon(Icons.key_rounded, color: Colors.indigo),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                        borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                        borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0), // Set border radius here
-                        borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
+                        borderSide: const BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                       ),
                       suffixIcon: IconButton(
                         padding: const EdgeInsets.all(0),
@@ -185,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  Text("Don't have an account?"),
+                  const Text("Don't have an account?"),
                   const SizedBox(height: 10.0),
                   SizedBox(
                     width: double.infinity,

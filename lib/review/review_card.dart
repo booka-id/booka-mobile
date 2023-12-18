@@ -30,7 +30,7 @@ class ReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -82,25 +82,25 @@ class ReviewCard extends StatelessWidget {
                   onPressed: () {
                     showCardOptions!(bookId, isAdmin);
                   },
-                  icon: Icon(Icons.more_vert)
+                  icon: const Icon(Icons.more_vert)
                 )
               ],
             ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10),
+            padding: const EdgeInsets.only(top: 10, left: 10),
             child: Text(
-              "$content",
-              style: TextStyle(fontSize: 16),
+              content,
+              style: const TextStyle(fontSize: 16),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10),
+            padding: const EdgeInsets.only(top: 10, left: 10),
             child: isInFeeds == true ? Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                Icon(Icons.menu_book_rounded, color: Colors.grey),
-                SizedBox(width: 10,),
-                Container (
+                const Icon(Icons.menu_book_rounded, color: Colors.grey),
+                const SizedBox(width: 10,),
+                SizedBox (
                   width: MediaQuery.of(context).size.width*0.8,
                   child: Column (
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -95,7 +95,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                           final response = await request.postJson(
                               // "http://127.0.0.1:8000/review/post-flutter/$bookID",
                               // "http://10.0.2.2:8000/review/post-flutter/$bookID",
-                              "https://deploytest-production-cf18.up.railway.app/review/post-flutter/${bookID}",
+                              "https://deploytest-production-cf18.up.railway.app/review/post-flutter/$bookID",
                               jsonEncode(<String, String>{
                                 'title': '',
                                 'rating': _rating.toString(),

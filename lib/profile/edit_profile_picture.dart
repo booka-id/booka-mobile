@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io'show File;
-import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:booka_mobile/landing_page/login.dart';
 
 import '../models/user.dart';
 
@@ -51,6 +48,7 @@ class _EditProfilePic extends State<EditProfilePic> {
       });
     }
   }
+  @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
     return AlertDialog(

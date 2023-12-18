@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class BookDetailPage extends StatefulWidget {
   final int bookID;
@@ -71,18 +70,18 @@ class _BookDetailPageState extends State<BookDetailPage> {
         // Extract username from the first user's fields
         String author = userData['author'];
         String title = userData['title'];
-        String image_url_large = userData['image_url_large'];
+        String imageUrlLarge = userData['image_url_large'];
         String publisher = userData['publisher'];
-        double avg_rating =
-            userData['avg_rating'] == null ? 0.0 : userData['avg_rating'];
+        double avgRating =
+            userData['avg_rating'] ?? 0.0;
         int year = userData['year'];
         String isbn = userData['isbn'];
         List<String> bookDetailList = [];
         bookDetailList.add(author);
         bookDetailList.add(title);
-        bookDetailList.add(image_url_large);
+        bookDetailList.add(imageUrlLarge);
         bookDetailList.add(publisher);
-        bookDetailList.add(avg_rating.toStringAsFixed(1));
+        bookDetailList.add(avgRating.toStringAsFixed(1));
         bookDetailList.add(year.toString());
         bookDetailList.add(isbn);
         return bookDetailList;
@@ -104,7 +103,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
   Future<List<Review>> fetchBookReviews() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'https://deploytest-production-cf18.up.railway.app/review/get_reviews/${bookID}'
+        'https://deploytest-production-cf18.up.railway.app/review/get_reviews/$bookID'
         // 'http://10.0.2.2:8000/review/get_reviews/${bookID}'
         // 'http://127.0.0.1:8000/review/get_reviews/${bookID}'
         );
@@ -167,7 +166,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
         builder: (context) {
           final user = context.read<UserProvider>();
           return Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             height: MediaQuery.of(context).size.height * 0.75,
             color: Colors.white70,
             child: Column(
@@ -234,7 +233,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                                         usernameSnapshot) {
                                   if (usernameSnapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return SkeletonCard();
+                                    return const SkeletonCard();
                                   } else if (usernameSnapshot.hasError) {
                                     return Text(
                                         'Error: ${usernameSnapshot.error}');
@@ -284,13 +283,13 @@ class _BookDetailPageState extends State<BookDetailPage> {
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             color: Colors.white70,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 16.0),
+                  padding: const EdgeInsets.only(top: 16.0),
                   alignment: Alignment.center,
                   child: const Text(
                     'How was your journey on this book?',
@@ -301,7 +300,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                   ),
                 ),
                 ReviewFormPage(bookID: bookID, onSubmit: handleSubmit,),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 )
               ],
@@ -322,7 +321,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Book Detail'),
+        title: const Text('Book Detail'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
@@ -331,9 +330,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
         builder: (context, snapshot) {
           String author = snapshot.data![0];
           String title = snapshot.data![1];
-          String image_url_large = snapshot.data![2];
+          String imageUrlLarge = snapshot.data![2];
           String publisher = snapshot.data![3];
-          String avg_rating = snapshot.data![4];
+          String avgRating = snapshot.data![4];
           String year = snapshot.data![5];
           String isbn = snapshot.data![6];
           if (snapshot.hasData) {
@@ -347,7 +346,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          changeUrl(image_url_large), // Gunakan URL gambar cover buku dari data API
+                          changeUrl(imageUrlLarge), // Gunakan URL gambar cover buku dari data API
                           fit: BoxFit.fitWidth,
                           // width: 80.0,
                         ),
@@ -360,8 +359,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${title}',
-                          style: TextStyle(
+                          title,
+                          style: const TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold
                           ),
@@ -377,7 +376,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               ),
                             ),
                             Text(
-                              '$year',
+                              year,
                               style: TextStyle(
                                 fontSize: 18, 
                                 color: Colors.grey[700]
@@ -391,7 +390,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               ),
                             ),
                             Text(
-                              'ISBN: ${isbn}',
+                              'ISBN: $isbn',
                               style: TextStyle(
                                 fontSize: 18, 
                                 color: Colors.grey[700]
@@ -422,8 +421,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           const Icon(Icons.star, color: Colors.amber, size: 35,),
                           const SizedBox(width: 5,),
                           Text(
-                            avg_rating,
-                            style: TextStyle(
+                            avgRating,
+                            style: const TextStyle(
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                               color: Colors.amber
@@ -436,12 +435,12 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           Container(
                             width: 50,
                             height: 50,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.indigo,
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.article_outlined),
+                              icon: const Icon(Icons.article_outlined),
                               color: Colors.white, // Change the icon color as needed
                               onPressed: () {
                                 // Add your onPressed logic for "See Reviews" here
@@ -449,8 +448,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               },
                             ),
                           ),
-                          SizedBox(height: 6),
-                          Text(
+                          const SizedBox(height: 6),
+                          const Text(
                             'See Reviews',
                             style: TextStyle(fontSize: 12),
                           ),
@@ -461,12 +460,12 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           Container(
                             width: 50,
                             height: 50,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.indigo,
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.add_comment),
+                              icon: const Icon(Icons.add_comment),
                               color: Colors.white, // Change the icon color as needed
                               onPressed: () {
                                 // Add your onPressed logic for "See Reviews" here
@@ -474,8 +473,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               },
                             ),
                           ),
-                          SizedBox(height: 6),
-                          Text(
+                          const SizedBox(height: 6),
+                          const Text(
                             'Add Review',
                             style: TextStyle(fontSize: 12),
                           ),
@@ -483,7 +482,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30,)
+                  const SizedBox(height: 30,)
                 ],
               ),
             );

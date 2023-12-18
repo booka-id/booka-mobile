@@ -37,17 +37,17 @@ class _EventFormPageState extends State<EventFormPage> {
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     // melakukan konversi data json menjadi object Event
-    List<String> list_string = [];
-    list_string.add("None");
+    List<String> listString = [];
+    listString.add("None");
 
     for (var d in data) {
       if (d != null) {
-        list_string.add(Book.fromJson(d).fields.title);
+        listString.add(Book.fromJson(d).fields.title);
       }
     }
 
-    featuredBookList = list_string;
-    return list_string;
+    featuredBookList = listString;
+    return listString;
   }
 
 @override
@@ -101,7 +101,7 @@ Widget build(BuildContext context) {
                             ),
                             onChanged: (String value) {
                               setState(() {
-                                _name = value!;
+                                _name = value;
                               });
                             },
                             validator: (String? value) {
@@ -118,10 +118,10 @@ Widget build(BuildContext context) {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Featured Book",
                               ),
-                              SizedBox(height: 8.0), 
+                              const SizedBox(height: 8.0), 
                               DropdownButton<String>(
                                 value: _selectedFeaturedBook,
                                 items: featuredBookList.map((String featuredBookChosen) {
@@ -140,7 +140,7 @@ Widget build(BuildContext context) {
                                 underline: Container(
                                   height: 1,
                                 ),
-                                icon: Icon(Icons.arrow_drop_down), 
+                                icon: const Icon(Icons.arrow_drop_down), 
                               ),
                             ],
                           ),
@@ -181,7 +181,7 @@ Widget build(BuildContext context) {
                             ),
                             onChanged: (String value) {
                               setState(() {
-                                _description = value!;
+                                _description = value;
                               });
                             },
                             validator: (String? value) {
@@ -204,7 +204,7 @@ Widget build(BuildContext context) {
                             ),
                             onChanged: (String value) {
                               setState(() {
-                                _photo = value!;
+                                _photo = value;
                               });
                             },
                             validator: (String? value) {
@@ -246,7 +246,7 @@ Widget build(BuildContext context) {
                                     ));
                                     Navigator.pushReplacement(
                                       context,
-                                      MaterialPageRoute(builder: (context) => EventPage()),
+                                      MaterialPageRoute(builder: (context) => const EventPage()),
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context)
