@@ -22,8 +22,20 @@ class BookList extends StatelessWidget {
       return user.temp_books;
     }
   }
+
+  ImageProvider getImage(String url){
+    ImageProvider image;
+    try{
+      image = NetworkImage(changeUrl(url));
+    }catch(e){
+      image = const AssetImage('assets/images/no_image.jpg');
+    }
+    return image;
+  }
+
   @override
   Widget build(BuildContext context) {
+    ImageProvider image;;
     return Consumer<UserProvider>(
       builder: (context, user, child) {
         List<Fields> books = getBooks(user, type);
@@ -42,6 +54,7 @@ class BookList extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            color: Colors.indigo,
                           ),
                         ),
                       ),
@@ -51,42 +64,58 @@ class BookList extends StatelessWidget {
 
                     itemCount: books.length,
                     itemBuilder: (context, index) {
-                  return SizedBox(
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
                     width: 150,
-                    height: 250,
-                    child: Card(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              height: 150,
-                              child: FadeInImage(
-                                placeholder: const AssetImage('assets/images/no_image.jpg'),
-                                image: NetworkImage(changeUrl(books[index].imageUrlMedium),),
-                                fit: BoxFit.cover,
-                                imageErrorBuilder: (context, error, stackTrace) {
-                                  return const Image(
-                                    image: AssetImage('assets/images/no_image.jpg'),
-                                  );
-                                }
-                              )
+                    height: 200,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: getImage(books[index].imageUrlLarge),
+                              fit: BoxFit.cover,
                             ),
-                            SizedBox(
-                              height: 75,
-                              child: Text(
-                                books[index].title,
-                                overflow: TextOverflow.clip,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.center,
+                                colors: [
+                                  Colors.black.withOpacity(0.7),
+                                  Colors.transparent,
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              height: 20,
-                              child: Text(
-                                'By: ${books[index].author}',
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children:[
+                                Text(
+                                  books[index].title,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  books[index].author,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ]
                             ),
-                          ],
-                        )),
+                          ),
+                        )
+                    )
                   );
                 },
                 )
