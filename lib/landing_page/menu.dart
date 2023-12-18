@@ -36,11 +36,11 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Booka',
+          style: TextStyle(fontSize: 25),
         ),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [
-
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: request.loggedIn == true?
@@ -61,27 +61,27 @@ class MyHomePage extends StatelessWidget {
                     );
                   }
               )
-              :null
+              :
               // User Belum Login
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     backgroundColor: Colors.white,
-              //   ),
-              //   onPressed: () {
-              //     Navigator.push(context,
-              //         MaterialPageRoute(builder: (context) => const LoginPage()));
-              //   },
-              //   child: const Text(
-              //     'Login',
-              //     style: TextStyle(
-              //       fontSize: 20,
-              //       color: Colors.indigo,
-              //     ),
-              //   ),
-              // )
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  // backgroundColor: Color(0xE8FF90C2),
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()));
+                },
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.indigo,
+                  ),
+                ),
+              )
           ),
         ],
       ),

@@ -76,12 +76,18 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Review Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
-              Navigator.push(
+              if(request.loggedIn){
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           ReviewPage() //Todo ganti review buku,
                       ));
+              }else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Login terlebih dahulu."),
+                ));
+              }
             },
           ),
           ListTile(
