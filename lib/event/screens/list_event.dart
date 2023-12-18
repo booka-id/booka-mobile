@@ -44,7 +44,7 @@ class _EventPageState extends State<EventPage> {
         title: const Text('Event'),
       ),
       drawer: const LeftDrawer(),
-      bottomNavigationBar: BotNavBar(2),
+      bottomNavigationBar: BotNavBar(3),
       body: FutureBuilder(
         future: fetchProduct(),
         builder: (context, AsyncSnapshot<List<Event>> snapshot) {

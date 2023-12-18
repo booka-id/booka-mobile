@@ -234,7 +234,7 @@ class _ReviewPageState extends State<ReviewPage> {
         },
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: BotNavBar(1),
+      bottomNavigationBar: BotNavBar(2),
       body: DefaultTabController(
         length: 2, // Number of tabs
         child: Column(

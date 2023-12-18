@@ -35,7 +35,6 @@ class BookList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ImageProvider image;;
     return Consumer<UserProvider>(
       builder: (context, user, child) {
         List<Fields> books = getBooks(user, type);
@@ -105,7 +104,7 @@ class BookList extends StatelessWidget {
                                   books[index].author,
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w400,
                                     color: Colors.white,
                                   ),
                                   textAlign: TextAlign.center,

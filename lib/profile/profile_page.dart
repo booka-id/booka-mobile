@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:booka_mobile/models/user.dart';
 
 import '../landing_page/bottom_nav_bar.dart';
+import '../landing_page/left_drawer.dart';
 import '../landing_page/menu.dart';
 import '../review/feeds.dart';
 import 'book_list.dart';
@@ -18,7 +19,7 @@ class ProfilePage extends StatelessWidget {
     final user = context.read<UserProvider>();
     String? userName = user.username;
     String? email = user.email;
-    int _selectedIndex = 3;
+    int _selectedIndex = 4;
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +29,8 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      bottomNavigationBar: BotNavBar(3),
+      bottomNavigationBar: BotNavBar(4),
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal:30),

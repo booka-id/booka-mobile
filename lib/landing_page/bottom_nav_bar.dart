@@ -37,7 +37,14 @@ class _BotNavBarState extends State<BotNavBar> {
               builder: (context) => MyHomePage(),
             ),
           );
-        } else if (_selectedIndex == 1) {
+        }else if (_selectedIndex == 1) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EventPage(), // Todo ganti ke katalog buku
+            ),
+          );
+        } else if (_selectedIndex == 2) {
           if(request.loggedIn){
             Navigator.pushReplacement(
               context,
@@ -50,7 +57,7 @@ class _BotNavBarState extends State<BotNavBar> {
                 MaterialPageRoute(builder: (context) => const LoginPage()));
           }
         }
-        else if (_selectedIndex == 2) {
+        else if (_selectedIndex == 3) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -58,7 +65,7 @@ class _BotNavBarState extends State<BotNavBar> {
             ),
           );
         }
-        else if (_selectedIndex == 3) {
+        else if (_selectedIndex == 4) {
           if(request.loggedIn){
             Navigator.pushReplacement(
               context,
@@ -84,6 +91,13 @@ class _BotNavBarState extends State<BotNavBar> {
             size: 30.0,
           ),
           label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.menu_book_rounded,
+            size: 30.0,
+          ),
+          label: "Catalogue",
         ),
         BottomNavigationBarItem(
           icon: Icon(
