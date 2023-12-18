@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-
+import '../event/screens/list_event.dart';
 import '../profile/profile_page.dart';
 import '../review/feeds.dart';
 import 'login.dart';
@@ -38,10 +38,23 @@ class _BotNavBarState extends State<BotNavBar> {
             ),
           );
         } else if (_selectedIndex == 1) {
+          if(request.loggedIn){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ReviewPage()
+              ),
+            );
+          }else{
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+          }
+        }
+        else if (_selectedIndex == 2) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const ReviewPage(),
+              builder: (context) => const EventPage(),
             ),
           );
         }

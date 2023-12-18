@@ -1,3 +1,4 @@
+import 'package:booka_mobile/katalog_buku/catalogue.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -5,19 +6,21 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/review/feeds.dart';
 import 'package:booka_mobile/landing_page/login.dart';
+import 'package:booka_mobile/event/screens/list_event.dart';
 
 class ShopItem {
   final String name;
   final IconData icon;
   final Color cardColor;
-  ShopItem(this.name, this.icon, this.cardColor);
+  ShopItem(this.name, this.icon, this.cardColor) ;
 }
+
 
 class ShopCard extends StatelessWidget {
   final ShopItem item;
   final Color cardColor;
 
-  const ShopCard(this.item, this.cardColor, {super.key}); // Constructor
+  const ShopCard(this.item, this.cardColor ,{super.key}); // Constructor
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +52,10 @@ class ShopCard extends StatelessWidget {
           if (item.name == "Login") {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(content: Text("Menekan tombol login !")));
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));
-          } else if (request.loggedIn == false) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                  const SnackBar(content: Text("Login terlebih dahulu !")));
-          } else {
+              ..showSnackBar(SnackBar(
+                  content: Text("Login terlebih dahulu !")));
+
+          }else{
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
@@ -69,12 +67,26 @@ class ShopCard extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) =>
                           const ReviewPage())); //todo Ganti review buku
+              }
+              if (item.name == "Katalog Buku") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const CataloguePage())); //todo Ganti katalog buku
+              }
+             else if (item.name == "Event") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const EventPage())); 
             }
 
             if (item.name == "Logout") {
               final response = await request.logout(
-                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                  "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
+                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                  "http://127.0.0.1:8000/auth/logout/");
               String message = response["message"];
               if (response['status']) {
                 String uname = response["username"];
@@ -87,12 +99,12 @@ class ShopCard extends StatelessWidget {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(message),
+                  content: Text("$message"),
                 ));
               }
             }
-          }
-        },
+            }
+          },
         child: Container(
           // Container untuk menyimpan Icon dan Text
           padding: const EdgeInsets.all(8),
@@ -112,7 +124,7 @@ class ShopCard extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
               ],
-            ),
+            )
           ),
         ),
       ),

@@ -1,6 +1,11 @@
+import 'package:booka_mobile/katalog_buku/catalogue.dart';
+import 'package:booka_mobile/review/feeds.dart';
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
+import 'package:booka_mobile/event/screens/list_event.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 //Todo import 'package:booka_mobile/landing_page/shoplist_form.dart';
 
 class LeftDrawer extends StatelessWidget {
@@ -8,6 +13,7 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Drawer(
 
       child: ListView(
@@ -53,7 +59,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.checklist),
+            leading: const Icon(Icons.menu_book_rounded),
             title: const Text('Katalog Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
@@ -61,12 +67,12 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyHomePage() //Todo ganti katalog buku,
+                          const CataloguePage()
                       ));
             },
           ),
           ListTile(
-            leading: const Icon(Icons.add_shopping_cart),
+            leading: const Icon(Icons.rate_review_rounded),
             title: const Text('Review Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
@@ -74,7 +80,7 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyHomePage() //Todo ganti review buku,
+                          ReviewPage() //Todo ganti review buku,
                       ));
             },
           ),
@@ -87,8 +93,34 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyHomePage() //Todo ganti event buku,
+                          EventPage() //Todo ganti event buku,
                       ));
+            },
+          ),
+          if(request.loggedIn)
+          ListTile(
+            leading: const Icon(Icons.logout_outlined, color: Colors.red,),
+            title: const Text('Logout', style: TextStyle(color: Colors.red),),
+            // Bagian redirection ke ShopFormPage
+            onTap: () async {
+              final response = await request.logout(
+                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                  "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
+              String message = response["message"];
+              if (response['status']) {
+                String uname = response["username"];
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("$message Sampai jumpa, $uname."),
+                ));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(message),
+                ));
+              }
             },
           ),
         ],
