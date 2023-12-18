@@ -1,8 +1,8 @@
 # booka_mobile
 
-A new Flutter project.
+Aplikasi mobile untuk memenuhi tugas besar mata kuliah Pemrograman Berbasis Web, dibuat menggunakan framework Flutter.
 
-APk : [![Build status](https://build.appcenter.ms/v0.1/apps/c954c151-659d-4acd-b916-c08eda1494a6/branches/master/badge)](https://appcenter.ms)
+Link Apk : install.appcenter.ms/orgs/booka/apps/booka/distribution_groups/public
 
 ## Daftar Nama Anggota Kelompok
 - Muh. Syarief Mulyadi
