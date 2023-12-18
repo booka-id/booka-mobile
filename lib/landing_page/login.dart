@@ -35,6 +35,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +111,21 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10.0), // Set border radius here
                         borderSide: BorderSide(color: Colors.indigo, width: 1.0), // Set border color and width
                       ),
+                      suffixIcon: IconButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.indigo,
+                        ),
+                      ),
+
                     ),
-                    obscureText: true, // Hide entered text
+                    obscureText: _isObscure, // Hide entered text
                   ),
                   const SizedBox(height: 24.0),
                   SizedBox(
