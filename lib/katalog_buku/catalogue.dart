@@ -58,7 +58,7 @@ class _CataloguePageState extends State<CataloguePage> {
   Future<List<Book>> fetchBook() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url =
-        Uri.parse('http://10.0.2.2:8000/api/books/'
+        Uri.parse('https://deploytest-production-cf18.up.railway.app/api/books/'
           // 'https://deploytest-production-cf18.up.railway.app/api/books/'
             // 'http://127.0.0.1:8000/review/all/'
             );
@@ -88,7 +88,7 @@ class _CataloguePageState extends State<CataloguePage> {
   Future<List<Stock>> _fetchStocks() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'http://10.0.2.2:8000/catalogue/json/');
+        'https://deploytest-production-cf18.up.railway.app/catalogue/json/');
     var response = await http.get(
         url,
         headers: {"Content-Type": "application/json"},
@@ -193,85 +193,82 @@ class _CataloguePageState extends State<CataloguePage> {
   }
 
   ListView bookCard(CookieRequest request) {
-    return ListView.builder(
-                itemCount: _displayedStocks.length,
-                itemBuilder: (_, index) => 
-                Container(
-                        height: 150,
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        padding: const EdgeInsets.all(20.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.11),
-                              offset: const Offset(0, 10),
-                              blurRadius: 40,
-                              spreadRadius: 0.0
-                            )
-                          ]
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
+                  return ListView.builder(
+                    itemCount: _displayedStocks.length,
+                    itemBuilder: (_, index) => Container(
+                      height: 150,
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.11),
+                            offset: const Offset(0, 10),
+                            blurRadius: 40,
+                            spreadRadius: 0.0,
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
                             width: 90,
                             height: 135,
                             child: FadeInImage(
                               placeholder: const AssetImage('assets/images/no_image.jpg'),
-                              image: NetworkImage(changeUrl(_displayedBooks[index].fields.imageUrlMedium),),
+                              image: NetworkImage(changeUrl(_displayedBooks[index].fields.imageUrlMedium)),
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
                                 return const Image(
                                   image: AssetImage('assets/images/no_image.jpg'),
                                 );
-                              }
-                            )
+                              },
                             ),
-                            const SizedBox(width: 20,),
-                            Flexible(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _displayedBooks[index].fields.title,
-                                    style: const TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(width: 20,),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _displayedBooks[index].fields.title,
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Text(
-                                    "by ${ _displayedBooks[index].fields.author}",
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w800,
-                                      color: Color.fromARGB(255, 134, 132, 132)
-                                    ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  "by ${_displayedBooks[index].fields.author}",
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color.fromARGB(255, 134, 132, 132),
                                   ),
-                                  Text(
-                                    "Rp${ _displayedStocks[index].fields.price}",
-                                    style: const TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.indigo
-                                    ),
+                                ),
+                                Text(
+                                  "Rp${_displayedStocks[index].fields.price}",
+                                  style: const TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.indigo,
                                   ),
-                                  Text(
-                                    "Tersedia : ${ _displayedStocks[index].fields.quantity}",
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w200,
-                                      color: Color.fromARGB(255, 134, 132, 132)
-                                    ),
-                                  )
-                                ],
-                              )
+                                ),
+                                Text(
+                                  "Tersedia : ${_displayedStocks[index].fields.quantity}",
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w200,
+                                    color: Color.fromARGB(255, 134, 132, 132),
+                                  ),
+                                ),
+                              ],
                             ),
-                            // SizedBox(width: 30,),
-                            IconButton(
+                          ),
+                          IconButton(
                             onPressed: () {
                               if(request.loggedIn){
                                 Navigator.push(
@@ -323,7 +320,7 @@ class _CataloguePageState extends State<CataloguePage> {
               filled: true,
               fillColor: Colors.white,
               contentPadding: const EdgeInsets.all(15),
-              hintText: 'Search Book by title',
+              hintText: 'Search Book by title...',
               hintStyle: const TextStyle(
                 color: Color.fromARGB(255, 139, 137, 133),
                 fontSize: 14,
@@ -344,8 +341,10 @@ class _CataloguePageState extends State<CataloguePage> {
 
   AppBar appBar() {
     return AppBar(
+      backgroundColor: Colors.indigo,
       title: const Text(
-        'Booka Catalogue'),
+        'Booka Catalogue',
+        ),
       centerTitle: true,
     );
   }
