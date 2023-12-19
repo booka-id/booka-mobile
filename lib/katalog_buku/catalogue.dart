@@ -1,11 +1,16 @@
+import 'package:booka_mobile/katalog_buku/add_form.dart';
 import 'package:booka_mobile/katalog_buku/booka_detail.dart';
+import 'package:booka_mobile/landing_page/login.dart';
+import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/user.dart';
+import 'package:booka_mobile/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:booka_mobile/models/stock.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 class CataloguePage extends StatefulWidget {
@@ -55,7 +60,8 @@ class _CataloguePageState extends State<CataloguePage> {
   Future<List<Book>> fetchBook() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url =
-        Uri.parse('https://deploytest-production-cf18.up.railway.app/api/books/'
+        Uri.parse('http://10.0.2.2:8000/api/books/'
+          // 'https://deploytest-production-cf18.up.railway.app/api/books/'
             // 'http://127.0.0.1:8000/review/all/'
             );
     var response = await http.get(
@@ -111,7 +117,8 @@ class _CataloguePageState extends State<CataloguePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserProvider>();
+    final user = context.read<UserProvider>(); // Jika Anda memerlukan 'user' di bawah
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: appBar(),
       backgroundColor: Colors.white,
@@ -125,9 +132,10 @@ class _CataloguePageState extends State<CataloguePage> {
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ini akan mengatur ruang antara teks dan tombol
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(left: 20),
                     child: Text(
                       'Books',
@@ -138,11 +146,12 @@ class _CataloguePageState extends State<CataloguePage> {
                       ),
                     ),
                   ),
+                  user.is_superuser ? _addBookButton() : Container()
                 ],
               ),
-              const SizedBox(height: 15,),
+              const SizedBox(height: 10,),
               Expanded(
-                child: _displayedBooks.isNotEmpty ? bookCard() : const Center(child: Text("No books founds"),)
+                child: _displayedBooks.isNotEmpty ? bookCard(request) : const Center(child: Text("No books founds"),)
               ),
             ],
           )
@@ -153,7 +162,39 @@ class _CataloguePageState extends State<CataloguePage> {
     );
   }
 
-  ListView bookCard() {
+  Padding _addBookButton() {
+    return Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      ),
+                      onPressed: () {
+                        // Aksi ketika tombol Add Book ditekan
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddBookFormPage()),
+                        );
+                      },
+                      child: Text(
+                        'Add Book',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+  }
+
+  ListView bookCard(CookieRequest request) {
     return ListView.builder(
                 itemCount: _displayedStocks.length,
                 itemBuilder: (_, index) => 
@@ -217,7 +258,7 @@ class _CataloguePageState extends State<CataloguePage> {
                                     style: const TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black
+                                      color: Colors.indigo
                                     ),
                                   ),
                                   Text(
@@ -234,15 +275,23 @@ class _CataloguePageState extends State<CataloguePage> {
                             // SizedBox(width: 30,),
                             IconButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BookDetailPage(
-                                    book: _displayedBooks[index],
-                                    stock: _displayedStocks[index],
+                              if(request.loggedIn){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BookDetailsPage(
+                                      bookId: _displayedBooks[index].pk,
+                                      bookName: _displayedBooks[index].fields.title,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }else{
+                                ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(const SnackBar(content: Text("Login terlebih dahulu!")));
+                                Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => const LoginPage()));
+                              }
                             },
                             icon: const Icon(
                               Icons.arrow_forward_ios,
