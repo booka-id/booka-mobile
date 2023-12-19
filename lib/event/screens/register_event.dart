@@ -19,6 +19,8 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register Event'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,41 +29,68 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Nama'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Nama tidak boleh kosong';
-                  }
-                  return null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  style: TextStyle(fontFamily: 'Poppins'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _phoneController,
-                decoration: const InputDecoration(labelText: 'Nomor Handphone'),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Nomor Handphone tidak boleh kosong';
-                  }
-                  return null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(
+                    labelText: 'Nomor Handphone',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                  style: TextStyle(fontFamily: 'Poppins'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nomor Handphone tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Email tidak boleh kosong';
-                  } else if (!value.contains('@')) {
-                    return 'Email tidak valid';
-                  }
-                  return null;
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(fontFamily: 'Poppins'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Email tidak boleh kosong';
+                    } else if (!value.contains('@')) {
+                      return 'Email tidak valid';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 32),
               ElevatedButton(
@@ -70,6 +99,9 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                     _showRegistrationSuccessDialog();
                   }
                 },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                ),
                 child: const Text('Register'),
               ),
             ],
@@ -91,8 +123,9 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const EventPage()),);
+                  context,
+                  MaterialPageRoute(builder: (context) => const EventPage()),
+                );
               },
               child: const Text('OK'),
             ),

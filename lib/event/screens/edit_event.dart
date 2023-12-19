@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:booka_mobile/models/event.dart';
 
 class EditEventPage extends StatefulWidget {
-  final Event event; 
+  final Event event;
 
   const EditEventPage({required this.event, Key? key}) : super(key: key);
 
@@ -100,16 +100,17 @@ class _EditEventPageState extends State<EditEventPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: TextFormField(
-                          initialValue: _name, 
+                          initialValue: _name,
                           decoration: InputDecoration(
                             hintText: "Nama Event",
                             labelText: "Nama Event",
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
+                          style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _name = value;
@@ -124,12 +125,13 @@ class _EditEventPageState extends State<EditEventPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               "Featured Book",
+                              style: TextStyle(fontFamily: 'Poppins'),
                             ),
                             const SizedBox(height: 8.0),
                             DropdownButton<String>(
@@ -138,7 +140,10 @@ class _EditEventPageState extends State<EditEventPage> {
                                   .map((String featuredBookChosen) {
                                 return DropdownMenuItem<String>(
                                   value: featuredBookChosen,
-                                  child: Text(featuredBookChosen),
+                                  child: Text(
+                                    featuredBookChosen,
+                                    style: TextStyle(fontFamily: 'Poppins'),
+                                  ),
                                 );
                               }).toList(),
                               onChanged: (String? newValue) {
@@ -158,16 +163,17 @@ class _EditEventPageState extends State<EditEventPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: TextFormField(
                           initialValue: _date,
                           decoration: InputDecoration(
                             hintText: "Tanggal (YYYY-MM-DD)",
                             labelText: "Tanggal",
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
+                          style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _date = value;
@@ -182,16 +188,17 @@ class _EditEventPageState extends State<EditEventPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: TextFormField(
                           initialValue: _description,
                           decoration: InputDecoration(
                             hintText: "Deskripsi",
                             labelText: "Deskripsi",
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
+                          style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _description = value;
@@ -206,16 +213,17 @@ class _EditEventPageState extends State<EditEventPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: TextFormField(
                           initialValue: _photo,
                           decoration: InputDecoration(
                             hintText: "URL Foto",
                             labelText: "URL Foto",
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
+                          style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _photo = value;
@@ -232,7 +240,7 @@ class _EditEventPageState extends State<EditEventPage> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor:
@@ -242,7 +250,7 @@ class _EditEventPageState extends State<EditEventPage> {
                               if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
                                   "https://deploytest-production-cf18.up.railway.app/${widget.event.pk}/",
-                                  // "http://127.0.0.1:8000/event/edit-event-flutter/${widget.event.pk}/", 
+                                  // "http://127.0.0.1:8000/event/edit-event-flutter/${widget.event.pk}/",
                                   jsonEncode({
                                     'name': _name,
                                     'featured_book': _featuredBook,
@@ -252,22 +260,22 @@ class _EditEventPageState extends State<EditEventPage> {
                                   }),
                                 );
                                 if (response['status'] == 'success') {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content:
-                                        Text("Event berhasil diedit!"),
-                                  ));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Event berhasil diedit!"),
+                                    ),
+                                  );
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MyHomePage()),
                                   );
                                 } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content:
-                                        Text("Gagal. Silakan coba lagi."),
-                                  ));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Gagal. Silakan coba lagi."),
+                                    ),
+                                  );
                                 }
                               }
                             },
