@@ -24,41 +24,20 @@ class _EventFormPageState extends State<EventFormPage> {
   List<String> featuredBookList = <String>[];
   String _selectedFeaturedBook = "None";
 
-  Future<List<String>> fetchProduct() async {
-    var url = Uri.parse(
-      'https://deploytest-production-cf18.up.railway.app/event/get-books/');
-        // 'http://127.0.0.1:8000/event/get-books/');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _photoController = TextEditingController();
 
-    // melakukan decode response menjadi bentuk json
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
 
-    // melakukan konversi data json menjadi object Event
-    List<String> list_string = [];
-    list_string.add("None");
-
-    for (var d in data) {
-      if (d != null) {
-        list_string.add(Book.fromJson(d).fields.title);
-      }
-    }
-
-    featuredBookList = list_string;
-    return list_string;
-  }
-
-@override
-Widget build(BuildContext context) {
-  final request = context.watch<CookieRequest>();
-
-  return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Form Tambah Event',
+            'Add New Event',
           ),
         ),
         backgroundColor: Colors.indigo,
@@ -66,212 +45,254 @@ Widget build(BuildContext context) {
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
-          future: fetchProduct(),
-          builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.data == null) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              if (!snapshot.hasData) {
-                return const Column(
-                  children: [
-                    Text(
-                      "Tidak ada buku disini",
-                      style:
-                      TextStyle(color: Color(0xff59A5D8), fontSize: 20),
-                    ),
-                    SizedBox(height: 8),
-                  ],
-                );
-              } else {
-                return Form (
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "Nama Event",
-                              labelText: "Nama Event",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            onChanged: (String value) {
-                              setState(() {
-                                _name = value!;
-                              });
-                            },
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return "Nama tidak boleh kosong!";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Featured Book",
-                              ),
-                              SizedBox(height: 8.0), 
-                              DropdownButton<String>(
-                                value: _selectedFeaturedBook,
-                                items: featuredBookList.map((String featuredBookChosen) {
-                                  return DropdownMenuItem<String>(
-                                    value: featuredBookChosen,
-                                    child: Text(featuredBookChosen),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedFeaturedBook = newValue.toString();
-                                    _featuredBook = newValue.toString();
-                                  });
-                                },
-                               isExpanded: true,
-                                underline: Container(
-                                  height: 1,
-                                ),
-                                icon: Icon(Icons.arrow_drop_down), 
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "Tanggal (YYYY-MM-DD)",
-                              labelText: "Tanggal",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            onChanged: (String value) {
-                              setState(() {
-                                _date = value;
-                              });
-                            },
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return "Tanggal tidak boleh kosong!";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "Deskripsi",
-                              labelText: "Deskripsi",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            onChanged: (String value) {
-                              setState(() {
-                                _description = value!;
-                              });
-                            },
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return "Deskripsi tidak boleh kosong!";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "URL Foto",
-                              labelText: "URL Foto",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            onChanged: (String value) {
-                              setState(() {
-                                _photo = value!;
-                              });
-                            },
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return "URL Foto tidak boleh kosong!";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                MaterialStateProperty.all(Colors.indigo),
-                              ),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final response = await request.postJson(
-                                    // "https://deploytest-production-cf18.up.railway.app/event/create-event-flutter/",
-                                    "http://127.0.0.1:8000/event/create-event-flutter/",
-                                    jsonEncode({
-                                      'name': _name,
-                                      'featured_book': _featuredBook,
-                                      'date': _date,
-                                      'description': _description,
-                                      'photo': _photo,
-                                    }),
-                                  );
-                                  if (response['status'] == 'success') {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content:
-                                      Text("Event baru berhasil disimpan!"),
-                                    ));
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => EventPage()),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content:
-                                      Text("Gagal. Silakan coba lagi."),
-                                    ));
-                                  }
-                                }
-                              },
-                              child: const Text(
-                                "Add Event",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+        future: fetchProduct(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (!snapshot.hasData) {
+              return const Column(
+                children: [
+                  Text(
+                    "Tidak ada buku disini",
+                    style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
                   ),
-                );
-              }
+                  SizedBox(height: 8),
+                ],
+              );
+            } else {
+              return Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          hintText: "Nama Event",
+                          labelText: "Nama Event",
+                          prefixIcon: const Icon(Icons.event, color: Colors.indigo),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                        ),
+                        style: TextStyle(fontFamily: 'Poppins'),
+                        onChanged: (String value) {
+                          setState(() {
+                            _name = value;
+                          });
+                        },
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "Nama tidak boleh kosong!";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Featured Book",
+                            style: TextStyle(fontFamily: 'Poppins'),
+                          ),
+                          const SizedBox(height: 8.0),
+                          DropdownButton<String>(
+                            value: _selectedFeaturedBook,
+                            items: featuredBookList.map((String featuredBookChosen) {
+                              return DropdownMenuItem<String>(
+                                value: featuredBookChosen,
+                                child: Text(
+                                  featuredBookChosen,
+                                  style: TextStyle(fontFamily: 'Poppins'),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedFeaturedBook = newValue.toString();
+                                _featuredBook = newValue.toString();
+                              });
+                            },
+                            isExpanded: true,
+                            underline: Container(
+                              height: 1,
+                            ),
+                            icon: const Icon(Icons.arrow_drop_down),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _dateController,
+                        decoration: InputDecoration(
+                          hintText: "Tanggal (YYYY-MM-DD)",
+                          labelText: "Tanggal",
+                          prefixIcon: const Icon(Icons.calendar_today, color: Colors.indigo),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                        ),
+                        style: TextStyle(fontFamily: 'Poppins'),
+                        onChanged: (String value) {
+                          setState(() {
+                            _date = value;
+                          });
+                        },
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "Tanggal tidak boleh kosong!";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _descriptionController,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          hintText: "Deskripsi",
+                          labelText: "Deskripsi",
+                          prefixIcon: const Icon(Icons.description, color: Colors.indigo),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                        ),
+                        style: TextStyle(fontFamily: 'Poppins'),
+                        onChanged: (String value) {
+                          setState(() {
+                            _description = value;
+                          });
+                        },
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "Deskripsi tidak boleh kosong!";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _photoController,
+                        decoration: InputDecoration(
+                          hintText: "URL Foto",
+                          labelText: "URL Foto",
+                          prefixIcon: const Icon(Icons.image, color: Colors.indigo),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                        ),
+                        style: TextStyle(fontFamily: 'Poppins'),
+                        onChanged: (String value) {
+                          setState(() {
+                            _photo = value;
+                          });
+                        },
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "URL Foto tidak boleh kosong!";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final response = await request.postJson(
+                                "https://deploytest-production-cf18.up.railway.app/event/create-event-flutter/",
+                                jsonEncode({
+                                  'name': _name,
+                                  'featured_book': _featuredBook,
+                                  'date': _date,
+                                  'description': _description,
+                                  'photo': _photo,
+                                }),
+                              );
+                              if (response['status'] == 'success') {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Event baru berhasil disimpan!"),
+                                  ),
+                                );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const EventPage()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Gagal. Silakan coba lagi."),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text(
+                            "Add Event",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
           }
-        )
-      );
-    }
+        },
+      ),
+    );
   }
+
+  Future<List<String>> fetchProduct() async {
+    var url = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/get-books/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    List<String> listString = [];
+    listString.add("None");
+
+    for (var d in data) {
+      if (d != null) {
+        listString.add(Book.fromJson(d).fields.title);
+      }
+    }
+
+    featuredBookList = listString;
+    return listString;
+  }
+}
