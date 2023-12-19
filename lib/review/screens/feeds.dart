@@ -1,13 +1,14 @@
 import 'package:booka_mobile/landing_page/bottom_nav_bar.dart';
 import 'package:booka_mobile/models/review.dart';
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/book_detail.dart';
-import 'package:booka_mobile/review/book_search.dart';
-import 'package:booka_mobile/review/card_skeleton.dart';
-import 'package:booka_mobile/review/review_card.dart';
+import 'package:booka_mobile/review/screens/book_detail.dart';
+import 'package:booka_mobile/review/screens/book_search.dart';
+import 'package:booka_mobile/review/widget/card_skeleton.dart';
+import 'package:booka_mobile/review/widget/review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'dart:convert';
 
 import 'package:provider/provider.dart';
@@ -212,6 +213,7 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserProvider>();
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -260,16 +262,12 @@ class _ReviewPageState extends State<ReviewPage> {
                           ],
                         );
                       } else {
-                        if (!snapshot.hasData) {
-                          return const Column(
-                            children: [
-                              Text(
-                                "Tidak ada data produk.",
-                                style: TextStyle(
-                                    color: Color(0xff59A5D8), fontSize: 20),
-                              ),
-                              SizedBox(height: 8),
-                            ],
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "There's no reviews yet...",
+                              style: TextStyle( fontSize: 20),
+                            ),
                           );
                         } else {
                           return ListView.separated(
@@ -349,16 +347,17 @@ class _ReviewPageState extends State<ReviewPage> {
                       if (snapshot.data == null) {
                         return const Center(child: SkeletonCard());
                       } else {
-                        if (!snapshot.hasData) {
-                          return const Column(
-                            children: [
-                              Text(
-                                "Tidak ada data produk.",
-                                style: TextStyle(
-                                    color: Color(0xff59A5D8), fontSize: 20),
-                              ),
-                              SizedBox(height: 8),
-                            ],
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return request.loggedIn ? const Center(
+                            child: Text(
+                              "You've never written your review.",
+                              style: TextStyle( fontSize: 20),
+                            ),
+                          ) : const Center(
+                            child: Text(
+                              "Log in to see your reviews.",
+                              style: TextStyle( fontSize: 20),
+                            ),
                           );
                         } else {
                           return ListView.separated(

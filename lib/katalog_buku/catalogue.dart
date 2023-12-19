@@ -58,8 +58,9 @@ class _CataloguePageState extends State<CataloguePage> {
   Future<List<Book>> fetchBook() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url =
-        Uri.parse('http://10.0.2.2:8000/api/books/'
-          // 'https://deploytest-production-cf18.up.railway.app/api/books/'
+        Uri.parse(
+          // 'http://10.0.2.2:8000/api/books/'
+          'https://deploytest-production-cf18.up.railway.app/api/books/'
             // 'http://127.0.0.1:8000/review/all/'
             );
     var response = await http.get(
@@ -88,7 +89,9 @@ class _CataloguePageState extends State<CataloguePage> {
   Future<List<Stock>> _fetchStocks() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'http://10.0.2.2:8000/catalogue/json/');
+        // 'http://10.0.2.2:8000/catalogue/json/'
+        'https://deploytest-production-cf18.up.railway.app/catalogue/json/'
+      );
     var response = await http.get(
         url,
         headers: {"Content-Type": "application/json"},

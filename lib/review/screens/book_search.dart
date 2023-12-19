@@ -1,6 +1,6 @@
 import 'package:booka_mobile/models/book.dart';
-import 'package:booka_mobile/review/book_detail.dart';
-import 'package:booka_mobile/review/book_card.dart';
+import 'package:booka_mobile/review/screens/book_detail.dart';
+import 'package:booka_mobile/review/widget/book_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

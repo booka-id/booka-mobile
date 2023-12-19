@@ -1,5 +1,5 @@
 import 'package:booka_mobile/katalog_buku/catalogue.dart';
-import 'package:booka_mobile/review/feeds.dart';
+import 'package:booka_mobile/review/screens/feeds.dart';
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';

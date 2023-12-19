@@ -1,9 +1,9 @@
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/review.dart';
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/card_skeleton.dart';
-import 'package:booka_mobile/review/review_card.dart';
-import 'package:booka_mobile/review/review_form.dart';
+import 'package:booka_mobile/review/widget/card_skeleton.dart';
+import 'package:booka_mobile/review/widget/review_card.dart';
+import 'package:booka_mobile/review/widget/review_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -64,7 +64,6 @@ class _BookDetailPageState extends State<BookDetailPage> {
     if (response.statusCode == 200) {
       // Parse the JSON response
       dynamic userData = jsonDecode(response.body);
-      print(userData);
 
       if (userData != null) {
         // Extract username from the first user's fields
@@ -209,17 +208,6 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           ),
                         );
                       } else {
-                        if (!snapshot.hasData) {
-                          return const Column(
-                            children: [
-                              Text(
-                                "Be the first to review this book!",
-                                style: TextStyle( fontSize: 20),
-                              ),
-                              SizedBox(height: 8),
-                            ],
-                          );
-                        } else {
                           return ListView.separated(
                             separatorBuilder: (context, index) =>
                                 const Divider(height: 1, color: Colors.grey),
@@ -258,7 +246,6 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               );
                             },
                           );
-                        }
                       }
                     },
                   ),

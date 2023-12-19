@@ -1,9 +1,10 @@
+import 'package:booka_mobile/katalog_buku/catalogue.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../event/screens/list_event.dart';
 import '../profile/profile_page.dart';
-import '../review/feeds.dart';
+import '../review/screens/feeds.dart';
 import 'login.dart';
 import 'menu.dart';
 
@@ -41,7 +42,7 @@ class _BotNavBarState extends State<BotNavBar> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const EventPage(), // Todo ganti ke katalog buku
+              builder: (context) => const CataloguePage(), // Todo ganti ke katalog buku
             ),
           );
         } else if (_selectedIndex == 2) {

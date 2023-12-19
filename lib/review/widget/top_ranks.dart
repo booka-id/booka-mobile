@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/book_detail.dart';
+import 'package:booka_mobile/review/screens/book_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -18,8 +18,8 @@ class TopRanksWidget extends StatelessWidget {
 
   Future<List<dynamic>> getBookRanks() async {
     String url = 
-    "http://10.0.2.2:8000/review/rating_ranks";
-    // "https://deploytest-production-cf18.up.railway.app/review/rating_ranks/";
+    // "http://10.0.2.2:8000/review/rating_ranks";
+    "https://deploytest-production-cf18.up.railway.app/review/rating_ranks/";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -62,7 +62,7 @@ class TopRanksWidget extends StatelessWidget {
           } else {
             return Container(
               padding: const EdgeInsets.all(20),
-              height: 290, // Set a fixed height for the container
+              height: 300, // Set a fixed height for the container
               child: ListView.builder(
                 itemCount: snapshot.data!.length,
                 scrollDirection: Axis.horizontal,

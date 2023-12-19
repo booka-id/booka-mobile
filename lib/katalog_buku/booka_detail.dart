@@ -4,7 +4,7 @@ import 'package:booka_mobile/katalog_buku/edit_form.dart';
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/stock.dart';
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/book_detail.dart';
+import 'package:booka_mobile/review/screens/book_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -31,8 +31,14 @@ class _BookDetailPageState extends State<BookDetailsPage> {
   }
 
   Future<void> _fetchBookData() async {
-    final bookUrl = Uri.parse('http://10.0.2.2:8000/catalogue/book-json/${widget.bookId}/');
-    final bookstockUrl = Uri.parse('http://10.0.2.2:8000/catalogue/bookstock-json/${widget.bookId}/');
+    final bookUrl = Uri.parse(
+      // 'http://10.0.2.2:8000/catalogue/book-json/${widget.bookId}/'
+      'https://deploytest-production-cf18.up.railway.app/catalogue/book-json/${widget.bookId}/'
+    );
+    final bookstockUrl = Uri.parse(
+      // 'http://10.0.2.2:8000/catalogue/bookstock-json/${widget.bookId}/'
+      'https://deploytest-production-cf18.up.railway.app/catalogue/bookstock-json/${widget.bookId}/'
+    );
     
       var bookResponse = await http.get(
         bookUrl,
@@ -57,7 +63,10 @@ class _BookDetailPageState extends State<BookDetailsPage> {
   }
 
   Future<void> submitOrder(int userId, int quantity, String paymentMethod) async {
-    final url = Uri.parse('http://10.0.2.2:8000/catalogue/buy-book-flutter/'); // Ganti dengan URL API yang sesuai
+    final url = Uri.parse(
+      // 'http://10.0.2.2:8000/catalogue/buy-book-flutter/'
+      'https://deploytest-production-cf18.up.railway.app/catalogue/buy-book-flutter/'
+    ); // Ganti dengan URL API yang sesuai
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -86,7 +95,10 @@ class _BookDetailPageState extends State<BookDetailsPage> {
 
 
   Future<void> deleteBook(int bookId, BuildContext context) async {
-  final url = Uri.parse('http://10.0.2.2:8000/catalogue/delete-book-flutter/$bookId/'); // Sesuaikan dengan URL API Anda
+  final url = Uri.parse(
+    // 'http://10.0.2.2:8000/catalogue/delete-book-flutter/$bookId/'
+    'https://deploytest-production-cf18.up.railway.app/catalogue/delete-book-flutter/$bookId/'
+  ); // Sesuaikan dengan URL API Anda
   final response = await http.post(url);
 
   if (response.statusCode == 200) {

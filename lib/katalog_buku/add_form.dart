@@ -25,7 +25,7 @@ class _AddBookFormPageState extends State<AddBookFormPage> {
 
   // Fungsi untuk mengirim data ke Django
   Future<void> addBook() async {
-    final url = Uri.parse('http://10.0.2.2:8000/catalogue/add-book-flutter/'); // Ganti dengan URL API Django Anda
+    final url = Uri.parse('https://deploytest-production-cf18.up.railway.app/catalogue/add-book-flutter/'); // Ganti dengan URL API Django Anda
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({

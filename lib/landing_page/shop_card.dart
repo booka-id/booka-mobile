@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';
 import 'package:provider/provider.dart';
-import 'package:booka_mobile/review/feeds.dart';
+import 'package:booka_mobile/review/screens/feeds.dart';
 import 'package:booka_mobile/event/screens/list_event.dart';
 
 class ShopItem {

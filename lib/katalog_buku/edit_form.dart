@@ -39,8 +39,8 @@ class _EditBookFormPageState extends State<EditBookFormPage> {
   }
 
   Future<void> _fetchBookData() async {
-    final bookUrl = Uri.parse('http://10.0.2.2:8000/catalogue/book-json/${widget.bookId}/');
-    final bookstockUrl = Uri.parse('http://10.0.2.2:8000/catalogue/bookstock-json/${widget.bookId}/');
+    final bookUrl = Uri.parse('https://deploytest-production-cf18.up.railway.app/catalogue/book-json/${widget.bookId}/');
+    final bookstockUrl = Uri.parse('https://deploytest-production-cf18.up.railway.app/catalogue/bookstock-json/${widget.bookId}/');
     
       var bookResponse = await http.get(
         bookUrl,
@@ -68,7 +68,7 @@ class _EditBookFormPageState extends State<EditBookFormPage> {
 
   // Contoh fungsi untuk mengupdate buku
 Future<void> updateBook(Map<String, dynamic> bookData) async {
-  final url = Uri.parse('http://10.0.2.2:8000/catalogue/edit-book-flutter/${widget.bookId}/');
+  final url = Uri.parse('https://deploytest-production-cf18.up.railway.app/catalogue/edit-book-flutter/${widget.bookId}/');
   final response = await http.post(url,
     headers: {"Content-Type": "application/json"},
     body: jsonEncode(bookData),
