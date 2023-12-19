@@ -18,7 +18,6 @@ State<EditProfilePic> createState() => _EditProfilePic();
 class _EditProfilePic extends State<EditProfilePic> {
   File? _imageFile;
   String? _imageUrl;
-  String? _imagePath;
 
   String name = "";
 
@@ -112,6 +111,7 @@ class _EditProfilePic extends State<EditProfilePic> {
                             onPressed: () async {
                               await uploadImage();
                               userProvider.changeProfilePic(_imageUrl!);
+                              if(!context.mounted) return ;
                               Navigator.pop(context);
                             },
                             child: const Text("Save"),

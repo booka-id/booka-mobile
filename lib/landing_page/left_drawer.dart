@@ -112,6 +112,7 @@ class LeftDrawer extends StatelessWidget {
               final response = await request.logout(
                   // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                   "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
+              if(!context.mounted) return;
               String message = response["message"];
               if (response['status']) {
                 String uname = response["username"];

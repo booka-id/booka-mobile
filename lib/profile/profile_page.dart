@@ -1,9 +1,7 @@
 import 'package:booka_mobile/profile/tambah_buku_profil.dart';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:booka_mobile/models/user.dart';
-
 import '../landing_page/bottom_nav_bar.dart';
 import '../landing_page/left_drawer.dart';
 import 'book_list.dart';
@@ -13,11 +11,9 @@ class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
     final user = context.read<UserProvider>();
     String? userName = user.username;
     String? email = user.email;
-    int selectedIndex = 4;
 
     return Scaffold(
       appBar: AppBar(

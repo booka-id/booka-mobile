@@ -9,8 +9,8 @@ import 'menu.dart';
 
 
 class BotNavBar extends StatefulWidget {
-  int initState;
-  BotNavBar(this.initState, {Key? key}) : super(key: key);
+  final int initState;
+  const BotNavBar(this.initState, {Key? key}) : super(key: key);
 
   @override
   _BotNavBarState createState() => _BotNavBarState(initState);
