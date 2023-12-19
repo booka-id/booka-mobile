@@ -25,7 +25,8 @@ class _AddBookFormPageState extends State<AddBookFormPage> {
 
   // Fungsi untuk mengirim data ke Django
   Future<void> addBook() async {
-    final url = Uri.parse('https://deploytest-production-cf18.up.railway.app/catalogue/add-book-flutter/'); // Ganti dengan URL API Django Anda
+    final url = Uri.parse(
+        'https://deploytest-production-cf18.up.railway.app/catalogue/add-book-flutter/'); // Ganti dengan URL API Django Anda
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
@@ -46,9 +47,9 @@ class _AddBookFormPageState extends State<AddBookFormPage> {
       );
       // Anda mungkin ingin navigasi ke halaman lain atau refresh state
       Future.delayed(const Duration(seconds: 2), () {
-        
         // Atau, jika Anda ingin mengganti halaman saat ini dengan home, gunakan:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CataloguePage()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => CataloguePage()));
       });
     } else {
       // Terjadi kesalahan
@@ -231,5 +232,4 @@ class _AddBookFormPageState extends State<AddBookFormPage> {
       ),
     );
   }
-
 }

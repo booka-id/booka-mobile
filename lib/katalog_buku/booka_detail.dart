@@ -13,7 +13,11 @@ class BookDetailsPage extends StatefulWidget {
   final int bookId;
   final String bookName;
 
-  const BookDetailsPage({Key? key, required this.bookId, required this.bookName,}) : super(key: key);
+  const BookDetailsPage({
+    Key? key,
+    required this.bookId,
+    required this.bookName,
+  }) : super(key: key);
 
   @override
   State<BookDetailsPage> createState() => _BookDetailPageState();
@@ -27,52 +31,51 @@ class _BookDetailPageState extends State<BookDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _fetchDataFuture= _fetchBookData();
+    _fetchDataFuture = _fetchBookData();
   }
 
   Future<void> _fetchBookData() async {
     final bookUrl = Uri.parse(
-      // 'http://10.0.2.2:8000/catalogue/book-json/${widget.bookId}/'
-      'https://deploytest-production-cf18.up.railway.app/catalogue/book-json/${widget.bookId}/'
-    );
+        // 'http://10.0.2.2:8000/catalogue/book-json/${widget.bookId}/'
+        'https://deploytest-production-cf18.up.railway.app/catalogue/book-json/${widget.bookId}/');
     final bookstockUrl = Uri.parse(
-      // 'http://10.0.2.2:8000/catalogue/bookstock-json/${widget.bookId}/'
-      'https://deploytest-production-cf18.up.railway.app/catalogue/bookstock-json/${widget.bookId}/'
-    );
-    
-      var bookResponse = await http.get(
-        bookUrl,
-        headers: {"Content-Type": "application/json"},
-      );
-      var bookstockResponse = await http.get(
-        bookstockUrl,
-        headers: {"Content-Type": "application/json"},
-      );
+        // 'http://10.0.2.2:8000/catalogue/bookstock-json/${widget.bookId}/'
+        'https://deploytest-production-cf18.up.railway.app/catalogue/bookstock-json/${widget.bookId}/');
 
-      var bookData = jsonDecode(utf8.decode(bookResponse.bodyBytes));
-      var bookstockData = jsonDecode(utf8.decode(bookstockResponse.bodyBytes));
-      setState(() {
-        book = Book.fromJson(bookData[0]);
-        stock = Stock.fromJson(bookstockData[0]);
-      });
+    var bookResponse = await http.get(
+      bookUrl,
+      headers: {"Content-Type": "application/json"},
+    );
+    var bookstockResponse = await http.get(
+      bookstockUrl,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    var bookData = jsonDecode(utf8.decode(bookResponse.bodyBytes));
+    var bookstockData = jsonDecode(utf8.decode(bookstockResponse.bodyBytes));
+    setState(() {
+      book = Book.fromJson(bookData[0]);
+      stock = Stock.fromJson(bookstockData[0]);
+    });
   }
 
   String changeUrl(String url) {
-    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    String newUrl = url.replaceAll(
+        'http://images.amazon.com', 'https://m.media-amazon.com');
     return newUrl;
   }
 
-  Future<void> submitOrder(int userId, int quantity, String paymentMethod) async {
+  Future<void> submitOrder(
+      int userId, int quantity, String paymentMethod) async {
     final url = Uri.parse(
-      // 'http://10.0.2.2:8000/catalogue/buy-book-flutter/'
-      'https://deploytest-production-cf18.up.railway.app/catalogue/buy-book-flutter/'
-    ); // Ganti dengan URL API yang sesuai
+        // 'http://10.0.2.2:8000/catalogue/buy-book-flutter/'
+        'https://deploytest-production-cf18.up.railway.app/catalogue/buy-book-flutter/'); // Ganti dengan URL API yang sesuai
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
-        'book_id' : widget.bookId.toString(),
-        'user_id' : userId.toString(),
+        'book_id': widget.bookId.toString(),
+        'user_id': userId.toString(),
         'quantity': quantity.toString(),
         'payment_method': paymentMethod,
         // Tambahkan field lain jika diperlukan
@@ -93,28 +96,26 @@ class _BookDetailPageState extends State<BookDetailsPage> {
     }
   }
 
-
   Future<void> deleteBook(int bookId, BuildContext context) async {
-  final url = Uri.parse(
-    // 'http://10.0.2.2:8000/catalogue/delete-book-flutter/$bookId/'
-    'https://deploytest-production-cf18.up.railway.app/catalogue/delete-book-flutter/$bookId/'
-  ); // Sesuaikan dengan URL API Anda
-  final response = await http.post(url);
+    final url = Uri.parse(
+        // 'http://10.0.2.2:8000/catalogue/delete-book-flutter/$bookId/'
+        'https://deploytest-production-cf18.up.railway.app/catalogue/delete-book-flutter/$bookId/'); // Sesuaikan dengan URL API Anda
+    final response = await http.post(url);
 
-  if (response.statusCode == 200) {
-    // Berhasil menghapus buku
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Buku berhasil dihapus.")),
-    );
-    // Kembali ke halaman sebelumnya atau refresh list buku
-    Navigator.of(context).pop();
-  } else {
-    // Terjadi kesalahan
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Terjadi kesalahan saat menghapus buku.")),
-    );
+    if (response.statusCode == 200) {
+      // Berhasil menghapus buku
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Buku berhasil dihapus.")),
+      );
+      // Kembali ke halaman sebelumnya atau refresh list buku
+      Navigator.of(context).pop();
+    } else {
+      // Terjadi kesalahan
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Terjadi kesalahan saat menghapus buku.")),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -124,334 +125,343 @@ class _BookDetailPageState extends State<BookDetailsPage> {
         title: Text(widget.bookName),
       ),
       body: FutureBuilder(
-        future: _fetchDataFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Tampilkan loading indicator
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // Tampilkan error jika ada
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            return Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  colors: [
-                    Colors.indigo,
-                    Color.fromARGB(255, 89, 105, 198),
-                    Color.fromARGB(255, 149, 158, 209)
-
-                  ]
-                )
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: 30,),
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 140,
-                          height: 210,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            image: DecorationImage(
-                              image: NetworkImage(changeUrl(book.fields.imageUrlMedium),),
-                              fit: BoxFit.cover,
-                            )
-                          ),
-                        )
-                      ],
+          future: _fetchDataFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Tampilkan loading indicator
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              // Tampilkan error jika ada
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return Container(
+                decoration: const BoxDecoration(
+                    gradient:
+                        LinearGradient(begin: Alignment.topCenter, colors: [
+                  Colors.indigo,
+                  Color.fromARGB(255, 89, 105, 198),
+                  Color.fromARGB(255, 149, 158, 209)
+                ])),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      height: 30,
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 140,
+                            height: 210,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    changeUrl(book.fields.imageUrlMedium),
+                                  ),
+                                  fit: BoxFit.cover,
+                                )),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(60), topRight: Radius.circular(60)),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(60),
+                            topRight: Radius.circular(60)),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(40),
-                        child: 
-                        SingleChildScrollView(
-                          child: 
-                        Column(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                book.fields.title,
-                                style: const TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+                          padding: EdgeInsets.all(40),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  book.fields.title,
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 4,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 4,
-                              ),
-                              SizedBox(height: 12,),
-                              Text(
-                                "Author",
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color.fromARGB(255, 134, 132, 132)
+                                SizedBox(
+                                  height: 12,
                                 ),
-                              ),
-                              Text(
-                                book.fields.author,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black
+                                Text(
+                                  "Author",
+                                  style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w800,
+                                      color:
+                                          Color.fromARGB(255, 134, 132, 132)),
                                 ),
-                              ),
-                              SizedBox(height: 7,),
-                              Text(
-                                "Year",
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color.fromARGB(255, 134, 132, 132)
+                                Text(
+                                  book.fields.author,
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black),
                                 ),
-                              ),
-                              Text(
-                                "${ book.fields.year}",
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black
+                                SizedBox(
+                                  height: 7,
                                 ),
-                              ),
-                              SizedBox(height: 7,),
-                              Text(
-                                "Publisher",
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color.fromARGB(255, 134, 132, 132)
+                                Text(
+                                  "Year",
+                                  style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w800,
+                                      color:
+                                          Color.fromARGB(255, 134, 132, 132)),
                                 ),
-                              ),
-                              Text(
-                                book.fields.publisher,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black
+                                Text(
+                                  "${book.fields.year}",
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black),
                                 ),
-                              ),
-                              SizedBox(height: 7,),
-                              Text(
-                                "ISBN",
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color.fromARGB(255, 134, 132, 132)
+                                SizedBox(
+                                  height: 7,
                                 ),
-                              ),
-                              Text(
-                                book.fields.isbn,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black
+                                Text(
+                                  "Publisher",
+                                  style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w800,
+                                      color:
+                                          Color.fromARGB(255, 134, 132, 132)),
                                 ),
-                              ),
-                              SizedBox(height: 7,),
-                              Text(
-                                "Year",
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color.fromARGB(255, 134, 132, 132)
+                                Text(
+                                  book.fields.publisher,
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black),
                                 ),
-                              ),
-                              Text(
-                                "${ book.fields.year}",
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black
+                                SizedBox(
+                                  height: 7,
                                 ),
-                              ),
-                              SizedBox(height: 12,),
-                              Text(
-                                "Rp${ stock.fields.price}",
-                                style: const TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.indigo
+                                Text(
+                                  "ISBN",
+                                  style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w800,
+                                      color:
+                                          Color.fromARGB(255, 134, 132, 132)),
                                 ),
-                              ),
-                              Text(
-                                "Tersedia : ${ stock.fields.quantity}",
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w200,
-                                  color: Color.fromARGB(255, 134, 132, 132)
+                                Text(
+                                  book.fields.isbn,
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black),
                                 ),
-                              ),
-                            ],
-                          ),
-                          
-                        )
-                      ),
-                    )
-                  )
-                ],
-              ),
-            );
-          }
-        }
-      ),
-      bottomNavigationBar: user.is_superuser ?  _adminBar(context) : _userBar(user.id),
+                                SizedBox(
+                                  height: 7,
+                                ),
+                                Text(
+                                  "Year",
+                                  style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w800,
+                                      color:
+                                          Color.fromARGB(255, 134, 132, 132)),
+                                ),
+                                Text(
+                                  "${book.fields.year}",
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                Text(
+                                  "Rp${stock.fields.price}",
+                                  style: const TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.indigo),
+                                ),
+                                Text(
+                                  "Tersedia : ${stock.fields.quantity}",
+                                  style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w200,
+                                      color:
+                                          Color.fromARGB(255, 134, 132, 132)),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ))
+                  ],
+                ),
+              );
+            }
+          }),
+      bottomNavigationBar:
+          user.is_superuser ? _adminBar(context) : _userBar(user.id),
     );
   }
 
   SafeArea _userBar(int userId) {
     return SafeArea(
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Menyusun tombol dengan rata
-        children: <Widget>[
-          // Tombol Beli
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: const BorderSide(color: Colors.indigo),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceEvenly, // Menyusun tombol dengan rata
+          children: <Widget>[
+            // Tombol Beli
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: const BorderSide(color: Colors.indigo),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                onPressed: () {
-                  _showPurchasePopup(context, userId);
-                },
-                child: const Text(
-                  'Beli',
-                  style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10), // Jarak antar tombol
-          // Tombol Review
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                onPressed: () {
-                  // Aksi ketika tombol Review ditekan
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BookDetailPage(bookID: widget.bookId,)));
-                },
-                child: const Text(
-                  'Cek Review',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                  onPressed: () {
+                    _showPurchasePopup(context, userId);
+                  },
+                  child: const Text(
+                    'Beli',
+                    style: TextStyle(
+                      color: Colors.indigo,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 10), // Jarak antar tombol
+            // Tombol Review
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.indigo,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  onPressed: () {
+                    // Aksi ketika tombol Review ditekan
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BookDetailPage(
+                                  bookID: widget.bookId,
+                                )));
+                  },
+                  child: const Text(
+                    'Cek Review',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
   }
 
   SafeArea _adminBar(context) {
     return SafeArea(
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Menyusun tombol dengan rata
-        children: <Widget>[
-          // Tombol Beli
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: const BorderSide(color: Colors.indigo),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                onPressed: () async {
-                  // Aksi ketika tombol Beli ditekan
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditBookFormPage(bookId: widget.bookId),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceEvenly, // Menyusun tombol dengan rata
+          children: <Widget>[
+            // Tombol Beli
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: const BorderSide(color: Colors.indigo),
                     ),
-                  );
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  onPressed: () async {
+                    // Aksi ketika tombol Beli ditekan
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditBookFormPage(bookId: widget.bookId),
+                      ),
+                    );
 
-                  if (result == 'updated') {
-                    _fetchBookData();
-                  }
-                },
-                child: const Text(
-                  'Edit',
-                  style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 16,
+                    if (result == 'updated') {
+                      _fetchBookData();
+                    }
+                  },
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: Colors.indigo,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 10), // Jarak antar tombol
-          // Tombol Review
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+            const SizedBox(width: 10), // Jarak antar tombol
+            // Tombol Review
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                onPressed: () {
-                  // Aksi ketika tombol Review ditekan
-                  _confirmDelete(widget.bookId, context);
-                },
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                  onPressed: () {
+                    // Aksi ketika tombol Review ditekan
+                    _confirmDelete(widget.bookId, context);
+                  },
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
   }
 
   void _confirmDelete(int bookId, BuildContext context) {
@@ -594,5 +604,4 @@ class _BookDetailPageState extends State<BookDetailsPage> {
       },
     );
   }
-
 }

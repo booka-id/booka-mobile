@@ -36,7 +36,7 @@ class _ReviewPageState extends State<ReviewPage> {
     var url = Uri.parse(
         'https://deploytest-production-cf18.up.railway.app/review/all/'
         // 'http://10.0.2.2:8000/review/all/'
-      );
+        );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -60,7 +60,7 @@ class _ReviewPageState extends State<ReviewPage> {
     var url = Uri.parse(
         'https://deploytest-production-cf18.up.railway.app/review/user/$id'
         // 'http://10.0.2.2:8000/review/user/$id'
-      );
+        );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -80,9 +80,9 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Future<List<String>> getUsername(int id) async {
-    String url = 
-    // "http://10.0.2.2:8000/review/get_user/$id";
-    "https://deploytest-production-cf18.up.railway.app/review/get_user/$id";
+    String url =
+        // "http://10.0.2.2:8000/review/get_user/$id";
+        "https://deploytest-production-cf18.up.railway.app/review/get_user/$id";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -110,9 +110,9 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Future<String> getBookTitle(int id) async {
-    String url = 
-    // "http://10.0.2.2:8000/review/books/$id";
-    "https://deploytest-production-cf18.up.railway.app/review/books/$id";
+    String url =
+        // "http://10.0.2.2:8000/review/books/$id";
+        "https://deploytest-production-cf18.up.railway.app/review/books/$id";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -266,13 +266,15 @@ class _ReviewPageState extends State<ReviewPage> {
                           return const Center(
                             child: Text(
                               "There's no reviews yet...",
-                              style: TextStyle( fontSize: 20),
+                              style: TextStyle(fontSize: 20),
                             ),
                           );
                         } else {
                           return ListView.separated(
-                            separatorBuilder: (context, index) => 
-                            Divider(height: 1, color: Colors.grey[450],),
+                            separatorBuilder: (context, index) => Divider(
+                              height: 1,
+                              color: Colors.grey[450],
+                            ),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
                               return FutureBuilder<List<String>>(
@@ -298,36 +300,37 @@ class _ReviewPageState extends State<ReviewPage> {
                                             'Error: ${usernameSnapshot.error ?? bookTitleSnapshot.error}');
                                       } else {
                                         return InkWell(
-                                          onTap: () async {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BookDetailPage(
-                                                        bookID: snapshot
-                                                            .data![index]
-                                                            .fields
-                                                            .book),
-                                              ),
-                                            );
-                                          },
-                                          child: ReviewCard(
-                                            image: usernameSnapshot.data![1],
-                                            username: usernameSnapshot.data![0],
-                                            rating:
-                                                snapshot.data![index].fields.rating,
-                                            content:
-                                                snapshot.data![index].fields.content,
-                                            bookTitle: bookTitleSnapshot.data,
-                                            bookId: snapshot.data![index].fields.book,
-                                            isAdmin:
-                                                snapshot.data![index].fields.user ==
-                                                        user.id ||
-                                                    user.is_superuser,
-                                            isInFeeds: true,
-                                            showCardOptions: showCardOptions,
-                                          )
-                                        );
+                                            onTap: () async {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BookDetailPage(
+                                                          bookID: snapshot
+                                                              .data![index]
+                                                              .fields
+                                                              .book),
+                                                ),
+                                              );
+                                            },
+                                            child: ReviewCard(
+                                              image: usernameSnapshot.data![1],
+                                              username:
+                                                  usernameSnapshot.data![0],
+                                              rating: snapshot
+                                                  .data![index].fields.rating,
+                                              content: snapshot
+                                                  .data![index].fields.content,
+                                              bookTitle: bookTitleSnapshot.data,
+                                              bookId: snapshot
+                                                  .data![index].fields.book,
+                                              isAdmin: snapshot.data![index]
+                                                          .fields.user ==
+                                                      user.id ||
+                                                  user.is_superuser,
+                                              isInFeeds: true,
+                                              showCardOptions: showCardOptions,
+                                            ));
                                       }
                                     },
                                   );
@@ -348,20 +351,25 @@ class _ReviewPageState extends State<ReviewPage> {
                         return const Center(child: SkeletonCard());
                       } else {
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return request.loggedIn ? const Center(
-                            child: Text(
-                              "You've never written your review.",
-                              style: TextStyle( fontSize: 20),
-                            ),
-                          ) : const Center(
-                            child: Text(
-                              "Log in to see your reviews.",
-                              style: TextStyle( fontSize: 20),
-                            ),
-                          );
+                          return request.loggedIn
+                              ? const Center(
+                                  child: Text(
+                                    "You've never written your review.",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                )
+                              : const Center(
+                                  child: Text(
+                                    "Log in to see your reviews.",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                );
                         } else {
                           return ListView.separated(
-                            separatorBuilder: (context, index) => const Divider(height: 1, color: Colors.grey,),
+                            separatorBuilder: (context, index) => const Divider(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) {
                               return FutureBuilder<List<String>>(
@@ -387,36 +395,37 @@ class _ReviewPageState extends State<ReviewPage> {
                                             'Error: ${usernameSnapshot.error ?? bookTitleSnapshot.error}');
                                       } else {
                                         return InkWell(
-                                          onTap: () async {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BookDetailPage(
-                                                        bookID: snapshot
-                                                            .data![index]
-                                                            .fields
-                                                            .book),
-                                              ),
-                                            );
-                                          },
-                                          child: ReviewCard(
-                                            image: usernameSnapshot.data![1],
-                                            username: usernameSnapshot.data![0],
-                                            rating:
-                                                snapshot.data![index].fields.rating,
-                                            content:
-                                                snapshot.data![index].fields.content,
-                                            bookTitle: bookTitleSnapshot.data,
-                                            bookId: snapshot.data![index].fields.book,
-                                            isAdmin:
-                                                snapshot.data![index].fields.user ==
-                                                        user.id ||
-                                                    user.is_superuser,
-                                            isInFeeds: true,
-                                            showCardOptions: showCardOptions,
-                                          )
-                                        );
+                                            onTap: () async {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BookDetailPage(
+                                                          bookID: snapshot
+                                                              .data![index]
+                                                              .fields
+                                                              .book),
+                                                ),
+                                              );
+                                            },
+                                            child: ReviewCard(
+                                              image: usernameSnapshot.data![1],
+                                              username:
+                                                  usernameSnapshot.data![0],
+                                              rating: snapshot
+                                                  .data![index].fields.rating,
+                                              content: snapshot
+                                                  .data![index].fields.content,
+                                              bookTitle: bookTitleSnapshot.data,
+                                              bookId: snapshot
+                                                  .data![index].fields.book,
+                                              isAdmin: snapshot.data![index]
+                                                          .fields.user ==
+                                                      user.id ||
+                                                  user.is_superuser,
+                                              isInFeeds: true,
+                                              showCardOptions: showCardOptions,
+                                            ));
                                       }
                                     },
                                   );

@@ -13,8 +13,6 @@ import 'bottom_nav_bar.dart';
 // Todo ganti import 'package:booka_mobile/landing_page/shoplist_form.dart';
 // Todo import 'package:booka-mobile/screens/book_list.dart';
 
-
-
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
   final List<ShopItem> items = [
@@ -28,8 +26,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     final user = context.watch<UserProvider>();
-    int selectedIndex= 0;
-
+    int selectedIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,47 +38,47 @@ class MyHomePage extends StatelessWidget {
         foregroundColor: Colors.white,
         actions: [
           Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: request.loggedIn == true?
-            //User Sudah Login
-              Consumer<UserProvider>(
-                  builder: (context, user,_){
-                    return CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(user.profile_picture),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ProfilePage()));
-                        },
+              margin: const EdgeInsets.only(right: 10),
+              child: request.loggedIn == true
+                  ?
+                  //User Sudah Login
+                  Consumer<UserProvider>(builder: (context, user, _) {
+                      return CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(user.profile_picture),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const ProfilePage()));
+                          },
+                        ),
+                      );
+                    })
+                  :
+                  // User Belum Login
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        // backgroundColor: Color(0xE8FF90C2),
                       ),
-                    );
-                  }
-              )
-              :
-              // User Belum Login
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  // backgroundColor: Color(0xE8FF90C2),
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()));
-                },
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.indigo,
-                  ),
-                ),
-              )
-          ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()));
+                      },
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.indigo,
+                        ),
+                      ),
+                    )),
         ],
       ),
       drawer: const LeftDrawer(),
@@ -142,8 +139,5 @@ class MyHomePage extends StatelessWidget {
     // case the title) provided by the parent (in this case the App widget) and
     // used by the build method of the State. Fields in a Widget subclass are
     // always marked "final".
-
-
   }
 }
-

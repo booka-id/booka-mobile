@@ -74,14 +74,17 @@ class _EventFormPageState extends State<EventFormPage> {
                         decoration: InputDecoration(
                           hintText: "Nama Event",
                           labelText: "Nama Event",
-                          prefixIcon: const Icon(Icons.event, color: Colors.indigo),
+                          prefixIcon:
+                              const Icon(Icons.event, color: Colors.indigo),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                         ),
                         style: TextStyle(fontFamily: 'Poppins'),
@@ -108,7 +111,8 @@ class _EventFormPageState extends State<EventFormPage> {
                           const SizedBox(height: 8.0),
                           DropdownButton<String>(
                             value: _selectedFeaturedBook,
-                            items: featuredBookList.map((String featuredBookChosen) {
+                            items: featuredBookList
+                                .map((String featuredBookChosen) {
                               return DropdownMenuItem<String>(
                                 value: featuredBookChosen,
                                 child: Text(
@@ -137,14 +141,17 @@ class _EventFormPageState extends State<EventFormPage> {
                         decoration: InputDecoration(
                           hintText: "Tanggal (YYYY-MM-DD)",
                           labelText: "Tanggal",
-                          prefixIcon: const Icon(Icons.calendar_today, color: Colors.indigo),
+                          prefixIcon: const Icon(Icons.calendar_today,
+                              color: Colors.indigo),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                         ),
                         style: TextStyle(fontFamily: 'Poppins'),
@@ -167,14 +174,17 @@ class _EventFormPageState extends State<EventFormPage> {
                         decoration: InputDecoration(
                           hintText: "Deskripsi",
                           labelText: "Deskripsi",
-                          prefixIcon: const Icon(Icons.description, color: Colors.indigo),
+                          prefixIcon: const Icon(Icons.description,
+                              color: Colors.indigo),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                         ),
                         style: TextStyle(fontFamily: 'Poppins'),
@@ -196,14 +206,17 @@ class _EventFormPageState extends State<EventFormPage> {
                         decoration: InputDecoration(
                           hintText: "URL Foto",
                           labelText: "URL Foto",
-                          prefixIcon: const Icon(Icons.image, color: Colors.indigo),
+                          prefixIcon:
+                              const Icon(Icons.image, color: Colors.indigo),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.indigo, width: 1.0),
+                            borderSide: const BorderSide(
+                                color: Colors.indigo, width: 1.0),
                           ),
                         ),
                         style: TextStyle(fontFamily: 'Poppins'),
@@ -224,7 +237,8 @@ class _EventFormPageState extends State<EventFormPage> {
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.indigo),
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
@@ -241,12 +255,14 @@ class _EventFormPageState extends State<EventFormPage> {
                               if (response['status'] == 'success') {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text("Event baru berhasil disimpan!"),
+                                    content:
+                                        Text("Event baru berhasil disimpan!"),
                                   ),
                                 );
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const EventPage()),
+                                  MaterialPageRoute(
+                                      builder: (context) => const EventPage()),
                                 );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -275,7 +291,8 @@ class _EventFormPageState extends State<EventFormPage> {
   }
 
   Future<List<String>> fetchProduct() async {
-    var url = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/get-books/');
+    var url = Uri.parse(
+        'https://deploytest-production-cf18.up.railway.app/event/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},

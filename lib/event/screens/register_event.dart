@@ -117,7 +117,8 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Registrasi Berhasil'),
-          content: const Text('Anda berhasil mendaftar ke Event. Sampai jumpa!'),
+          content:
+              const Text('Anda berhasil mendaftar ke Event. Sampai jumpa!'),
           actions: [
             TextButton(
               onPressed: () {

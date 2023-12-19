@@ -35,57 +35,68 @@ class ReviewCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(backgroundImage: NetworkImage(image),radius: 25),
-                    SizedBox(width: defaultPadding,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: username,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.indigo, // Color for the username part
-                                ),
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                      backgroundImage: NetworkImage(image), radius: 25),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: username,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors
+                                    .indigo, // Color for the username part
                               ),
-                            ],
-                          ),
-                          softWrap: true,
+                            ),
+                          ],
                         ),
-                        Row(children: [
-                          const Icon(Icons.star, color: Colors.amber,),
-                          const SizedBox(width: 3,),
+                        softWrap: true,
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          const SizedBox(
+                            width: 3,
+                          ),
                           Text(
                             "$rating.0",
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.grey[700]
-                            ),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.grey[700]),
                           ),
-                        ],)
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(width: defaultPadding*2.5,),
-                if(isInFeeds)
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                width: defaultPadding * 2.5,
+              ),
+              if (isInFeeds)
                 IconButton(
-                  onPressed: () {
-                    showCardOptions!(bookId, isAdmin);
-                  },
-                  icon: const Icon(Icons.more_vert)
-                )
-              ],
-            ),
+                    onPressed: () {
+                      showCardOptions!(bookId, isAdmin);
+                    },
+                    icon: const Icon(Icons.more_vert))
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10),
             child: Text(
@@ -95,24 +106,28 @@ class ReviewCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10),
-            child: isInFeeds == true ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                const Icon(Icons.menu_book_rounded, color: Colors.grey),
-                const SizedBox(width: 10,),
-                SizedBox (
-                  width: MediaQuery.of(context).size.width*0.8,
-                  child: Column (
+            child: isInFeeds == true
+                ? Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "$bookTitle",
-                        style: TextStyle(color: Colors.grey[800]),)
-                    ]
-                  ),
-                )
-              ],
-            ) : null,
+                      const Icon(Icons.menu_book_rounded, color: Colors.grey),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "$bookTitle",
+                                style: TextStyle(color: Colors.grey[800]),
+                              )
+                            ]),
+                      )
+                    ],
+                  )
+                : null,
           ),
         ],
       ),

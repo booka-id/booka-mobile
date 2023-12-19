@@ -8,7 +8,6 @@ import '../review/screens/feeds.dart';
 import 'login.dart';
 import 'menu.dart';
 
-
 class BotNavBar extends StatefulWidget {
   final int initState;
   const BotNavBar(this.initState, {Key? key}) : super(key: key);
@@ -38,43 +37,38 @@ class _BotNavBarState extends State<BotNavBar> {
               builder: (context) => MyHomePage(),
             ),
           );
-        }else if (_selectedIndex == 1) {
+        } else if (_selectedIndex == 1) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const CataloguePage(), // Todo ganti ke katalog buku
+              builder: (context) =>
+                  const CataloguePage(), // Todo ganti ke katalog buku
             ),
           );
         } else if (_selectedIndex == 2) {
-          if(request.loggedIn){
+          if (request.loggedIn) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ReviewPage()
-              ),
+              MaterialPageRoute(builder: (context) => const ReviewPage()),
             );
-          }else{
+          } else {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginPage()));
           }
-        }
-        else if (_selectedIndex == 3) {
+        } else if (_selectedIndex == 3) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const EventPage(),
             ),
           );
-        }
-        else if (_selectedIndex == 4) {
-          if(request.loggedIn){
+        } else if (_selectedIndex == 4) {
+          if (request.loggedIn) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ProfilePage()
-              ),
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
             );
-          }else{
+          } else {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -82,7 +76,6 @@ class _BotNavBarState extends State<BotNavBar> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginPage()));
           }
-
         }
       },
       items: const [
