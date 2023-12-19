@@ -36,32 +36,35 @@ class _CataloguePageState extends State<CataloguePage> {
     });
   }
 
-  void updateList(String value){
+  void updateList(String value) {
     setState(() {
       _displayedBooks = _allBooks
-        .where((element) => 
-          element.fields.title.toLowerCase().contains(value.toLowerCase()) ||
-          element.fields.author.toLowerCase().contains(value.toLowerCase())).toList();
-      
+          .where((element) =>
+              element.fields.title
+                  .toLowerCase()
+                  .contains(value.toLowerCase()) ||
+              element.fields.author.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+
       _displayedStocks = _allStocks.where((stock) {
         return _displayedBooks.any((book) => book.pk == stock.pk);
       }).toList();
-
-    }); 
+    });
   }
 
   String changeUrl(String url) {
-    String newUrl = url.replaceAll('http://images.amazon.com' , 'https://m.media-amazon.com');
+    String newUrl = url.replaceAll(
+        'http://images.amazon.com', 'https://m.media-amazon.com');
     return newUrl;
   }
-  
+
   Future<List<Book>> fetchBook() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url =
-        Uri.parse('https://deploytest-production-cf18.up.railway.app/api/books/'
-          // 'https://deploytest-production-cf18.up.railway.app/api/books/'
-            // 'http://127.0.0.1:8000/review/all/'
-            );
+    var url = Uri.parse(
+        // 'http://10.0.2.2:8000/api/books/'
+        'https://deploytest-production-cf18.up.railway.app/api/books/'
+        // 'http://127.0.0.1:8000/review/all/'
+        );
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -88,10 +91,11 @@ class _CataloguePageState extends State<CataloguePage> {
   Future<List<Stock>> _fetchStocks() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
+        // 'http://10.0.2.2:8000/catalogue/json/'
         'https://deploytest-production-cf18.up.railway.app/catalogue/json/');
     var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
+      url,
+      headers: {"Content-Type": "application/json"},
     );
 
     // melakukan decode response menjadi bentuk json
@@ -100,9 +104,9 @@ class _CataloguePageState extends State<CataloguePage> {
     // melakukan konversi data json menjadi object Product
     List<Stock> listProduct = [];
     for (var d in data) {
-        if (d != null) {
-            listProduct.add(Stock.fromJson(d));
-        }
+      if (d != null) {
+        listProduct.add(Stock.fromJson(d));
+      }
     }
 
     setState(() {
@@ -115,7 +119,8 @@ class _CataloguePageState extends State<CataloguePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserProvider>(); // Jika Anda memerlukan 'user' di bawah
+    final user =
+        context.read<UserProvider>(); // Jika Anda memerlukan 'user' di bawah
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: appBar(),
@@ -125,13 +130,16 @@ class _CataloguePageState extends State<CataloguePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _searchField(),
-          const SizedBox(height: 40,),
+          const SizedBox(
+            height: 40,
+          ),
           Expanded(
-            child: Column(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ini akan mengatur ruang antara teks dan tombol
+                mainAxisAlignment: MainAxisAlignment
+                    .spaceBetween, // Ini akan mengatur ruang antara teks dan tombol
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(left: 20),
@@ -147,14 +155,17 @@ class _CataloguePageState extends State<CataloguePage> {
                   user.is_superuser ? _addBookButton() : Container()
                 ],
               ),
-              const SizedBox(height: 10,),
-              Expanded(
-                child: _displayedBooks.isNotEmpty ? bookCard(request) : const Center(child: Text("No books founds"),)
+              const SizedBox(
+                height: 10,
               ),
+              Expanded(
+                  child: _displayedBooks.isNotEmpty
+                      ? bookCard(request)
+                      : const Center(
+                          child: Text("No books founds"),
+                        )),
             ],
-          )
-          ),
-          
+          )),
         ],
       ),
     );
@@ -162,34 +173,34 @@ class _CataloguePageState extends State<CataloguePage> {
 
   Padding _addBookButton() {
     return Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.indigo,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      ),
-                      onPressed: () {
-                        // Aksi ketika tombol Add Book ditekan
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddBookFormPage()),
-                        );
-                      },
-                      child: Text(
-                        'Add Book',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+      padding: const EdgeInsets.only(right: 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.indigo,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          ),
+          onPressed: () {
+            // Aksi ketika tombol Add Book ditekan
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddBookFormPage()),
+            );
+          },
+          child: Text(
+            'Add Book',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   ListView bookCard(CookieRequest request) {
@@ -301,7 +312,6 @@ class _CataloguePageState extends State<CataloguePage> {
               );
   }
 
-
   Container _searchField() {
     return Container(
           margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
@@ -332,11 +342,9 @@ class _CataloguePageState extends State<CataloguePage> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none
-              )
-            ),
-          ),
-        );
+                borderSide: BorderSide.none)),
+      ),
+    );
   }
 
   AppBar appBar() {

@@ -29,18 +29,22 @@ class BookCard extends StatelessWidget {
               width: 120,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(image,fit: BoxFit.cover,),
+                child: Image.network(
+                  image,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            SizedBox(width: defaultPadding,),
+            SizedBox(
+              width: defaultPadding,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: defaultPadding / 2),
+                    padding: EdgeInsets.symmetric(vertical: defaultPadding / 2),
                     child: Text(
                       title,
                       style: Theme.of(context).textTheme.titleLarge,

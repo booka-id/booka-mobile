@@ -1,25 +1,23 @@
 import 'dart:convert';
 
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/book_detail.dart';
+import 'package:booka_mobile/review/screens/book_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 class TopRanksWidget extends StatelessWidget {
-  const TopRanksWidget({
-    Key? key
-  }) : super(key: key);
+  const TopRanksWidget({Key? key}) : super(key: key);
 
   final double defaultPadding = 16.0;
   final Color primaryColor = const Color(0xFF2967FF);
   final Color grayColor = const Color(0xFF8D8D8E);
 
   Future<List<dynamic>> getBookRanks() async {
-    String url = 
-    "http://10.0.2.2:8000/review/rating_ranks";
-    // "https://deploytest-production-cf18.up.railway.app/review/rating_ranks/";
+    String url =
+        // "http://10.0.2.2:8000/review/rating_ranks";
+        "https://deploytest-production-cf18.up.railway.app/review/rating_ranks/";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -39,6 +37,7 @@ class TopRanksWidget extends StatelessWidget {
       throw Exception('Failed to fetch user data');
     }
   }
+
   String changeUrl(String url) {
     String newUrl = url.replaceAll(
         'http://images.amazon.com', 'https://m.media-amazon.com');
@@ -56,42 +55,50 @@ class TopRanksWidget extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator(); // Placeholder for loading state
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}'); // Placeholder for error state
+            return Text(
+                'Error: ${snapshot.error}'); // Placeholder for error state
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No data available'); // Placeholder for empty data state
+            return const Text(
+                'No data available'); // Placeholder for empty data state
           } else {
             return Container(
               padding: const EdgeInsets.all(20),
-              height: 290, // Set a fixed height for the container
+              height: 300, // Set a fixed height for the container
               child: ListView.builder(
                 itemCount: snapshot.data!.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  String rank = (index+1).toString();
+                  String rank = (index + 1).toString();
                   int id = snapshot.data![index]['id'];
                   String title = snapshot.data![index]['title'];
                   String author = snapshot.data![index]['author'];
                   String imageUrl = snapshot.data![index]['image_url'];
                   double avgRating = snapshot.data![index]['avg_rating'] ?? 0.0;
                   return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(width: 2, color: Colors.indigo),
-                    //   borderRadius: BorderRadius.circular(15)
-                    // ),
-                    width: 170,
-                    height: 180,
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      // decoration: BoxDecoration(
+                      //   border: Border.all(width: 2, color: Colors.indigo),
+                      //   borderRadius: BorderRadius.circular(15)
+                      // ),
+                      width: 170,
+                      height: 180,
                       child: InkWell(
                         onTap: () => {
-                          if(request.loggedIn){
-                            Navigator.push(context,
-                              MaterialPageRoute(
-                                builder: (context) => BookDetailPage(bookID: id)))
-                          }else{
-                            ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(const SnackBar(content: Text("Login terlebih dahulu!")))
-                          }
+                          if (request.loggedIn)
+                            {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BookDetailPage(bookID: id)))
+                            }
+                          else
+                            {
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(const SnackBar(
+                                    content: Text("Login terlebih dahulu!")))
+                            }
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,34 +108,45 @@ class TopRanksWidget extends StatelessWidget {
                               width: 120,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.network(changeUrl(imageUrl),fit: BoxFit.cover,),
+                                child: Image.network(
+                                  changeUrl(imageUrl),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                             Text(
                               title,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text(author, textAlign: TextAlign.center,),
+                            Text(
+                              author,
+                              textAlign: TextAlign.center,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                              const Icon(Icons.star, color: Colors.amber,),
-                              const SizedBox(width: 3,),
-                              Text(
-                                avgRating.toStringAsFixed(1),
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.grey[700]
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
                                 ),
-                              ),
-                            ],),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  avgRating.toStringAsFixed(1),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.grey[700]),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      )
-                  );
+                      ));
                 },
               ),
             );
