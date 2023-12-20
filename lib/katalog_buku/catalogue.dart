@@ -1,12 +1,13 @@
 import 'package:booka_mobile/katalog_buku/add_form.dart';
+import 'package:booka_mobile/katalog_buku/api_service.dart';
 import 'package:booka_mobile/katalog_buku/booka_detail.dart';
+import 'package:booka_mobile/katalog_buku/history_purchase.dart';
+import 'package:booka_mobile/katalog_buku/widgets/book_card.dart';
 import 'package:booka_mobile/landing_page/login.dart';
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:booka_mobile/landing_page/left_drawer.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:booka_mobile/models/stock.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class CataloguePage extends StatefulWidget {
 }
 
 class _CataloguePageState extends State<CataloguePage> {
+  final ApiService _apiService = ApiService();
   List<Book> _allBooks = [];
   List<Book> _displayedBooks = [];
   List<Stock> _allStocks = [];
@@ -27,8 +29,12 @@ class _CataloguePageState extends State<CataloguePage> {
   @override
   void initState() {
     super.initState();
-    fetchBook();
-    _fetchStocks();
+    _loadData();
+  }
+
+  void _loadData() async {
+    _allBooks = await _apiService.fetchBooks();
+    _allStocks = await _apiService.fetchStocks();
 
     setState(() {
       _displayedBooks = _allBooks;
@@ -50,71 +56,6 @@ class _CataloguePageState extends State<CataloguePage> {
         return _displayedBooks.any((book) => book.pk == stock.pk);
       }).toList();
     });
-  }
-
-  String changeUrl(String url) {
-    String newUrl = url.replaceAll(
-        'http://images.amazon.com', 'https://m.media-amazon.com');
-    return newUrl;
-  }
-
-  Future<List<Book>> fetchBook() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse(
-        // 'http://10.0.2.2:8000/api/books/'
-        'https://deploytest-production-cf18.up.railway.app/api/books/'
-        // 'http://127.0.0.1:8000/review/all/'
-        );
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
-
-    // melakukan decode response menjadi bentuk json
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-    // melakukan konversi data json menjadi object Product
-    List<Book> fetchedBooks = [];
-    for (var d in data) {
-      if (d != null) {
-        fetchedBooks.add(Book.fromJson(d));
-      }
-    }
-    setState(() {
-      _allBooks = fetchedBooks;
-      _displayedBooks = List.from(_allBooks);
-    });
-
-    return fetchedBooks;
-  }
-
-  Future<List<Stock>> _fetchStocks() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse(
-        // 'http://10.0.2.2:8000/catalogue/json/'
-        'https://deploytest-production-cf18.up.railway.app/catalogue/json/');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
-
-    // melakukan decode response menjadi bentuk json
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-    // melakukan konversi data json menjadi object Product
-    List<Stock> listProduct = [];
-    for (var d in data) {
-      if (d != null) {
-        listProduct.add(Stock.fromJson(d));
-      }
-    }
-
-    setState(() {
-      _allStocks = listProduct;
-      _displayedStocks = List.from(_allStocks);
-    });
-
-    return listProduct;
   }
 
   @override
@@ -152,7 +93,18 @@ class _CataloguePageState extends State<CataloguePage> {
                       ),
                     ),
                   ),
-                  user.is_superuser ? _addBookButton() : Container()
+                  user.is_superuser ? _addBookButton() : Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: IconButton(
+                      icon: Icon(Icons.history),
+                      onPressed:() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HistoryPurchasePage(userId: user.id,)),
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
               const SizedBox(
@@ -204,113 +156,37 @@ class _CataloguePageState extends State<CataloguePage> {
   }
 
   ListView bookCard(CookieRequest request) {
-                  return ListView.builder(
-                    itemCount: _displayedStocks.length,
-                    itemBuilder: (_, index) => Container(
-                      height: 150,
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      padding: const EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.11),
-                            offset: const Offset(0, 10),
-                            blurRadius: 40,
-                            spreadRadius: 0.0,
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 90,
-                            height: 135,
-                            child: FadeInImage(
-                              placeholder: const AssetImage('assets/images/no_image.jpg'),
-                              image: NetworkImage(changeUrl(_displayedBooks[index].fields.imageUrlMedium)),
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) {
-                                return const Image(
-                                  image: AssetImage('assets/images/no_image.jpg'),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 20,),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _displayedBooks[index].fields.title,
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  "by ${_displayedBooks[index].fields.author}",
-                                  style: const TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color.fromARGB(255, 134, 132, 132),
-                                  ),
-                                ),
-                                Text(
-                                  "Rp${_displayedStocks[index].fields.price}",
-                                  style: const TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.indigo,
-                                  ),
-                                ),
-                                Text(
-                                  "Tersedia : ${_displayedStocks[index].fields.quantity}",
-                                  style: const TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w200,
-                                    color: Color.fromARGB(255, 134, 132, 132),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if(request.loggedIn){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BookDetailsPage(
-                                      bookId: _displayedBooks[index].pk,
-                                      bookName: _displayedBooks[index].fields.title,
-                                    ),
-                                  ),
-                                );
-                              }else{
-                                ScaffoldMessenger.of(context)
-                                ..hideCurrentSnackBar()
-                                ..showSnackBar(const SnackBar(content: Text("Login terlebih dahulu!")));
-                                Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => const LoginPage()));
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.black,
-                              size: 20.0,
-                            )
-                          )
-                          ],
-                        ),
-                        // color: Colors.green,
-                      ),
-              );
+    return ListView.builder(
+      itemCount: _displayedBooks.length, // Make sure this is the count of displayed books, not stocks
+      itemBuilder: (_, index) => BookCard(
+        book: _displayedBooks[index],
+        stock: _displayedStocks[index], // Ensure this matches the book by index
+        onTap: () {
+          if (request.loggedIn) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookDetailsPage(
+                  bookId: _displayedBooks[index].pk,
+                  bookName: _displayedBooks[index].fields.title,
+                ),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(const SnackBar(content: Text("Please log in first!")));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          }
+        },
+        isLoggedIn: request.loggedIn,
+      ),
+    );
   }
+
 
   Container _searchField() {
     return Container(
@@ -350,6 +226,7 @@ class _CataloguePageState extends State<CataloguePage> {
   AppBar appBar() {
     return AppBar(
       backgroundColor: Colors.indigo,
+      foregroundColor: Colors.white,
       title: const Text(
         'Booka Catalogue',
         ),
