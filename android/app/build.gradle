@@ -56,10 +56,10 @@ android {
 
     signingConfigs {
      release {
-             storeFile file("../../release-keystore.jks")
-             storePassword = "$System.env.KEY_PASSWORD"
-             keyAlias = "release"
-             keyPassword = "$System.env.KEY_PASSWORD"
+         storeFile file("../../release-keystore.jks")
+         storePassword = "$System.env.KEY_PASSWORD"
+         keyAlias = "release"
+         keyPassword = "$System.env.KEY_PASSWORD"
      }
 }
     buildTypes {
@@ -72,30 +72,6 @@ android {
         }
     }
 
-    productFlavors {
-        prod {
-            applicationId "com.booka_mobile.booka"
-            versionCode 3
-            versionName "1.1.0"
-        }
-        dev {
-            applicationId "com.booka_mobile.booka"
-            versionCode 15
-            versionName "1.3.6"
-        }
-    }
-
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def project = "Booka"
-            def SEP = "_"
-            def flavor = variant.productFlavors[0].name
-            def version = variant.versionName
-            def newApkName = project + SEP + flavor + SEP + SEP + version + ".apk"
-
-            outputFileName = new File(newApkName)
-        }
-    }
 }
 
 flutter {
