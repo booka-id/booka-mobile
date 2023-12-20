@@ -529,7 +529,7 @@ class _BookDetailPageState extends State<BookDetailsPage> {
     int quantity = 0; // Default quantity
     final pricePerBook = stock.fields.price; // Harga per buku
     int totalPrice = quantity * pricePerBook; // Harga total
-    String paymentMethod = 'Cash on Delivery'; // Default payment method
+    String? paymentMethod = 'Cash on Delivery'; // Default payment method
 
     showDialog(
       context: context,
@@ -563,7 +563,7 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                       groupValue: paymentMethod,
                       onChanged: (value) {
                         setState(() {
-                          paymentMethod = value!;
+                          paymentMethod = value;
                         });
                       },
                     ),
@@ -575,7 +575,7 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                       groupValue: paymentMethod,
                       onChanged: (value) {
                         setState(() {
-                          paymentMethod = value!;
+                          paymentMethod = value;
                         });
                       },
                     ),
@@ -595,7 +595,8 @@ class _BookDetailPageState extends State<BookDetailsPage> {
               child: const Text('Submit Order'),
               onPressed: () {
                 // Logika untuk mengirimkan order
-                submitOrder(userId, quantity, paymentMethod);
+                print(paymentMethod);
+                submitOrder(userId, quantity, paymentMethod!);
                 Navigator.of(dialogContext).pop(); // Menutup dialog
               },
             ),
