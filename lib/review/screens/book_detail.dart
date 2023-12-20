@@ -4,6 +4,7 @@ import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/review/widget/card_skeleton.dart';
 import 'package:booka_mobile/review/widget/review_card.dart';
 import 'package:booka_mobile/review/widget/review_form.dart';
+import 'package:cloudinary_url_gen/transformation/effect/effect_actions.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -136,6 +137,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
     if (response.statusCode == 200) {
       // Parse the JSON response
       List<dynamic> userDataList = jsonDecode(response.body);
+      String noImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
       if (userDataList.isNotEmpty) {
         // Extract username from the first user's fields
@@ -143,7 +145,11 @@ class _BookDetailPageState extends State<BookDetailPage> {
         String username = userData['fields']['username'];
         List<String> identityList = [];
         identityList.add(username);
-        identityList.add(userData['fields']['image_url']);
+        if(userData['fields']['image_url'] == null){
+          identityList.add(noImage);
+        }else{
+          identityList.add(userData['fields']['image_url']);
+        }
         return identityList;
       } else {
         throw Exception('No user data found');
