@@ -23,8 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    flavorDimensions "default"
-    namespace "com.example.Booka"
+    namespace "com.example.booka_mobile"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -55,19 +54,18 @@ android {
     }
 
     signingConfigs {
-     release {
-         storeFile file("../../release-keystore.jks")
-         storePassword = "$System.env.KEY_PASSWORD"
-         keyAlias = "release"
-         keyPassword = "$System.env.KEY_PASSWORD"
-     }
-}
+        release {
+            storeFile file("../../release-keystore.jks")
+            storePassword = "$System.env.KEY_PASSWORD"
+            keyAlias = "release"
+            keyPassword = "$System.env.KEY_PASSWORD"
+        }
+    }
     buildTypes {
         release {
             signingConfig signingConfigs.release
         }
     }
-
 }
 
 flutter {
