@@ -231,7 +231,7 @@ class _CataloguePageState extends State<CataloguePage> {
       backgroundColor: Colors.indigo,
       foregroundColor: Colors.white,
       title: const Text(
-        'Booka Catalogue',
+        'Catalogue',
         ),
       centerTitle: true,
  
@@ -239,7 +239,6 @@ class _CataloguePageState extends State<CataloguePage> {
         Container(
             margin: const EdgeInsets.only(right: 10),
             child:
-            //User Sudah Login
             Consumer<UserProvider>(builder: (context, user, _) {
               return CircleAvatar(
                 radius: 20,
