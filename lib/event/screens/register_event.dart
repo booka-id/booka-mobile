@@ -42,7 +42,7 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                   style: TextStyle(fontFamily: 'Poppins'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Nama tidak boleh kosong';
+                      return 'Name cannot be empty!';
                     }
                     return null;
                   },
@@ -54,7 +54,7 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                 child: TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(
-                    labelText: 'Nomor Handphone',
+                    labelText: 'Phone Number',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -63,7 +63,7 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                   style: TextStyle(fontFamily: 'Poppins'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Nomor Handphone tidak boleh kosong';
+                      return 'Phone number cannot be empty!';
                     }
                     return null;
                   },
@@ -84,9 +84,9 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                   style: TextStyle(fontFamily: 'Poppins'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Email tidak boleh kosong';
+                      return 'Email cannot be empty!';
                     } else if (!value.contains('@')) {
-                      return 'Email tidak valid';
+                      return 'Invalid email';
                     }
                     return null;
                   },
@@ -102,7 +102,10 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.indigo),
                 ),
-                child: const Text('Register'),
+                child: Text(
+                  'Register',
+                  style: TextStyle(color: Colors.white), 
+                ),
               ),
             ],
           ),
@@ -116,8 +119,8 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Registrasi Berhasil'),
-          content: const Text('Anda berhasil mendaftar ke Event. Sampai jumpa!'),
+          title: const Text('Registration Success!'),
+          content: const Text('You sucessfully registered to the event. See you!'),
           actions: [
             TextButton(
               onPressed: () {
