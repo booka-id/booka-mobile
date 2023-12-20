@@ -13,6 +13,9 @@ import 'dart:convert';
 
 import 'package:provider/provider.dart';
 
+import '../../landing_page/login.dart';
+import '../../profile/profile_page.dart';
+
 class ReviewPage extends StatefulWidget {
   const ReviewPage({Key? key}) : super(key: key);
 
@@ -223,6 +226,27 @@ class _ReviewPageState extends State<ReviewPage> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.indigo,
         centerTitle: true,
+        actions: [
+          Container(
+              margin: const EdgeInsets.only(right: 10),
+              child:
+              //User Sudah Login
+              Consumer<UserProvider>(builder: (context, user, _) {
+                return CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(user.profile_picture),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ProfilePage()));
+                    },
+                  ),
+                );
+              })
+          ),
+        ],
       ),
       drawer: const LeftDrawer(),
       floatingActionButton: FloatingActionButton(

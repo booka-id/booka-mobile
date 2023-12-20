@@ -11,6 +11,7 @@ import 'package:booka_mobile/models/stock.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../landing_page/bottom_nav_bar.dart';
+import '../profile/profile_page.dart';
 
 class CataloguePage extends StatefulWidget {
   const CataloguePage({Key? key}) : super(key: key);
@@ -348,8 +349,31 @@ class _CataloguePageState extends State<CataloguePage> {
 
   AppBar appBar() {
     return AppBar(
-      title: const Text('Booka Catalogue'),
+      title: const Text('Catalogue'),
       centerTitle: true,
+      backgroundColor: Colors.indigo,
+      foregroundColor: Colors.white,
+      actions: [
+        Container(
+            margin: const EdgeInsets.only(right: 10),
+            child:
+            //User Sudah Login
+            Consumer<UserProvider>(builder: (context, user, _) {
+              return CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(user.profile_picture),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePage()));
+                  },
+                ),
+              );
+            })
+        ),
+      ],
     );
   }
 }

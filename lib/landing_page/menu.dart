@@ -19,8 +19,6 @@ class MyHomePage extends StatelessWidget {
     ShopItem("Katalog Buku", Icons.menu_book_rounded, Colors.indigo),
     ShopItem("Review Buku", Icons.rate_review_rounded, Colors.indigo),
     ShopItem("Event", Icons.calendar_today, Colors.indigo),
-    // ShopItem("Logout", Icons.logout, Colors.indigo),
-    // ShopItem("Login", Icons.login, Colors.indigo),
   ];
   @override
   Widget build(BuildContext context) {

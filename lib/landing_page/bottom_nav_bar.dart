@@ -37,45 +37,40 @@ class _BotNavBarState extends State<BotNavBar> {
               builder: (context) => MyHomePage(),
             ),
           );
-        } else if (_selectedIndex == 1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const CataloguePage(), // Todo ganti ke katalog buku
-            ),
-          );
-        } else if (_selectedIndex == 2) {
-          if (request.loggedIn) {
+        } else if (request.loggedIn == true){
+          if (_selectedIndex == 1) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const ReviewPage()),
+              MaterialPageRoute(
+                builder: (context) =>
+                const CataloguePage(), // Todo ganti ke katalog buku
+              ),
             );
-          } else {
+          } else if (_selectedIndex == 2) {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));
-          }
-        } else if (_selectedIndex == 3) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const EventPage(),
-            ),
-          );
-        } else if (_selectedIndex == 4) {
-          if (request.loggedIn) {
+                MaterialPageRoute(builder: (context) => const ReviewPage()));
+
+          } else if (_selectedIndex == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EventPage(),
+              ),
+            );
+          } else if (_selectedIndex == 4) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const ProfilePage()),
             );
-          } else {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                  const SnackBar(content: Text("Login terlebih dahulu !")));
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));
           }
+        } else {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(const SnackBar(
+                content: Text("Login terlebih dahulu !")));
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const LoginPage();
+          }));
         }
       },
       items: const [

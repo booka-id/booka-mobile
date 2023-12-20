@@ -62,10 +62,18 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Katalog Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CataloguePage()));
+              if (request.loggedIn == true) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        const CataloguePage() //Todo ganti review buku,
+                    ));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Login terlebih dahulu."),
+                ));
+              }
             },
           ),
           ListTile(
@@ -73,7 +81,7 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Review Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
-              if (request.loggedIn) {
+              if (request.loggedIn == true) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -92,12 +100,18 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Event'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const EventPage() //Todo ganti event buku,
-                      ));
+              if (request.loggedIn == true) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        const ReviewPage() //Todo ganti review buku,
+                    ));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Login terlebih dahulu."),
+                ));
+              }
             },
           ),
           if (request.loggedIn)

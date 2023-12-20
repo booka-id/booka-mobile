@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:booka_mobile/review/screens/feeds.dart';
 import 'package:booka_mobile/event/screens/list_event.dart';
 
+import 'login.dart';
+
 class ShopItem {
   final String name;
   final IconData icon;
@@ -47,11 +49,14 @@ class ShopCard extends StatelessWidget {
           //       MaterialPageRoute(
           //           builder: (context) => MyHomePage())); //todo Ganti event
           // }
-          if (item.name == "Login") {
+          if (request.loggedIn == false) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
                   const SnackBar(content: Text("Login terlebih dahulu !")));
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return const LoginPage();
+            }));
           } else {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
@@ -74,27 +79,6 @@ class ShopCard extends StatelessWidget {
             } else if (item.name == "Event") {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const EventPage()));
-            }
-
-            if (item.name == "Logout") {
-              final response = await request.logout(
-                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                  "http://127.0.0.1:8000/auth/logout/");
-              String message = response["message"];
-              if (response['status']) {
-                String uname = response["username"];
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("$message Sampai jumpa, $uname."),
-                ));
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(message),
-                ));
-              }
             }
           }
         },
