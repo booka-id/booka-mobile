@@ -104,13 +104,13 @@ class _EditEventPageState extends State<EditEventPage> {
                         child: TextFormField(
                           initialValue: _name,
                           decoration: InputDecoration(
-                            hintText: "Nama Event",
-                            labelText: "Nama Event",
+                            hintText: "Event Name",
+                            labelText: "Event Name",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          style: TextStyle(fontFamily: 'Poppins'),
+                          // style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _name = value;
@@ -118,7 +118,7 @@ class _EditEventPageState extends State<EditEventPage> {
                           },
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "Nama tidak boleh kosong!";
+                              return "Name cannot be empty!";
                             }
                             return null;
                           },
@@ -131,7 +131,7 @@ class _EditEventPageState extends State<EditEventPage> {
                           children: [
                             const Text(
                               "Featured Book",
-                              style: TextStyle(fontFamily: 'Poppins'),
+                              // style: TextStyle(fontFamily: 'Poppins'),
                             ),
                             const SizedBox(height: 8.0),
                             DropdownButton<String>(
@@ -142,7 +142,7 @@ class _EditEventPageState extends State<EditEventPage> {
                                   value: featuredBookChosen,
                                   child: Text(
                                     featuredBookChosen,
-                                    style: TextStyle(fontFamily: 'Poppins'),
+                                    // style: TextStyle(fontFamily: 'Poppins'),
                                   ),
                                 );
                               }).toList(),
@@ -167,13 +167,13 @@ class _EditEventPageState extends State<EditEventPage> {
                         child: TextFormField(
                           initialValue: _date,
                           decoration: InputDecoration(
-                            hintText: "Tanggal (YYYY-MM-DD)",
-                            labelText: "Tanggal",
+                            hintText: "Date (YYYY-MM-DD)",
+                            labelText: "Date",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          style: TextStyle(fontFamily: 'Poppins'),
+                          // style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _date = value;
@@ -181,7 +181,7 @@ class _EditEventPageState extends State<EditEventPage> {
                           },
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "Tanggal tidak boleh kosong!";
+                              return "Date cannot be empty!";
                             }
                             return null;
                           },
@@ -192,13 +192,13 @@ class _EditEventPageState extends State<EditEventPage> {
                         child: TextFormField(
                           initialValue: _description,
                           decoration: InputDecoration(
-                            hintText: "Deskripsi",
-                            labelText: "Deskripsi",
+                            hintText: "Description",
+                            labelText: "Description",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          style: TextStyle(fontFamily: 'Poppins'),
+                          // style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _description = value;
@@ -206,7 +206,7 @@ class _EditEventPageState extends State<EditEventPage> {
                           },
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "Deskripsi tidak boleh kosong!";
+                              return "Description cannot be empty!";
                             }
                             return null;
                           },
@@ -217,13 +217,13 @@ class _EditEventPageState extends State<EditEventPage> {
                         child: TextFormField(
                           initialValue: _photo,
                           decoration: InputDecoration(
-                            hintText: "URL Foto",
-                            labelText: "URL Foto",
+                            hintText: "Photo URL",
+                            labelText: "Photo URL",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          style: TextStyle(fontFamily: 'Poppins'),
+                          // style: TextStyle(fontFamily: 'Poppins'),
                           onChanged: (String value) {
                             setState(() {
                               _photo = value;
@@ -231,7 +231,7 @@ class _EditEventPageState extends State<EditEventPage> {
                           },
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "URL Foto tidak boleh kosong!";
+                              return "Photo URL cannot be empty!";
                             }
                             return null;
                           },
@@ -249,7 +249,7 @@ class _EditEventPageState extends State<EditEventPage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
-                                  "https://deploytest-production-cf18.up.railway.app/${widget.event.pk}/",
+                                  "https://deploytest-production-cf18.up.railway.app/event/edit-event-flutter/${widget.event.pk}/",
                                   // "http://127.0.0.1:8000/event/edit-event-flutter/${widget.event.pk}/",
                                   jsonEncode({
                                     'name': _name,
@@ -262,7 +262,7 @@ class _EditEventPageState extends State<EditEventPage> {
                                 if (response['status'] == 'success') {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("Event berhasil diedit!"),
+                                      content: Text("Event edited!"),
                                     ),
                                   );
                                   Navigator.pushReplacement(
@@ -273,7 +273,7 @@ class _EditEventPageState extends State<EditEventPage> {
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("Gagal. Silakan coba lagi."),
+                                      content: Text("Failed. Please try again."),
                                     ),
                                   );
                                 }

@@ -1,3 +1,4 @@
+import 'package:booka_mobile/landing_page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,6 +9,7 @@ import 'package:booka_mobile/event/screens/edit_event.dart';
 import 'package:booka_mobile/event/screens/register_event.dart';
 import 'package:booka_mobile/models/user.dart';
 import 'package:booka_mobile/landing_page/bottom_nav_bar.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 class EventPage extends StatefulWidget {
@@ -27,24 +29,25 @@ class _EventPageState extends State<EventPage> {
     );
 
     var data = jsonDecode(utf8.decode(response.bodyBytes));
-    List<Event> list_event = [];
+    List<Event> listEvent = [];
     for (var d in data) {
       if (d != null) {
-        list_event.add(Event.fromJson(d));
+        listEvent.add(Event.fromJson(d));
       }
     }
-    return list_event;
+    return listEvent;
   }
 
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserProvider>();
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Event'),
       ),
       drawer: const LeftDrawer(),
-      bottomNavigationBar: BotNavBar(2),
+      bottomNavigationBar: BotNavBar(3),
       body: FutureBuilder(
         future: fetchProduct(),
         builder: (context, AsyncSnapshot<List<Event>> snapshot) {
@@ -53,7 +56,7 @@ class _EventPageState extends State<EventPage> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
-                "Tidak ada data event.",
+                "No Event.",
                 style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
               ),
             );
@@ -71,7 +74,7 @@ class _EventPageState extends State<EventPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
-                          "${snapshot.data![index].fields.photo}",
+                          snapshot.data![index].fields.photo,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -82,7 +85,7 @@ class _EventPageState extends State<EventPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${snapshot.data![index].fields.name}",
+                            snapshot.data![index].fields.name,
                             style: const TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
@@ -91,48 +94,59 @@ class _EventPageState extends State<EventPage> {
                           const SizedBox(height: 10),
                           Text("Featuring: ${snapshot.data![index].fields.featuredBook}"),
                           const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.date.toString().split(' ')[0]}"),
+                          Text(snapshot.data![index].fields.date.toString().split(' ')[0]),
                           const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.description}"),
+                          Text(snapshot.data![index].fields.description),
                           const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegisterEventPage() 
-                                          ));
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                                ),
-                                child: const Text("Register", 
-                                style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              if (user.is_superuser)
+                              if (!user.is_superuser)
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditEventPage(event:snapshot.data![index]) 
-                                            ));
-                                  },
+                                    if (request.loggedIn)
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const RegisterEventPage() 
+                                              ));
+                                    if (!request.loggedIn)
+                                       Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const LoginPage() 
+                                              ));
+                                    }, 
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(Colors.grey[400]),
+                                    backgroundColor: MaterialStateProperty.all(Colors.indigo),
                                   ),
-                                  child: const Text("Edit", 
+                                  child: const Text("Register", 
                                   style: TextStyle(color: Colors.white),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
+                                if (user.is_superuser)
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditEventPage(event:snapshot.data![index]) 
+                                              ));
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.grey[400]),
+                                    ),
+                                    child: const Text("Edit", 
+                                    style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+
+                              if (user.is_superuser)
                                 ElevatedButton(
                                   onPressed: () async {
                                       final deleteUrl = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/delete-event-flutter/${snapshot.data![index].pk}/');
@@ -177,16 +191,16 @@ class _EventPageState extends State<EventPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EventFormPage(),
+                  builder: (context) => const EventFormPage(),
                 ),
               );
             },
-            child: const Icon(Icons.add, color: Colors.white),
             backgroundColor: Colors.indigo,
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
+            child: const Icon(Icons.add, color: Colors.white),
           )
         : null, 
     floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
