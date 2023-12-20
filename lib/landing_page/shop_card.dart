@@ -1,5 +1,4 @@
 import 'package:booka_mobile/katalog_buku/catalogue.dart';
-import 'package:booka_mobile/landing_page/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';

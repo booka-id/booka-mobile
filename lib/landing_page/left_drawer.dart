@@ -3,7 +3,6 @@ import 'package:booka_mobile/review/screens/feeds.dart';
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
-import 'package:booka_mobile/event/screens/list_event.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 //Todo import 'package:booka_mobile/landing_page/shoplist_form.dart';

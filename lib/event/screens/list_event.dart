@@ -12,7 +12,6 @@ import 'package:booka_mobile/landing_page/bottom_nav_bar.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-import '../../landing_page/login.dart';
 import '../../profile/profile_page.dart';
 
 class EventPage extends StatefulWidget {
@@ -75,7 +74,7 @@ class _EventPageState extends State<EventPage> {
           ],
       ),
       drawer: const LeftDrawer(),
-      bottomNavigationBar: BotNavBar(3),
+      bottomNavigationBar: const BotNavBar(3),
       body: FutureBuilder(
         future: fetchProduct(),
         builder: (context, AsyncSnapshot<List<Event>> snapshot) {
@@ -136,20 +135,22 @@ class _EventPageState extends State<EventPage> {
                               if (!user.is_superuser)
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (request.loggedIn)
+                                    if (request.loggedIn) {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   const RegisterEventPage() 
                                               ));
-                                    if (!request.loggedIn)
-                                       Navigator.push(
+                                    }
+                                    if (!request.loggedIn) {
+                                      Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   const LoginPage() 
                                               ));
+                                    }
                                     }, 
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(Colors.indigo),

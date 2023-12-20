@@ -79,7 +79,7 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
       drawer: const LeftDrawer(),
-      bottomNavigationBar: BotNavBar(0),
+      bottomNavigationBar: const BotNavBar(0),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(

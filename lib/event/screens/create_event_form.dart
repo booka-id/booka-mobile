@@ -24,10 +24,10 @@ class _EventFormPageState extends State<EventFormPage> {
   List<String> featuredBookList = <String>[];
   String _selectedFeaturedBook = "None";
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _photoController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _photoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

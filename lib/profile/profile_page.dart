@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      bottomNavigationBar: BotNavBar(4),
+      bottomNavigationBar: const BotNavBar(4),
       drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         child: Container(

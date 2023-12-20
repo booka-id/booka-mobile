@@ -13,7 +13,6 @@ import 'dart:convert';
 
 import 'package:provider/provider.dart';
 
-import '../../landing_page/login.dart';
 import '../../profile/profile_page.dart';
 
 class ReviewPage extends StatefulWidget {
@@ -264,7 +263,7 @@ class _ReviewPageState extends State<ReviewPage> {
         },
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: BotNavBar(2),
+      bottomNavigationBar: const BotNavBar(2),
       body: DefaultTabController(
         length: 2, // Number of tabs
         child: Column(

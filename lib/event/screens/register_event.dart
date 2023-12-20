@@ -102,7 +102,7 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.indigo),
                 ),
-                child: Text(
+                child: const Text(
                   'Register',
                   style: TextStyle(color: Colors.white), 
                 ),

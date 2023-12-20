@@ -129,7 +129,7 @@ class _BookDetailPageState extends State<BookDetailsPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // Tampilkan loading indicator
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               // Tampilkan error jika ada
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -145,11 +145,11 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -170,14 +170,14 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                     ),
                     Expanded(
                         child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(60),
                             topRight: Radius.circular(60)),
                       ),
                       child: Padding(
-                          padding: EdgeInsets.all(40),
+                          padding: const EdgeInsets.all(40),
                           child: SingleChildScrollView(
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.center,
@@ -192,12 +192,12 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 4,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
-                                Text(
+                                const Text(
                                   "Author",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w800,
                                       color:
@@ -210,12 +210,12 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                                       fontWeight: FontWeight.normal,
                                       color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 7,
                                 ),
-                                Text(
+                                const Text(
                                   "Year",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w800,
                                       color:
@@ -228,12 +228,12 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                                       fontWeight: FontWeight.normal,
                                       color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 7,
                                 ),
-                                Text(
+                                const Text(
                                   "Publisher",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w800,
                                       color:
@@ -246,12 +246,12 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                                       fontWeight: FontWeight.normal,
                                       color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 7,
                                 ),
-                                Text(
+                                const Text(
                                   "ISBN",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w800,
                                       color:
@@ -264,12 +264,12 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                                       fontWeight: FontWeight.normal,
                                       color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 7,
                                 ),
-                                Text(
+                                const Text(
                                   "Year",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w800,
                                       color:
@@ -282,7 +282,7 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                                       fontWeight: FontWeight.normal,
                                       color: Colors.black),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
                                 Text(
@@ -480,15 +480,15 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(color: Colors.indigo),
+                    side: const BorderSide(color: Colors.indigo),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
                   // Aksi ketika tombol Review ditekan
                   Navigator.of(dialogContext).pop();
                 },
-                child: Text(
+                child: const Text(
                   'Cancel',
                   style: TextStyle(
                     color: Colors.indigo,
@@ -504,14 +504,14 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
                   // Aksi ketika tombol Review ditekan
                   deleteBook(bookId, context);
                   Navigator.of(dialogContext).pop();
                 },
-                child: Text(
+                child: const Text(
                   'Delete',
                   style: TextStyle(
                     color: Colors.white,
@@ -535,14 +535,14 @@ class _BookDetailPageState extends State<BookDetailsPage> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text('Purchase Book'),
+          title: const Text('Purchase Book'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Quantity',
                     ),
                     keyboardType: TextInputType.number,
@@ -553,11 +553,11 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                       });
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text('Total Price: ${totalPrice.toString()}'),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ListTile(
-                    title: Text('Cash on Delivery'),
+                    title: const Text('Cash on Delivery'),
                     leading: Radio<String>(
                       value: 'Cash on Delivery',
                       groupValue: paymentMethod,
@@ -569,7 +569,7 @@ class _BookDetailPageState extends State<BookDetailsPage> {
                     ),
                   ),
                   ListTile(
-                    title: Text('Mobile Banking'),
+                    title: const Text('Mobile Banking'),
                     leading: Radio<String>(
                       value: 'Mobile Banking',
                       groupValue: paymentMethod,
@@ -586,13 +586,13 @@ class _BookDetailPageState extends State<BookDetailsPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(dialogContext).pop(); // Menutup dialog
               },
             ),
             TextButton(
-              child: Text('Submit Order'),
+              child: const Text('Submit Order'),
               onPressed: () {
                 // Logika untuk mengirimkan order
                 submitOrder(userId, quantity, paymentMethod);

@@ -127,7 +127,7 @@ class _CataloguePageState extends State<CataloguePage> {
     return Scaffold(
       appBar: appBar(),
       backgroundColor: Colors.white,
-      bottomNavigationBar: BotNavBar(1),
+      bottomNavigationBar: const BotNavBar(1),
       drawer: const LeftDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,16 +185,16 @@ class _CataloguePageState extends State<CataloguePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           ),
           onPressed: () {
             // Aksi ketika tombol Add Book ditekan
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddBookFormPage()),
+              MaterialPageRoute(builder: (context) => const AddBookFormPage()),
             );
           },
-          child: Text(
+          child: const Text(
             'Add Book',
             style: TextStyle(
               color: Colors.white,

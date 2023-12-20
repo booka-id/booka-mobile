@@ -49,7 +49,7 @@ class _AddBookFormPageState extends State<AddBookFormPage> {
       Future.delayed(const Duration(seconds: 2), () {
         // Atau, jika Anda ingin mengganti halaman saat ini dengan home, gunakan:
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => CataloguePage()));
+            context, MaterialPageRoute(builder: (context) => const CataloguePage()));
       });
     } else {
       // Terjadi kesalahan
