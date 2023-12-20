@@ -21,8 +21,9 @@ class EventPage extends StatefulWidget {
 
 class _EventPageState extends State<EventPage> {
   Future<List<Event>> fetchProduct() async {
-    var url = Uri.parse('https://deploytest-production-cf18.up.railway.app/event/get-event/');
-  //  var url = Uri.parse('http://127.0.0.1:8000/event/get-event/');
+    var url = Uri.parse(
+        'https://deploytest-production-cf18.up.railway.app/event/get-event/');
+    //  var url = Uri.parse('http://127.0.0.1:8000/event/get-event/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -64,13 +65,14 @@ class _EventPageState extends State<EventPage> {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (_, index) => Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      height: 200, 
+                      height: 200,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
@@ -92,9 +94,12 @@ class _EventPageState extends State<EventPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text("Featuring: ${snapshot.data![index].fields.featuredBook}"),
+                          Text(
+                              "Featuring: ${snapshot.data![index].fields.featuredBook}"),
                           const SizedBox(height: 10),
-                          Text(snapshot.data![index].fields.date.toString().split(' ')[0]),
+                          Text(snapshot.data![index].fields.date
+                              .toString()
+                              .split(' ')[0]),
                           const SizedBox(height: 10),
                           Text(snapshot.data![index].fields.description),
                           const SizedBox(height: 16),
@@ -184,26 +189,25 @@ class _EventPageState extends State<EventPage> {
           }
         },
       ),
-    
-    floatingActionButton: user.is_superuser
-        ? FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EventFormPage(),
-                ),
-              );
-            },
-            backgroundColor: Colors.indigo,
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            child: const Icon(Icons.add, color: Colors.white),
-          )
-        : null, 
-    floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: user.is_superuser
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EventFormPage(),
+                  ),
+                );
+              },
+              backgroundColor: Colors.indigo,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

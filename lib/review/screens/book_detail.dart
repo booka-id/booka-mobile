@@ -1,9 +1,9 @@
 import 'package:booka_mobile/models/book.dart';
 import 'package:booka_mobile/models/review.dart';
 import 'package:booka_mobile/models/user.dart';
-import 'package:booka_mobile/review/card_skeleton.dart';
-import 'package:booka_mobile/review/review_card.dart';
-import 'package:booka_mobile/review/review_form.dart';
+import 'package:booka_mobile/review/widget/card_skeleton.dart';
+import 'package:booka_mobile/review/widget/review_card.dart';
+import 'package:booka_mobile/review/widget/review_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -23,7 +23,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
 
   _BookDetailPageState({required this.bookID});
 
-  void handleSubmit(){
+  void handleSubmit() {
     setState(() {
       refresher++;
     });
@@ -55,7 +55,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
 
   Future<List<String>> getBookDetails() async {
     // String url = "http://10.0.2.2:8000/review/books/$bookID";
-    String url = "https://deploytest-production-cf18.up.railway.app/review/books/$bookID";
+    String url =
+        "https://deploytest-production-cf18.up.railway.app/review/books/$bookID";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -64,7 +65,6 @@ class _BookDetailPageState extends State<BookDetailPage> {
     if (response.statusCode == 200) {
       // Parse the JSON response
       dynamic userData = jsonDecode(response.body);
-      print(userData);
 
       if (userData != null) {
         // Extract username from the first user's fields
@@ -72,8 +72,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
         String title = userData['title'];
         String imageUrlLarge = userData['image_url_large'];
         String publisher = userData['publisher'];
-        double avgRating =
-            userData['avg_rating'] ?? 0.0;
+        double avgRating = userData['avg_rating'] ?? 0.0;
         int year = userData['year'];
         String isbn = userData['isbn'];
         List<String> bookDetailList = [];
@@ -127,7 +126,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
 
   Future<List<String>> getUsername(int id) async {
     // String url = "http://10.0.2.2:8000/review/get_user/$id";
-    String url = "https://deploytest-production-cf18.up.railway.app/review/get_user/$id";
+    String url =
+        "https://deploytest-production-cf18.up.railway.app/review/get_user/$id";
 
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -191,8 +191,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                     future: fetchBookReviews(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: 
-                        Column(
+                        return const Center(
+                            child: Column(
                           children: [
                             SkeletonCard(),
                             SkeletonCard(),
@@ -205,60 +205,47 @@ class _BookDetailPageState extends State<BookDetailPage> {
                         return const Center(
                           child: Text(
                             "Be the first to review this book!",
-                            style: TextStyle( fontSize: 20),
+                            style: TextStyle(fontSize: 20),
                           ),
                         );
                       } else {
-                        if (!snapshot.hasData) {
-                          return const Column(
-                            children: [
-                              Text(
-                                "Be the first to review this book!",
-                                style: TextStyle( fontSize: 20),
-                              ),
-                              SizedBox(height: 8),
-                            ],
-                          );
-                        } else {
-                          return ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const Divider(height: 1, color: Colors.grey),
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (_, index) {
-                              return FutureBuilder<List<String>>(
-                                future: getUsername(
-                                    snapshot.data![index].fields.user),
-                                builder: (context,
-                                    AsyncSnapshot<List<String>>
-                                        usernameSnapshot) {
-                                  if (usernameSnapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const SkeletonCard();
-                                  } else if (usernameSnapshot.hasError) {
-                                    return Text(
-                                        'Error: ${usernameSnapshot.error}');
-                                  } else {
-                                    return Container(
-                                        child: ReviewCard(
-                                      image: usernameSnapshot.data![1],
-                                      username: usernameSnapshot.data![0],
-                                      rating:
-                                          snapshot.data![index].fields.rating,
-                                      content:
-                                          snapshot.data![index].fields.content,
-                                      bookId: snapshot.data![index].fields.book,
-                                      isAdmin:
-                                          snapshot.data![index].fields.user ==
-                                                  user.id ||
-                                              user.is_superuser,
-                                      isInFeeds: false,
-                                    ));
-                                  }
-                                },
-                              );
-                            },
-                          );
-                        }
+                        return ListView.separated(
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1, color: Colors.grey),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (_, index) {
+                            return FutureBuilder<List<String>>(
+                              future: getUsername(
+                                  snapshot.data![index].fields.user),
+                              builder: (context,
+                                  AsyncSnapshot<List<String>>
+                                      usernameSnapshot) {
+                                if (usernameSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const SkeletonCard();
+                                } else if (usernameSnapshot.hasError) {
+                                  return Text(
+                                      'Error: ${usernameSnapshot.error}');
+                                } else {
+                                  return Container(
+                                      child: ReviewCard(
+                                    image: usernameSnapshot.data![1],
+                                    username: usernameSnapshot.data![0],
+                                    rating: snapshot.data![index].fields.rating,
+                                    content:
+                                        snapshot.data![index].fields.content,
+                                    bookId: snapshot.data![index].fields.book,
+                                    isAdmin:
+                                        snapshot.data![index].fields.user ==
+                                                user.id ||
+                                            user.is_superuser,
+                                    isInFeeds: false,
+                                  ));
+                                }
+                              },
+                            );
+                          },
+                        );
                       }
                     },
                   ),
@@ -299,7 +286,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
                     ),
                   ),
                 ),
-                ReviewFormPage(bookID: bookID, onSubmit: handleSubmit,),
+                ReviewFormPage(
+                  bookID: bookID,
+                  onSubmit: handleSubmit,
+                ),
                 const SizedBox(
                   height: 30,
                 )
@@ -341,12 +331,14 @@ class _BookDetailPageState extends State<BookDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
                     child: SizedBox(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          changeUrl(imageUrlLarge), // Gunakan URL gambar cover buku dari data API
+                          changeUrl(
+                              imageUrlLarge), // Gunakan URL gambar cover buku dari data API
                           fit: BoxFit.fitWidth,
                           // width: 80.0,
                         ),
@@ -361,9 +353,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                         Text(
                           title,
                           style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold
-                          ),
+                              fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,30 +361,22 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             Text(
                               "by $author",
                               style: TextStyle(
-                                fontSize: 18, 
-                                color: Colors.grey[700]
-                              ),
+                                  fontSize: 18, color: Colors.grey[700]),
                             ),
                             Text(
                               year,
                               style: TextStyle(
-                                fontSize: 18, 
-                                color: Colors.grey[700]
-                              ),
+                                  fontSize: 18, color: Colors.grey[700]),
                             ),
                             Text(
                               'Publisher: $publisher',
                               style: TextStyle(
-                                fontSize: 18, 
-                                color: Colors.grey[700]
-                              ),
+                                  fontSize: 18, color: Colors.grey[700]),
                             ),
                             Text(
                               'ISBN: $isbn',
                               style: TextStyle(
-                                fontSize: 18, 
-                                color: Colors.grey[700]
-                              ),
+                                  fontSize: 18, color: Colors.grey[700]),
                             ),
                           ],
                         )
@@ -405,30 +387,33 @@ class _BookDetailPageState extends State<BookDetailPage> {
 
                   // BUTTON ROW
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust the alignment as needed
+                    mainAxisAlignment: MainAxisAlignment
+                        .spaceEvenly, // Adjust the alignment as needed
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(left: 15,right: 15),
+                        padding: const EdgeInsets.only(left: 15, right: 15),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          border: Border.all(
-                            color: Colors.amber,
-                            width: 2
-                          )
-                        ),
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(color: Colors.amber, width: 2)),
                         child: Row(
                           children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 35,),
-                          const SizedBox(width: 5,),
-                          Text(
-                            avgRating,
-                            style: const TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.amber
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 35,
                             ),
-                          ),
-                        ],),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              avgRating,
+                              style: const TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.amber),
+                            ),
+                          ],
+                        ),
                       ),
                       Column(
                         children: [
@@ -441,7 +426,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             ),
                             child: IconButton(
                               icon: const Icon(Icons.article_outlined),
-                              color: Colors.white, // Change the icon color as needed
+                              color: Colors
+                                  .white, // Change the icon color as needed
                               onPressed: () {
                                 // Add your onPressed logic for "See Reviews" here
                                 showReviewsBottomSheet();
@@ -466,7 +452,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             ),
                             child: IconButton(
                               icon: const Icon(Icons.add_comment),
-                              color: Colors.white, // Change the icon color as needed
+                              color: Colors
+                                  .white, // Change the icon color as needed
                               onPressed: () {
                                 // Add your onPressed logic for "See Reviews" here
                                 showAddReviewBottomSheet();
@@ -482,7 +469,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30,)
+                  const SizedBox(
+                    height: 30,
+                  )
                 ],
               ),
             );

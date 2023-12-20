@@ -5,15 +5,14 @@ import 'package:http/http.dart' as http;
 import 'book.dart';
 
 class UserProvider extends ChangeNotifier {
-  String? _username ="" ;
+  String? _username = "";
   int? _id = 0;
   bool? _is_superuser = false;
-  String? _profile_picture="" ;
-  String? _email="";
+  String? _profile_picture = "";
+  String? _email = "";
   List<Fields> _favorite_book = [];
   List<Fields> _wishlist = [];
   List<Fields> _temp_books = [];
-
 
   String get username => _username!;
   String get profile_picture => _profile_picture!;
@@ -42,12 +41,11 @@ class UserProvider extends ChangeNotifier {
     // melakukan decode response menjadi bentuk json
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-    if(data['book'] == null){
+    if (data['book'] == null) {
       book = [];
-    }else{
+    } else {
       book = jsonDecode(data['book']);
     }
-
 
     List<Fields> fetchedBooks = [];
     for (var d in book) {
@@ -56,12 +54,12 @@ class UserProvider extends ChangeNotifier {
       }
     }
     return fetchedBooks;
-
   }
 
   Future<bool> saveProfilePic(String imageUrl) async {
     Uri url = Uri.parse(
-      'https://deploytest-production-cf18.up.railway.app/profile/change_profile_pic/',);
+      'https://deploytest-production-cf18.up.railway.app/profile/change_profile_pic/',
+    );
     var response = await http.post(
       url,
       body: {
@@ -81,17 +79,17 @@ class UserProvider extends ChangeNotifier {
     Uri url;
     if (type == 'favorit') {
       url = Uri.parse(
-          'https://deploytest-production-cf18.up.railway.app/profile/add_favorite_book/',
+        'https://deploytest-production-cf18.up.railway.app/profile/add_favorite_book/',
       );
     } else {
       url = Uri.parse(
-          'https://deploytest-production-cf18.up.railway.app/profile/add_wishlist/',
+        'https://deploytest-production-cf18.up.railway.app/profile/add_wishlist/',
       );
     }
     var bookJson = jsonEncode(books);
     var response = await http.post(
       url,
-      body:{
+      body: {
         'email': _email,
         'json_data': bookJson,
       },
@@ -99,7 +97,8 @@ class UserProvider extends ChangeNotifier {
     return jsonDecode(response.body)['message'];
   }
 
-  Future<void> setUser(String username, String profilePicture, String email, int id, bool isSuperuser) async {
+  Future<void> setUser(String username, String profilePicture, String email,
+      int id, bool isSuperuser) async {
     _username = username;
     _id = id;
     _is_superuser = isSuperuser;
@@ -122,23 +121,22 @@ class UserProvider extends ChangeNotifier {
 
   Future<String> saveFavoriteBook() async {
     String response = await saveBook(_temp_books, 'favorit');
-    if(response == 'success') {
+    if (response == 'success') {
       favoriteBookChanged();
       return 'success';
-    }else{
+    } else {
       return 'gagal';
     }
   }
 
   Future<String> saveWishlist() async {
     String response = await saveBook(_temp_books, 'wishlist');
-    if(response == 'success') {
+    if (response == 'success') {
       wishlistBookChanged();
       return 'success';
-    }else{
+    } else {
       return 'gagal';
     }
-
   }
 
   void addBook(Fields book) {
@@ -151,11 +149,9 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeProfilePic(String imageUrl){
+  void changeProfilePic(String imageUrl) {
     saveProfilePic(imageUrl);
     _profile_picture = imageUrl;
     notifyListeners();
   }
 }
-
-

@@ -1,5 +1,5 @@
 import 'package:booka_mobile/katalog_buku/catalogue.dart';
-import 'package:booka_mobile/review/feeds.dart';
+import 'package:booka_mobile/review/screens/feeds.dart';
 import 'package:flutter/material.dart';
 // Todo import 'package:booka-mobile/landing_page/book_list.dart';
 import 'package:booka_mobile/landing_page/menu.dart';
@@ -15,7 +15,6 @@ class LeftDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Drawer(
-
       child: ListView(
         children: [
           const DrawerHeader(
@@ -66,9 +65,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          const CataloguePage()
-                      ));
+                      builder: (context) => const CataloguePage()));
             },
           ),
           ListTile(
@@ -76,14 +73,14 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Review Buku'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
-              if(request.loggedIn){
+              if (request.loggedIn) {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const ReviewPage() //Todo ganti review buku,
-                      ));
-              }else{
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const ReviewPage() //Todo ganti review buku,
+                        ));
+              } else {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text("Login terlebih dahulu."),
                 ));
@@ -103,32 +100,39 @@ class LeftDrawer extends StatelessWidget {
                       ));
             },
           ),
-          if(request.loggedIn)
-          ListTile(
-            leading: const Icon(Icons.logout_outlined, color: Colors.red,),
-            title: const Text('Logout', style: TextStyle(color: Colors.red),),
-            // Bagian redirection ke ShopFormPage
-            onTap: () async {
-              final response = await request.logout(
-                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                  "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
-              String message = response["message"];
-              if (response['status']) {
-                String uname = response["username"];
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("$message Sampai jumpa, $uname."),
-                ));
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(message),
-                ));
-              }
-            },
-          ),
+          if (request.loggedIn)
+            ListTile(
+              leading: const Icon(
+                Icons.logout_outlined,
+                color: Colors.red,
+              ),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.red),
+              ),
+              // Bagian redirection ke ShopFormPage
+              onTap: () async {
+                final response = await request.logout(
+                    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                    "https://deploytest-production-cf18.up.railway.app/logout_mobile/");
+                if (!context.mounted) return;
+                String message = response["message"];
+                if (response['status']) {
+                  String uname = response["username"];
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$message Sampai jumpa, $uname."),
+                  ));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(message),
+                  ));
+                }
+              },
+            ),
         ],
       ),
     );

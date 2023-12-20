@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 // Todo import 'package:booka_mobile/screens/shoplist_form.dart';
 import 'package:provider/provider.dart';
-import 'package:booka_mobile/review/feeds.dart';
+import 'package:booka_mobile/review/screens/feeds.dart';
 import 'package:booka_mobile/event/screens/list_event.dart';
 
 class ShopItem {
   final String name;
   final IconData icon;
   final Color cardColor;
-  ShopItem(this.name, this.icon, this.cardColor) ;
+  ShopItem(this.name, this.icon, this.cardColor);
 }
-
 
 class ShopCard extends StatelessWidget {
   final ShopItem item;
   final Color cardColor;
 
-  const ShopCard(this.item, this.cardColor ,{super.key}); // Constructor
+  const ShopCard(this.item, this.cardColor, {super.key}); // Constructor
 
   @override
   Widget build(BuildContext context) {
@@ -51,40 +50,35 @@ class ShopCard extends StatelessWidget {
           if (item.name == "Login") {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(
-                  content: Text("Login terlebih dahulu !")));
-
-          }else{
+              ..showSnackBar(
+                  const SnackBar(content: Text("Login terlebih dahulu !")));
+          } else {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
                   content: Text("Kamu telah menekan tombol ${item.name}!")));
             // Navigate ke route yang sesuai (tergantung jenis tombol)
-              if (item.name == "Review Buku") {
+            if (item.name == "Review Buku") {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           const ReviewPage())); //todo Ganti review buku
-              }
-              if (item.name == "Katalog Buku") {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const CataloguePage())); //todo Ganti katalog buku
-              }
-             else if (item.name == "Event") {
+            }
+            if (item.name == "Katalog Buku") {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const EventPage())); 
+                          const CataloguePage())); //todo Ganti katalog buku
+            } else if (item.name == "Event") {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const EventPage()));
             }
 
             if (item.name == "Logout") {
               final response = await request.logout(
-                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                   "http://127.0.0.1:8000/auth/logout/");
               String message = response["message"];
               if (response['status']) {
@@ -102,29 +96,28 @@ class ShopCard extends StatelessWidget {
                 ));
               }
             }
-            }
-          },
+          }
+        },
         child: Container(
           // Container untuk menyimpan Icon dan Text
           padding: const EdgeInsets.all(8),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            )
-          ),
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                item.icon,
+                color: Colors.white,
+                size: 30.0,
+              ),
+              const Padding(padding: EdgeInsets.all(3)),
+              Text(
+                item.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ],
+          )),
         ),
       ),
     );

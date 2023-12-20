@@ -1,16 +1,16 @@
+import 'package:booka_mobile/katalog_buku/catalogue.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../event/screens/list_event.dart';
 import '../profile/profile_page.dart';
-import '../review/feeds.dart';
+import '../review/screens/feeds.dart';
 import 'login.dart';
 import 'menu.dart';
 
-
 class BotNavBar extends StatefulWidget {
-  int initState;
-  BotNavBar(this.initState, {Key? key}) : super(key: key);
+  final int initState;
+  const BotNavBar(this.initState, {Key? key}) : super(key: key);
 
   @override
   _BotNavBarState createState() => _BotNavBarState(initState);
@@ -37,43 +37,38 @@ class _BotNavBarState extends State<BotNavBar> {
               builder: (context) => MyHomePage(),
             ),
           );
-        }else if (_selectedIndex == 1) {
+        } else if (_selectedIndex == 1) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const EventPage(), // Todo ganti ke katalog buku
+              builder: (context) =>
+                  const CataloguePage(), // Todo ganti ke katalog buku
             ),
           );
         } else if (_selectedIndex == 2) {
-          if(request.loggedIn){
+          if (request.loggedIn) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ReviewPage()
-              ),
+              MaterialPageRoute(builder: (context) => const ReviewPage()),
             );
-          }else{
+          } else {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginPage()));
           }
-        }
-        else if (_selectedIndex == 3) {
+        } else if (_selectedIndex == 3) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const EventPage(),
             ),
           );
-        }
-        else if (_selectedIndex == 4) {
-          if(request.loggedIn){
+        } else if (_selectedIndex == 4) {
+          if (request.loggedIn) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ProfilePage()
-              ),
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
             );
-          }else{
+          } else {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -81,7 +76,6 @@ class _BotNavBarState extends State<BotNavBar> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const LoginPage()));
           }
-
         }
       },
       items: const [

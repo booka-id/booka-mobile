@@ -34,12 +34,12 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                 child: TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    labelText: 'Nama',
+                    labelText: 'Name',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  // style: TextStyle(fontFamily: 'Poppins'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Name cannot be empty!';
@@ -60,7 +60,7 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                     ),
                   ),
                   keyboardType: TextInputType.phone,
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  // style: TextStyle(fontFamily: 'Poppins'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Phone number cannot be empty!';
@@ -81,7 +81,7 @@ class _RegisterEventPageState extends State<RegisterEventPage> {
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  // style: TextStyle(fontFamily: 'Poppins'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Email cannot be empty!';

@@ -75,18 +75,18 @@ class AddBookButton extends StatelessWidget {
                                 TypeAheadField(
                                   textFieldConfiguration:
                                       const TextFieldConfiguration(
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          hintText: 'Cari Buku',
-                                        ),
-                                      ),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Cari Buku',
+                                    ),
+                                  ),
                                   suggestionsCallback: (pattern) {
                                     return updateList(pattern, snapshot.data!);
                                   },
                                   itemBuilder: (context, Book suggestion) {
                                     return ListTile(
-                                      leading: Image.network(
-                                          changeUrl(suggestion.fields.imageUrlMedium)),
+                                      leading: Image.network(changeUrl(
+                                          suggestion.fields.imageUrlMedium)),
                                       title: Text(suggestion.fields.title),
                                       subtitle: Text(suggestion.fields.author),
                                     );
@@ -94,21 +94,20 @@ class AddBookButton extends StatelessWidget {
                                   onSuggestionSelected: (Book suggestion) {
                                     userProvider.addBook(suggestion.fields);
                                   },
-
                                 ),
                                 const SizedBox(
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
                                       color: Colors.white,
                                     ),
-                                    child: Center(
-                                      child: BookList('temp')
-                                    ),
+                                    child: Center(child: BookList('temp')),
                                   ),
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
@@ -140,9 +139,7 @@ class AddBookButton extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
-          return const CircularProgressIndicator(
-        );
-      }
-    );
+          return const CircularProgressIndicator();
+        });
   }
 }
