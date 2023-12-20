@@ -25,15 +25,14 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
-    final user = context.watch<UserProvider>();
-    int selectedIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Booka',
-          style: TextStyle(fontSize: 25),
+          style: TextStyle(color: Colors.white),
         ),
+        centerTitle: true,
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         actions: [

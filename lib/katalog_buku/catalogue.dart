@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:booka_mobile/models/stock.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import '../landing_page/bottom_nav_bar.dart';
 
 class CataloguePage extends StatefulWidget {
   const CataloguePage({Key? key}) : super(key: key);
@@ -125,6 +126,7 @@ class _CataloguePageState extends State<CataloguePage> {
     return Scaffold(
       appBar: appBar(),
       backgroundColor: Colors.white,
+      bottomNavigationBar: BotNavBar(1),
       drawer: const LeftDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
